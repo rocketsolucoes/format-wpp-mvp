@@ -1,0 +1,180 @@
+import React, { useState, useEffect } from 'react';
+import { Menu, RefreshCw, Sparkles } from 'lucide-react';
+import { useLocation } from 'wouter';
+import { useAuth } from '../hooks/useAuth';
+import { supabase } from '../lib/supabase';
+import { DashboardSidebar } from '../components/DashboardSidebar';
+import { DashboardStats } from '../components/DashboardStats';
+import { RecentFormatting } from '../components/RecentFormatting';
+import { UsageChart } from '../components/UsageChart';
+import { Sheet, SheetContent } from '../components/ui/Sheet';
+import { Button } from '../components/ui/Button';
+import { Alert, AlertDescription } from '../components/ui/Alert';
+
+interface StatsData {
+  total_formatting: number;
+  this_month: number;
+  last_month: number;
+  total_tokens: number;
+  avg_tokens_per_format: number;
+}
+
+interface FormattingItem {
+  id: string;
+  input_text: string;
+  output_text: string;
+  created_at: string;
+  style_id?: string;
+}
+
+interface ChartDataPoint {
+  date: string;
+  count: number;
+}
+
+const Dashboard: React.FC = () => {
+  const { user } = useAuth();
+  const [, setLocation] = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [stats, setStats] = useState<StatsData | null>(null);
+  const [recentItems, setRecentItems] = useState<FormattingItem[]>([]);
+  const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchDashboardData = async () => {
+    if (!user) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const [statsResult, historyResult, chartResult] = await Promise.all([
+        supabase.rpc('get_user_stats', { p_user_id: user.id }),
+        supabase
+          .from('formatting_history')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(5),
+        user.plan !== 'free'
+          ? supabase.rpc('get_daily_usage', { p_user_id: user.id })
+          : Promise.resolve({ data: [], error: null }),
+      ]);
+
+      if (statsResult.error) throw statsResult.error;
+      if (historyResult.error) throw historyResult.error;
+      if (chartResult.error) throw chartResult.error;
+
+      setStats(statsResult.data);
+      setRecentItems(historyResult.data || []);
+      setChartData(chartResult.data || []);
+    } catch (err: any) {
+      console.error('Error fetching dashboard data:', err);
+      setError(err.message || 'Failed to load dashboard data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, [user]);
+
+  return (
+    <div className="flex h-screen overflow-hidden bg-slate-950">
+      <aside className="hidden lg:flex lg:w-72 border-r border-slate-800">
+        <DashboardSidebar />
+      </aside>
+
+      <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+        <SheetContent onClose={() => setMobileMenuOpen(false)}>
+          <DashboardSidebar onNavigate={() => setMobileMenuOpen(false)} />
+        </SheetContent>
+      </Sheet>
+
+      <main className="flex-1 overflow-y-auto">
+        <div className="sticky top-0 z-10 bg-slate-950/80 backdrop-blur-lg border-b border-slate-800">
+          <div className="px-4 py-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setMobileMenuOpen(true)}
+                  className="lg:hidden p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+                >
+                  <Menu className="w-6 h-6" />
+                </button>
+                <div>
+                  <h1 className="text-2xl font-bold text-white">Dashboard</h1>
+                  <p className="text-sm text-slate-400">Welcome back, {user?.full_name || 'User'}!</p>
+                </div>
+              </div>
+              <Button
+                variant="outline"
+                onClick={fetchDashboardData}
+                disabled={loading}
+                className="gap-2"
+              >
+                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                <span className="hidden sm:inline">Refresh</span>
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div className="px-4 py-6 sm:px-6 lg:px-8 space-y-8">
+          {error && (
+            <Alert variant="danger">
+              <AlertDescription>
+                {error}
+                <button
+                  onClick={fetchDashboardData}
+                  className="ml-2 underline hover:no-underline"
+                >
+                  Try again
+                </button>
+              </AlertDescription>
+            </Alert>
+          )}
+
+          <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-2xl p-6 text-center">
+            <Sparkles className="w-10 h-10 mx-auto mb-3 text-emerald-400" />
+            <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+              Ready to Format?
+            </h2>
+            <p className="text-slate-400 mb-4">
+              Transform your messages with AI-powered formatting
+            </p>
+            <div className="flex justify-center">
+              <Button
+                onClick={() => setLocation('/format')}
+                size="lg"
+                className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all hover:scale-105"
+              >
+                <Sparkles className="w-5 h-5 mr-2" />
+                Start Formatting
+              </Button>
+            </div>
+          </div>
+
+          <DashboardStats stats={stats} loading={loading} user={user} />
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <RecentFormatting items={recentItems} loading={loading} />
+            </div>
+            <div className="space-y-6">
+              <UsageChart
+                data={chartData}
+                loading={loading}
+                isPro={user?.plan !== 'free'}
+              />
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default Dashboard;
