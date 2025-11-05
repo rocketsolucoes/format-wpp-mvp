@@ -29,7 +29,8 @@ interface FormattingItem {
 
 interface ChartDataPoint {
   date: string;
-  count: number;
+  format_count: number;
+  token_count: number;
 }
 
 const Dashboard: React.FC = () => {
@@ -66,7 +67,7 @@ const Dashboard: React.FC = () => {
       if (historyResult.error) throw historyResult.error;
       if (chartResult.error) throw chartResult.error;
 
-      setStats(statsResult.data);
+      setStats(Array.isArray(statsResult.data) ? statsResult.data[0] : statsResult.data);
       setRecentItems(historyResult.data || []);
       setChartData(chartResult.data || []);
     } catch (err: any) {

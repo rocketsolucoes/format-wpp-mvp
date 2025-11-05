@@ -5,7 +5,8 @@ import { Badge } from './ui/Badge';
 
 interface ChartDataPoint {
   date: string;
-  count: number;
+  format_count: number;
+  token_count: number;
 }
 
 interface UsageChartProps {
@@ -64,9 +65,9 @@ export function UsageChart({ data, loading, isPro }: UsageChartProps) {
     date: new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   }));
 
-  const maxCount = data.length > 0 ? Math.max(...data.map(item => item.count)) : 1;
+  const maxCount = data.length > 0 ? Math.max(...data.map(item => item.format_count)) : 1;
   const avgCount = data.length > 0
-    ? data.reduce((sum, item) => sum + item.count, 0) / data.length
+    ? data.reduce((sum, item) => sum + item.format_count, 0) / data.length
     : 0;
 
   return (
@@ -81,15 +82,15 @@ export function UsageChart({ data, loading, isPro }: UsageChartProps) {
         <div className="h-64 w-full">
           <div className="flex items-end justify-between h-full gap-1 px-2">
             {formattedData.map((item, index) => {
-              const height = maxCount > 0 ? (item.count / maxCount) * 100 : 0;
+              const height = maxCount > 0 ? (item.format_count / maxCount) * 100 : 0;
               return (
                 <div key={index} className="flex-1 flex flex-col items-center group">
                   <div
                     className="w-full bg-gradient-to-t from-emerald-500 to-cyan-500 rounded-t hover:opacity-80 transition-opacity relative"
-                    style={{ height: `${height}%`, minHeight: item.count > 0 ? '4px' : '0' }}
+                    style={{ height: `${height}%`, minHeight: item.format_count > 0 ? '4px' : '0' }}
                   >
                     <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                      {item.count}
+                      {item.format_count}
                     </div>
                   </div>
                   {formattedData.length <= 15 && (
