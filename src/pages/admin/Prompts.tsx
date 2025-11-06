@@ -233,7 +233,11 @@ export default function Prompts() {
   };
 
   const handleSaveConfirm = async () => {
-    if (!currentEditingId) return;
+    if (!currentEditingId) {
+      toast.error('No prompt selected for editing');
+      setShowSaveDialog(false);
+      return;
+    }
 
     try {
       setSaving(true);
@@ -241,44 +245,59 @@ export default function Prompts() {
       const currentPrompt = prompts.find(p => p.id === currentEditingId);
       if (!currentPrompt) {
         toast.error('Prompt not found');
+        setShowSaveDialog(false);
         return;
       }
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('formatting_prompts')
         .update({
           prompt: editedPrompt,
           updated_at: new Date().toISOString(),
           version: currentPrompt.version + 1,
         })
-        .eq('id', currentEditingId);
+        .eq('id', currentEditingId)
+        .select();
 
       if (error) {
         console.error('Error saving prompt:', error);
-        toast.error('Failed to save prompt');
+        toast.error(`Failed to save prompt: ${error.message}`);
+        setShowSaveDialog(false);
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        console.error('No data returned after update');
+        toast.error('Update succeeded but no data returned');
+        setShowSaveDialog(false);
         return;
       }
 
       toast.success('Prompt saved successfully!');
 
-      const { data: updatedPrompts } = await supabase
+      const { data: updatedPrompts, error: fetchError } = await supabase
         .from('formatting_prompts')
         .select('*')
         .order('style_id');
 
-      if (updatedPrompts) {
+      if (fetchError) {
+        console.error('Error fetching updated prompts:', fetchError);
+        toast.error('Saved but failed to refresh list');
+      } else if (updatedPrompts) {
         setPrompts(updatedPrompts);
       }
 
       setEditMode(false);
       setEditedPrompt('');
       setCurrentEditingId(null);
+      setShowSaveDialog(false);
     } catch (err) {
       console.error('Error in handleSaveConfirm:', err);
-      toast.error('An error occurred while saving');
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      toast.error(`Error while saving: ${errorMessage}`);
+      setShowSaveDialog(false);
     } finally {
       setSaving(false);
-      setShowSaveDialog(false);
     }
   };
 
