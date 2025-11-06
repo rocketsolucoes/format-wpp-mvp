@@ -158,6 +158,17 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
         </div>
       )}
 
+      {!collapsed && (user?.plan === 'pro' || user?.plan === 'enterprise') && (
+        <div className="px-3 py-3 border-b border-slate-800">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-lg">
+            <Zap className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+            <span className="text-sm font-semibold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+              Unlimited
+            </span>
+          </div>
+        </div>
+      )}
+
       {!collapsed && user?.plan === 'free' && (
         <div className="px-3 py-3 border-b border-slate-800">
           <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-3 space-y-2.5">
