@@ -229,25 +229,39 @@ export default function Prompts() {
       toast.error(validation.error || 'Invalid prompt');
       return;
     }
+    setSaving(false);
     setShowSaveDialog(true);
   };
 
   const handleSaveConfirm = async () => {
+    console.log('handleSaveConfirm called', { currentEditingId, saving });
+
     if (!currentEditingId) {
+      console.error('No currentEditingId found');
       toast.error('No prompt selected for editing');
       setShowSaveDialog(false);
+      setSaving(false);
       return;
     }
 
     try {
+      console.log('Starting save process...');
       setSaving(true);
 
       const currentPrompt = prompts.find(p => p.id === currentEditingId);
       if (!currentPrompt) {
+        console.error('Prompt not found in prompts array');
         toast.error('Prompt not found');
+        setSaving(false);
         setShowSaveDialog(false);
         return;
       }
+
+      console.log('Attempting to save prompt:', {
+        id: currentEditingId,
+        oldVersion: currentPrompt.version,
+        newVersion: currentPrompt.version + 1,
+      });
 
       const { data, error } = await supabase
         .from('formatting_prompts')
@@ -260,8 +274,9 @@ export default function Prompts() {
         .select();
 
       if (error) {
-        console.error('Error saving prompt:', error);
+        console.error('Supabase error saving prompt:', error);
         toast.error(`Failed to save prompt: ${error.message}`);
+        setSaving(false);
         setShowSaveDialog(false);
         return;
       }
@@ -269,10 +284,12 @@ export default function Prompts() {
       if (!data || data.length === 0) {
         console.error('No data returned after update');
         toast.error('Update succeeded but no data returned');
+        setSaving(false);
         setShowSaveDialog(false);
         return;
       }
 
+      console.log('Prompt saved successfully, refreshing list...');
       toast.success('Prompt saved successfully!');
 
       const { data: updatedPrompts, error: fetchError } = await supabase
@@ -284,20 +301,22 @@ export default function Prompts() {
         console.error('Error fetching updated prompts:', fetchError);
         toast.error('Saved but failed to refresh list');
       } else if (updatedPrompts) {
+        console.log('Prompts list refreshed');
         setPrompts(updatedPrompts);
       }
 
       setEditMode(false);
       setEditedPrompt('');
       setCurrentEditingId(null);
+      setSaving(false);
       setShowSaveDialog(false);
+      console.log('Save process completed successfully');
     } catch (err) {
-      console.error('Error in handleSaveConfirm:', err);
+      console.error('Exception in handleSaveConfirm:', err);
       const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
       toast.error(`Error while saving: ${errorMessage}`);
-      setShowSaveDialog(false);
-    } finally {
       setSaving(false);
+      setShowSaveDialog(false);
     }
   };
 
@@ -729,7 +748,12 @@ export default function Prompts() {
         </div>
       </div>
 
-      <AlertDialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
+      <AlertDialog open={showSaveDialog} onOpenChange={(open) => {
+        if (!open) {
+          setSaving(false);
+        }
+        setShowSaveDialog(open);
+      }}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Save Prompt Changes?</AlertDialogTitle>
@@ -738,9 +762,15 @@ export default function Prompts() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel onClick={() => {
+              console.log('Cancel clicked, resetting saving state');
+              setSaving(false);
+              setShowSaveDialog(false);
+            }}>
+              Cancel
+            </AlertDialogCancel>
             <AlertDialogAction onClick={handleSaveConfirm} disabled={saving}>
-              {saving ? 'Saving...' : 'Save Changes'}
+              {saving ? 'Saving...' : 'Continue'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
