@@ -158,6 +158,36 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
         </div>
       )}
 
+      {!collapsed && user?.plan === 'free' && (
+        <div className="px-3 py-3 border-b border-slate-800">
+          <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-3 space-y-2.5">
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-slate-400">Credits</span>
+                <span className={`font-semibold ${
+                  (user?.credits_remaining || 0) > 10 ? 'text-emerald-400' :
+                  (user?.credits_remaining || 0) > 5 ? 'text-yellow-400' :
+                  'text-red-400'
+                }`}>
+                  {user?.credits_remaining || 0} / 100
+                </span>
+              </div>
+              <Progress value={user?.credits_remaining || 0} max={100} className="h-1.5" />
+            </div>
+
+            <Button
+              variant="primary"
+              fullWidth
+              size="sm"
+              className="text-sm py-2"
+              onClick={() => window.location.href = '/pricing'}
+            >
+              Upgrade to Pro
+            </Button>
+          </div>
+        </div>
+      )}
+
       <nav className="flex-1 px-2 py-3 space-y-1 overflow-y-auto pt-4">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -224,34 +254,6 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
       </nav>
 
       <div className="p-3 border-t border-slate-800 space-y-2">
-        {!collapsed && user?.plan === 'free' && (
-          <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-3 space-y-2.5">
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-slate-400">Credits</span>
-                <span className={`font-semibold ${
-                  (user?.credits_remaining || 0) > 10 ? 'text-emerald-400' :
-                  (user?.credits_remaining || 0) > 5 ? 'text-yellow-400' :
-                  'text-red-400'
-                }`}>
-                  {user?.credits_remaining || 0} / 100
-                </span>
-              </div>
-              <Progress value={user?.credits_remaining || 0} max={100} className="h-1.5" />
-            </div>
-
-            <Button
-              variant="primary"
-              fullWidth
-              size="sm"
-              className="text-sm py-2"
-              onClick={() => window.location.href = '/pricing'}
-            >
-              Upgrade to Pro
-            </Button>
-          </div>
-        )}
-
         <Button
           variant="ghost"
           fullWidth={!collapsed}
