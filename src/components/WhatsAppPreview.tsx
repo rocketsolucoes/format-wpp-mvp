@@ -114,10 +114,10 @@ export function WhatsAppPreview({ text, isLoading = false }: WhatsAppPreviewProp
 
   return (
     <Card className="border-slate-700 overflow-hidden">
-      <CardContent className="p-4">
+      <CardContent className="p-3 sm:p-4">
         <div className="mx-auto" style={{ maxWidth: '420px' }}>
           <div
-            className="relative bg-gradient-to-b from-slate-900 to-slate-800 rounded-[2.5rem] shadow-2xl overflow-hidden"
+            className="relative bg-gradient-to-b from-slate-900 to-slate-800 rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl overflow-hidden"
             style={{ aspectRatio: '9/16' }}
           >
             <div className="absolute inset-0 border-[12px] border-slate-900 rounded-[2.5rem] pointer-events-none"></div>

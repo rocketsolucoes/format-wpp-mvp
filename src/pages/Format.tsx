@@ -151,16 +151,24 @@ export default function Format() {
 
   return (
     <DashboardLayout>
-      <div className="px-4 py-4 sm:px-6 lg:px-8 border-b border-slate-800 bg-slate-950">
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+      <div className="px-4 py-3 sm:py-4 sm:px-6 lg:px-8 border-b border-slate-800 bg-slate-950">
+        <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
           AI Message Formatter
         </h1>
-        <p className="text-slate-400 text-sm">
+        <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
           Transform your messages with advanced AI-powered formatting
         </p>
       </div>
 
       <div className="px-4 py-6 sm:px-6 lg:px-8">
+        <div className="lg:hidden mb-6">
+          <h2 className="text-sm font-semibold text-white mb-3">Formatting Styles</h2>
+          <StyleSelector
+            selectedStyle={selectedStyle}
+            onStyleChange={setSelectedStyle}
+          />
+        </div>
+
         <div className="flex gap-6">
           <aside className="hidden lg:block w-64 flex-shrink-0">
             <div className="sticky top-6 space-y-4">
@@ -174,16 +182,8 @@ export default function Format() {
             </div>
           </aside>
 
-          <div className="lg:hidden mb-4">
-            <h2 className="text-sm font-semibold text-white mb-3">Formatting Styles</h2>
-            <StyleSelector
-              selectedStyle={selectedStyle}
-              onStyleChange={setSelectedStyle}
-            />
-          </div>
-
           <main className="flex-1 min-w-0 space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <span className={`text-sm font-medium ${charCountColor}`}>
                 {charCount}/5000
               </span>
@@ -195,9 +195,10 @@ export default function Format() {
                     onClick={handleRegenerate}
                     disabled={isFormatting}
                     aria-label="Regenerate"
+                    className="flex-1 sm:flex-none"
                   >
                     <RefreshCw className={`w-4 h-4 ${isFormatting ? 'animate-spin' : ''}`} />
-                    <span className="hidden sm:inline ml-2">Regenerate</span>
+                    <span className="ml-2">Regenerate</span>
                   </Button>
                 )}
                 <Button
@@ -206,9 +207,10 @@ export default function Format() {
                   onClick={handleClearAll}
                   disabled={!inputText && !outputText}
                   aria-label="Clear all"
+                  className="flex-1 sm:flex-none"
                 >
                   <Eraser className="w-4 h-4" />
-                  <span className="hidden sm:inline ml-2">Clear All</span>
+                  <span className="ml-2">Clear All</span>
                 </Button>
               </div>
             </div>
@@ -224,7 +226,7 @@ export default function Format() {
                   onChange={(e) => setInputText(e.target.value)}
                   placeholder="Paste or type your message here..."
                   disabled={isFormatting}
-                  className="w-full min-h-[200px] px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-y disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full min-h-[180px] sm:min-h-[200px] px-3 sm:px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-y disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                   aria-label="Original text input"
                 />
               </div>
@@ -232,7 +234,7 @@ export default function Format() {
               <Button
                 onClick={handleFormat}
                 disabled={!isInputValid || isFormatting || (user?.plan === 'free' && user?.credits_remaining <= 0)}
-                className="w-full h-12 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all"
+                className="w-full h-12 sm:h-14 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all text-base sm:text-lg font-semibold"
                 aria-label="Format with AI"
               >
                 {isFormatting ? (
@@ -258,23 +260,23 @@ export default function Format() {
                       id="output-text"
                       value={outputText}
                       readOnly
-                      className="w-full min-h-[200px] px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white resize-y pr-12"
+                      className="w-full min-h-[180px] sm:min-h-[200px] px-3 sm:px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white resize-y pr-12 text-sm sm:text-base"
                       aria-label="Formatted text output"
                     />
                     <button
                       onClick={handleCopy}
-                      className="absolute top-3 right-3 p-2 hover:bg-slate-800 rounded-lg transition-colors"
+                      className="absolute top-3 right-3 p-2 hover:bg-slate-800 rounded-lg transition-colors touch-manipulation"
                       aria-label="Copy to clipboard"
                     >
                       <Copy className="w-4 h-4 text-slate-400" />
                     </button>
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     <Button
                       onClick={handleCopy}
                       variant="outline"
-                      className="flex-1"
+                      className="flex-1 h-11 sm:h-10"
                       aria-label="Copy to clipboard"
                     >
                       <Copy className="w-4 h-4 mr-2" />
@@ -282,7 +284,7 @@ export default function Format() {
                     </Button>
                     <Button
                       onClick={handleSendToWhatsApp}
-                      className="flex-1 bg-[#25D366] hover:bg-[#20BD5A] text-white border-0"
+                      className="flex-1 h-11 sm:h-10 bg-[#25D366] hover:bg-[#20BD5A] text-white border-0"
                       aria-label="Send to WhatsApp"
                     >
                       <MessageCircle className="w-4 h-4 mr-2" />

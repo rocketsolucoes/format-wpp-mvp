@@ -128,7 +128,7 @@ export function StyleSelector({ selectedStyle, onStyleChange }: StyleSelectorPro
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2 sm:space-y-3">
       {styles.map((style, index) => {
         const isActive = selectedStyle === style.id;
         const colors = colorClasses[style.color as keyof typeof colorClasses];
@@ -150,23 +150,25 @@ export function StyleSelector({ selectedStyle, onStyleChange }: StyleSelectorPro
               relative cursor-pointer transition-all duration-200
               ${isActive
                 ? `border-2 ${colors.border} shadow-lg ${colors.shadow}`
-                : 'border-slate-700 hover:border-slate-600'
+                : 'border-slate-700 hover:border-slate-600 active:border-slate-500'
               }
               hover:scale-[1.01] hover:shadow-md hover:-translate-y-0.5
+              active:scale-[0.99]
               focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-950
+              touch-manipulation
             `}
           >
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className={`p-3 rounded-lg ${colors.bg}`}>
-                  <Icon className={`w-6 h-6 ${colors.icon}`} />
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <div className={`p-2.5 sm:p-3 rounded-lg ${colors.bg} flex-shrink-0`}>
+                  <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${colors.icon}`} />
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-white text-sm leading-tight mb-0.5">
+                  <h3 className="font-semibold text-white text-xs sm:text-sm leading-tight mb-0.5">
                     {style.name}
                   </h3>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-[11px] sm:text-xs text-slate-400 leading-snug">
                     {style.description}
                   </p>
                 </div>
@@ -174,7 +176,7 @@ export function StyleSelector({ selectedStyle, onStyleChange }: StyleSelectorPro
 
               {isActive && (
                 <div
-                  className={`absolute top-3 right-3 w-5 h-5 rounded-full ${colors.bg} flex items-center justify-center animate-in zoom-in duration-200`}
+                  className={`absolute top-2 right-2 sm:top-3 sm:right-3 w-5 h-5 rounded-full ${colors.bg} flex items-center justify-center animate-in zoom-in duration-200`}
                 >
                   <Check className={`w-3 h-3 ${colors.icon}`} strokeWidth={3} />
                 </div>
