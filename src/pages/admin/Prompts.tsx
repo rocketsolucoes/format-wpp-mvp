@@ -344,7 +344,7 @@ export default function Prompts() {
       }
 
       const data = await response.json();
-      setTestOutput(data.formattedText || '');
+      setTestOutput(data.formatted_text || '');
       toast.success('Test completed!');
     } catch (err) {
       console.error('Error testing prompt:', err);

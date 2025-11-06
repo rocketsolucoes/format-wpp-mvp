@@ -10,6 +10,7 @@ const corsHeaders = {
 interface FormatRequest {
   text: string;
   styleId?: string;
+  customPrompt?: string;
 }
 
 interface FormatResponse {
@@ -54,7 +55,6 @@ Deno.serve(async (req: Request) => {
 
     const token = authHeader.replace("Bearer ", "");
 
-    // Client com service role para verificar usuário
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
     const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
 
@@ -68,7 +68,6 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Client com o token do usuário para operações que respeitam RLS
     const supabase = createClient(supabaseUrl, supabaseServiceKey, {
       global: {
         headers: {
@@ -77,10 +76,11 @@ Deno.serve(async (req: Request) => {
       },
     });
 
-    const { text, styleId }: FormatRequest = await req.json();
+    const { text, styleId, customPrompt }: FormatRequest = await req.json();
 
     console.log("Received styleId:", styleId);
     console.log("Text length:", text.length);
+    console.log("Using custom prompt:", !!customPrompt);
 
     if (!text || text.length < 10) {
       return new Response(
@@ -138,17 +138,32 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const stylePrompts: Record<string, string> = {
-      casual: "You are a casual text formatter. Rewrite the user's text in a casual, friendly, conversational style suitable for WhatsApp. Keep it natural and approachable while maintaining clarity. Format with proper line breaks and emojis where appropriate for WhatsApp. ONLY return the rewritten text, nothing else.",
-      sales: "You are a persuasive sales text formatter. Rewrite the user's text using high-conversion copywriting techniques suitable for WhatsApp. Use urgency, social proof, clear benefits, and compelling calls-to-action. Highlight prices and benefits with bold formatting and emojis. Format with proper line breaks and emphasis for WhatsApp. ONLY return the rewritten text, nothing else.",
-      announcement: "You are an announcement text formatter. Rewrite the user's text as a clear and authoritative notice suitable for WhatsApp. Use direct language, proper structure, and emphasize key information. Organize information clearly with structured formatting. Format with proper line breaks and emojis for WhatsApp readability. ONLY return the rewritten text, nothing else.",
-    };
+    let systemPrompt: string;
 
-    const systemPrompt = styleId && stylePrompts[styleId]
-      ? stylePrompts[styleId]
-      : "You are a text formatter. Improve the user's text by fixing grammar, improving clarity, and enhancing readability while maintaining the original tone and meaning. Format with proper line breaks for WhatsApp. ONLY return the improved text, nothing else.";
+    if (customPrompt) {
+      systemPrompt = customPrompt;
+    } else if (styleId) {
+      const { data: promptData, error: promptError } = await supabaseAdmin
+        .from("formatting_prompts")
+        .select("prompt")
+        .eq("style_id", styleId)
+        .eq("is_active", true)
+        .maybeSingle();
 
-    console.log("Selected prompt for style:", styleId, "| Using default:", !stylePrompts[styleId]);
+      if (promptError) {
+        console.error("Error fetching prompt:", promptError);
+        systemPrompt = "You are a text formatter. Improve the user's text by fixing grammar, improving clarity, and enhancing readability while maintaining the original tone and meaning. Format with proper line breaks for WhatsApp. ONLY return the improved text, nothing else.";
+      } else if (promptData) {
+        systemPrompt = promptData.prompt;
+      } else {
+        console.warn("No prompt found for style:", styleId);
+        systemPrompt = "You are a text formatter. Improve the user's text by fixing grammar, improving clarity, and enhancing readability while maintaining the original tone and meaning. Format with proper line breaks for WhatsApp. ONLY return the improved text, nothing else.";
+      }
+    } else {
+      systemPrompt = "You are a text formatter. Improve the user's text by fixing grammar, improving clarity, and enhancing readability while maintaining the original tone and meaning. Format with proper line breaks for WhatsApp. ONLY return the improved text, nothing else.";
+    }
+
+    console.log("Using prompt from:", customPrompt ? "custom" : styleId ? "database" : "default");
     console.log("System prompt (first 100 chars):", systemPrompt.substring(0, 100));
 
     const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
