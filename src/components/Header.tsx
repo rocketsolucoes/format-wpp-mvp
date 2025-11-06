@@ -63,14 +63,14 @@ const Header: React.FC = () => {
               <>
                 <Link href="/pricing">
                   <a className="text-slate-300 hover:text-emerald-400 transition-colors text-sm font-medium">
-                    Pricing
+                    Preços
                   </a>
                 </Link>
                 <Button
                   variant="primary"
                   onClick={() => setLocation('/auth')}
                 >
-                  Sign In
+                  Entrar
                 </Button>
               </>
             ) : (
@@ -83,10 +83,10 @@ const Header: React.FC = () => {
                       <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-full group relative">
                         <Zap className="w-4 h-4 text-emerald-400" />
                         <span className="text-sm font-semibold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                          Unlimited
+                          Ilimitado
                         </span>
                         <div className="absolute bottom-full right-0 mb-2 w-40 px-3 py-2 bg-slate-900 border border-slate-800 rounded-lg text-xs text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                          Pro plan with unlimited formatting
+                          Plano Pro com formatação ilimitada
                         </div>
                       </div>
                     ) : (
@@ -100,7 +100,7 @@ const Header: React.FC = () => {
                           {user.credits_remaining}
                         </span>
                         <div className="absolute bottom-full right-0 mb-2 w-48 px-3 py-2 bg-slate-900 border border-slate-800 rounded-lg text-xs text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                          {user.credits_remaining} credits remaining. Resets monthly.
+                          {user.credits_remaining} créditos restantes. Renovados mensalmente.
                         </div>
                       </div>
                     )}
@@ -119,7 +119,7 @@ const Header: React.FC = () => {
                   <DropdownMenuLabel>
                     <div className="flex flex-col">
                       <span className="text-slate-100 font-semibold text-sm normal-case">
-                        {user.full_name || 'User'}
+                        {user.full_name || 'Usuário'}
                       </span>
                       <span className="text-slate-500 text-xs normal-case">
                         {user.email}
@@ -133,7 +133,7 @@ const Header: React.FC = () => {
                       <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-full w-fit">
                         <Zap className="w-4 h-4 text-emerald-400" />
                         <span className="text-sm font-semibold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                          Unlimited
+                          Ilimitado
                         </span>
                       </div>
                     ) : (
@@ -144,7 +144,7 @@ const Header: React.FC = () => {
                           user.credits_remaining > 5 ? 'text-yellow-400' :
                           'text-red-400'
                         }`}>
-                          {user.credits_remaining} credits
+                          {user.credits_remaining} créditos
                         </span>
                       </div>
                     )}
@@ -156,21 +156,21 @@ const Header: React.FC = () => {
                   <DropdownMenuItem onClick={() => setLocation('/dashboard')}>
                     <div className="flex items-center gap-2">
                       <User className="w-4 h-4" />
-                      Dashboard
+                      Painel
                     </div>
                   </DropdownMenuItem>
 
                   <DropdownMenuItem onClick={() => setLocation('/history')}>
                     <div className="flex items-center gap-2">
                       <History className="w-4 h-4" />
-                      History
+                      Histórico
                     </div>
                   </DropdownMenuItem>
 
                   <DropdownMenuItem onClick={() => setLocation('/settings')}>
                     <div className="flex items-center gap-2">
                       <Settings className="w-4 h-4" />
-                      Settings
+                      Configurações
                     </div>
                   </DropdownMenuItem>
 
@@ -180,7 +180,7 @@ const Header: React.FC = () => {
                   <DropdownMenuItem onClick={handleSignOut}>
                     <div className="flex items-center gap-2 text-red-400">
                       <LogOut className="w-4 h-4" />
-                      Sign Out
+                      Sair
                     </div>
                   </DropdownMenuItem>
                 </DropdownMenuContent>

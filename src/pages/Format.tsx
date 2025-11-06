@@ -35,12 +35,12 @@ export default function Format() {
 
   const handleFormat = async () => {
     if (!isInputValid) {
-      toast.error('Please enter text between 10 and 5000 characters');
+      toast.error('Por favor, insira um texto entre 10 e 5000 caracteres');
       return;
     }
 
     if (!user) {
-      toast.error('Please sign in to format text');
+      toast.error('Por favor, faça login para formatar texto');
       setLocation('/auth');
       return;
     }
@@ -60,17 +60,17 @@ export default function Format() {
       await refreshUser();
 
       if (result.credits_remaining === 0) {
-        toast.warning('You have used all your credits!');
+        toast.warning('Você usou todos os seus créditos!');
       } else if (result.credits_remaining > 0 && result.credits_remaining <= 5) {
-        toast.warning(`Only ${result.credits_remaining} credits remaining`);
+        toast.warning(`Apenas ${result.credits_remaining} créditos restantes`);
       } else {
-        toast.success('Text formatted successfully!');
+        toast.success('Texto formatado com sucesso!');
       }
     } catch (error) {
       if (error instanceof FormatterError) {
         switch (error.code) {
           case 'AUTH_REQUIRED':
-            toast.error('Please sign in again');
+            toast.error('Por favor, faça login novamente');
             setLocation('/auth');
             break;
           case 'NO_CREDITS':
@@ -80,10 +80,10 @@ export default function Format() {
             toast.error(error.message);
             break;
           case 'NETWORK_ERROR':
-            toast.error('Check your internet connection');
+            toast.error('Verifique sua conexão com a internet');
             break;
           default:
-            toast.error('Something went wrong. Please try again.');
+            toast.error('Algo deu errado. Por favor, tente novamente');
             break;
         }
       } else {
@@ -104,9 +104,9 @@ export default function Format() {
     if (!outputText) return;
     try {
       await navigator.clipboard.writeText(outputText);
-      toast.success('Copied!');
+      toast.success('Copiado!');
     } catch (error) {
-      toast.error('Failed to copy');
+      toast.error('Falha ao copiar');
     }
   }, [outputText]);
 
@@ -120,7 +120,7 @@ export default function Format() {
       ? `whatsapp://send?text=${encodedText}`
       : `https://web.whatsapp.com/send?text=${encodedText}`;
 
-    toast.info('Opening WhatsApp...');
+    toast.info('Abrindo WhatsApp...');
 
     try {
       const newWindow = window.open(whatsappUrl, '_blank');
@@ -137,10 +137,10 @@ export default function Format() {
     if (!outputText) return;
     try {
       await navigator.clipboard.writeText(outputText);
-      toast.success('Text copied! Paste it in WhatsApp');
+      toast.success('Texto copiado! Cole no WhatsApp');
       setWhatsappFallbackOpen(false);
     } catch (error) {
-      toast.error('Failed to copy');
+      toast.error('Falha ao copiar');
     }
   }, [outputText]);
 
@@ -153,16 +153,16 @@ export default function Format() {
     <DashboardLayout>
       <div className="px-4 py-3 sm:py-4 sm:px-6 lg:px-8 border-b border-slate-800 bg-slate-950">
         <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-          AI Message Formatter
+          Formatador de Mensagens IA
         </h1>
         <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
-          Transform your messages with advanced AI-powered formatting
+          Transforme suas mensagens com formatação avançada por IA
         </p>
       </div>
 
       <div className="px-4 py-6 sm:px-6 lg:px-8">
         <div className="lg:hidden mb-6">
-          <h2 className="text-sm font-semibold text-white mb-3">Formatting Styles</h2>
+          <h2 className="text-sm font-semibold text-white mb-3">Estilos de Formatação</h2>
           <StyleSelector
             selectedStyle={selectedStyle}
             onStyleChange={setSelectedStyle}
@@ -173,7 +173,7 @@ export default function Format() {
           <aside className="hidden lg:block w-64 flex-shrink-0">
             <div className="sticky top-6 space-y-4">
               <div>
-                <h2 className="text-sm font-semibold text-white mb-3">Formatting Styles</h2>
+                <h2 className="text-sm font-semibold text-white mb-3">Estilos de Formatação</h2>
                 <StyleSelector
                   selectedStyle={selectedStyle}
                   onStyleChange={setSelectedStyle}
@@ -198,7 +198,7 @@ export default function Format() {
                     className="flex-1 sm:flex-none"
                   >
                     <RefreshCw className={`w-4 h-4 ${isFormatting ? 'animate-spin' : ''}`} />
-                    <span className="ml-2">Regenerate</span>
+                    <span className="ml-2">Regenerar</span>
                   </Button>
                 )}
                 <Button
@@ -210,7 +210,7 @@ export default function Format() {
                   className="flex-1 sm:flex-none"
                 >
                   <Eraser className="w-4 h-4" />
-                  <span className="ml-2">Clear All</span>
+                  <span className="ml-2">Limpar Tudo</span>
                 </Button>
               </div>
             </div>
@@ -218,13 +218,13 @@ export default function Format() {
             <div className="space-y-4">
               <div>
                 <label htmlFor="input-text" className="block text-sm font-medium text-white mb-2">
-                  Original Text
+                  Texto Original
                 </label>
                 <textarea
                   id="input-text"
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  placeholder="Paste or type your message here..."
+                  placeholder="Cole ou digite sua mensagem aqui..."
                   disabled={isFormatting}
                   className="w-full min-h-[180px] sm:min-h-[200px] px-3 sm:px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-y disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                   aria-label="Original text input"
@@ -240,12 +240,12 @@ export default function Format() {
                 {isFormatting ? (
                   <>
                     <RefreshCw className="w-5 h-5 mr-2 animate-spin" />
-                    Formatting...
+                    Formatando...
                   </>
                 ) : (
                   <>
                     <Sparkles className="w-5 h-5 mr-2" />
-                    Format with AI ✨
+                    Formatar com IA ✨
                   </>
                 )}
               </Button>
@@ -253,7 +253,7 @@ export default function Format() {
               {outputText && (
                 <div className="space-y-3 animate-in fade-in slide-in-from-bottom-4 duration-500">
                   <label htmlFor="output-text" className="block text-sm font-medium text-white">
-                    Formatted for WhatsApp
+                    Formatado para WhatsApp
                   </label>
                   <div className="relative">
                     <textarea
@@ -280,7 +280,7 @@ export default function Format() {
                       aria-label="Copy to clipboard"
                     >
                       <Copy className="w-4 h-4 mr-2" />
-                      Copy
+                      Copiar
                     </Button>
                     <Button
                       onClick={handleSendToWhatsApp}
@@ -288,7 +288,7 @@ export default function Format() {
                       aria-label="Send to WhatsApp"
                     >
                       <MessageCircle className="w-4 h-4 mr-2" />
-                      Send to WhatsApp
+                      Enviar para WhatsApp
                     </Button>
                   </div>
                 </div>
@@ -307,14 +307,14 @@ export default function Format() {
       <Dialog open={upgradeModalOpen} onOpenChange={setUpgradeModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Upgrade to Pro for Unlimited Formatting</DialogTitle>
+            <DialogTitle>Faça Upgrade para o Pro e Tenha Formatação Ilimitada</DialogTitle>
             <DialogDescription>
-              You've run out of free credits. Upgrade to Pro to get unlimited AI-powered message formatting.
+              Você esgotou seus créditos gratuitos. Faça upgrade para o Pro e tenha formatação ilimitada de mensagens por IA.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setUpgradeModalOpen(false)}>
-              Cancel
+              Cancelar
             </Button>
             <Button
               onClick={() => {
@@ -323,7 +323,7 @@ export default function Format() {
               }}
               className="bg-gradient-to-r from-emerald-500 to-cyan-500"
             >
-              View Plans
+              Ver Planos
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -332,21 +332,21 @@ export default function Format() {
       <Dialog open={whatsappFallbackOpen} onOpenChange={setWhatsappFallbackOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>WhatsApp Not Found</DialogTitle>
+            <DialogTitle>WhatsApp Não Encontrado</DialogTitle>
             <DialogDescription>
-              Couldn't open WhatsApp automatically. Copy the text and paste it manually in WhatsApp.
+              Não foi possível abrir o WhatsApp automaticamente. Copie o texto e cole manualmente no WhatsApp.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setWhatsappFallbackOpen(false)}>
-              Cancel
+              Cancelar
             </Button>
             <Button
               onClick={handleCopyFromFallback}
               className="bg-[#25D366] hover:bg-[#20BD5A] text-white"
             >
               <Copy className="w-4 h-4 mr-2" />
-              Copy Text
+              Copiar Texto
             </Button>
           </DialogFooter>
         </DialogContent>

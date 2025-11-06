@@ -28,7 +28,7 @@ export async function formatText(
 ): Promise<FormatTextResponse> {
   if (text.length < 10) {
     throw new FormatterError(
-      'Text must be at least 10 characters long',
+      'O texto deve ter pelo menos 10 caracteres',
       'VALIDATION_ERROR',
       400
     );
@@ -36,7 +36,7 @@ export async function formatText(
 
   if (text.length > 5000) {
     throw new FormatterError(
-      'Text must be less than 5000 characters',
+      'O texto deve ter menos de 5000 caracteres',
       'VALIDATION_ERROR',
       400
     );
@@ -46,7 +46,7 @@ export async function formatText(
 
   if (sessionError || !session) {
     throw new FormatterError(
-      'You must be logged in to format text',
+      'Você precisa estar logado para formatar texto',
       'AUTH_REQUIRED',
       401
     );
@@ -69,18 +69,18 @@ export async function formatText(
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      const errorMessage = errorData.error || 'Failed to format text';
+      const errorMessage = errorData.error || 'Falha ao formatar texto';
 
       switch (response.status) {
         case 401:
           throw new FormatterError(
-            'Authentication failed. Please sign in again.',
+            'Falha na autenticação. Por favor, faça login novamente.',
             'AUTH_REQUIRED',
             401
           );
         case 403:
           throw new FormatterError(
-            'You have no credits remaining. Please upgrade your plan.',
+            'Você não tem créditos restantes. Por favor, faça upgrade do seu plano.',
             'NO_CREDITS',
             403
           );
@@ -109,13 +109,13 @@ export async function formatText(
 
     if (error instanceof TypeError && error.message.includes('fetch')) {
       throw new FormatterError(
-        'Network error. Please check your connection and try again.',
+        'Erro de rede. Por favor, verifique sua conexão e tente novamente.',
         'NETWORK_ERROR'
       );
     }
 
     throw new FormatterError(
-      'An unexpected error occurred. Please try again.',
+      'Ocorreu um erro inesperado. Por favor, tente novamente.',
       'SERVER_ERROR',
       500
     );

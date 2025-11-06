@@ -87,8 +87,8 @@ const Dashboard: React.FC = () => {
       <div className="px-4 py-4 sm:px-6 lg:px-8 border-b border-slate-800 bg-slate-950">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Dashboard</h1>
-            <p className="text-sm text-slate-400">Welcome back, {user?.full_name || 'User'}!</p>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Painel</h1>
+            <p className="text-sm text-slate-400">Bem-vindo de volta, {user?.full_name || 'Usuário'}!</p>
           </div>
           <Button
             variant="outline"
@@ -97,7 +97,7 @@ const Dashboard: React.FC = () => {
             className="gap-2"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-            <span className="hidden sm:inline">Refresh</span>
+            <span className="hidden sm:inline">Atualizar</span>
           </Button>
         </div>
       </div>
@@ -111,7 +111,7 @@ const Dashboard: React.FC = () => {
                   onClick={fetchDashboardData}
                   className="ml-2 underline hover:no-underline"
                 >
-                  Try again
+                  Tentar novamente
                 </button>
               </AlertDescription>
             </Alert>
@@ -120,10 +120,10 @@ const Dashboard: React.FC = () => {
           <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-2xl p-6 text-center">
             <Sparkles className="w-10 h-10 mx-auto mb-3 text-emerald-400" />
             <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-              Ready to Format?
+              Pronto para Formatar?
             </h2>
             <p className="text-slate-400 mb-4">
-              Transform your messages with AI-powered formatting
+              Transforme suas mensagens com formatação por IA
             </p>
             <div className="flex justify-center">
               <Button
@@ -132,7 +132,7 @@ const Dashboard: React.FC = () => {
                 className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all hover:scale-105"
               >
                 <Sparkles className="w-5 h-5 mr-2" />
-                Start Formatting
+                Começar a Formatar
               </Button>
             </div>
           </div>

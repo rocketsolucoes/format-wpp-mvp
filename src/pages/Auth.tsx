@@ -54,15 +54,15 @@ const Auth: React.FC = () => {
     const errors: { email?: string; password?: string } = {};
 
     if (!loginEmail) {
-      errors.email = 'Email is required';
+      errors.email = 'E-mail é obrigatório';
     } else if (!/\S+@\S+\.\S+/.test(loginEmail)) {
-      errors.email = 'Email is invalid';
+      errors.email = 'E-mail é inválido';
     }
 
     if (!loginPassword) {
-      errors.password = 'Password is required';
+      errors.password = 'Senha é obrigatória';
     } else if (loginPassword.length < 6) {
-      errors.password = 'Password must be at least 6 characters';
+      errors.password = 'A senha deve ter pelo menos 6 caracteres';
     }
 
     setLoginErrors(errors);
@@ -82,31 +82,31 @@ const Auth: React.FC = () => {
     } = {};
 
     if (!signupFullName) {
-      errors.fullName = 'Full name is required';
+      errors.fullName = 'Nome completo é obrigatório';
     } else if (signupFullName.length < 2) {
-      errors.fullName = 'Name must be at least 2 characters';
+      errors.fullName = 'O nome deve ter pelo menos 2 caracteres';
     }
 
     if (!signupEmail) {
-      errors.email = 'Email is required';
+      errors.email = 'E-mail é obrigatório';
     } else if (!/\S+@\S+\.\S+/.test(signupEmail)) {
-      errors.email = 'Email is invalid';
+      errors.email = 'E-mail é inválido';
     }
 
     if (!signupPassword) {
-      errors.password = 'Password is required';
+      errors.password = 'Senha é obrigatória';
     } else if (signupPassword.length < 6) {
-      errors.password = 'Password must be at least 6 characters';
+      errors.password = 'A senha deve ter pelo menos 6 caracteres';
     }
 
     if (!signupConfirmPassword) {
-      errors.confirmPassword = 'Please confirm your password';
+      errors.confirmPassword = 'Por favor, confirme sua senha';
     } else if (signupPassword !== signupConfirmPassword) {
-      errors.confirmPassword = 'Passwords do not match';
+      errors.confirmPassword = 'As senhas não coincidem';
     }
 
     if (!acceptTerms) {
-      errors.terms = 'You must accept the terms and conditions';
+      errors.terms = 'Você deve aceitar os termos e condições';
     }
 
     setSignupErrors(errors);
@@ -176,10 +176,10 @@ const Auth: React.FC = () => {
           </div>
           <h1 className="text-3xl font-bold mb-2">
             <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-              Welcome Back
+              Bem-vindo de Volta
             </span>
           </h1>
-          <p className="text-slate-400">Sign in to continue formatting</p>
+          <p className="text-slate-400">Faça login para continuar formatando</p>
         </div>
 
         {/* Card com Tabs */}
@@ -187,8 +187,8 @@ const Auth: React.FC = () => {
           <Tabs defaultValue="login">
             <div className="flex justify-center mb-6">
               <TabsList className="w-auto">
-                <TabsTrigger value="login">Login</TabsTrigger>
-                <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                <TabsTrigger value="login">Entrar</TabsTrigger>
+                <TabsTrigger value="signup">Criar Conta</TabsTrigger>
               </TabsList>
             </div>
 
@@ -197,12 +197,12 @@ const Auth: React.FC = () => {
               <form onSubmit={handleLoginSubmit} className="space-y-4">
                 <div>
                   <Label htmlFor="login-email" required>
-                    Email
+                    E-mail
                   </Label>
                   <Input
                     id="login-email"
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder="seu@email.com"
                     value={loginEmail}
                     onChange={(e) => setLoginEmail(e.target.value)}
                     error={loginErrors.email}
@@ -212,7 +212,7 @@ const Auth: React.FC = () => {
 
                 <div>
                   <Label htmlFor="login-password" required>
-                    Password
+                    Senha
                   </Label>
                   <Input
                     id="login-password"
@@ -231,12 +231,12 @@ const Auth: React.FC = () => {
                     onClick={() => setShowResetModal(true)}
                     className="text-sm text-emerald-400 hover:text-emerald-300 transition-colors"
                   >
-                    Forgot password?
+                    Esqueceu a senha?
                   </button>
                 </div>
 
                 <Button type="submit" loading={loading} fullWidth>
-                  Sign In
+                  Entrar
                 </Button>
               </form>
             </TabsContent>
@@ -246,12 +246,12 @@ const Auth: React.FC = () => {
               <form onSubmit={handleSignupSubmit} className="space-y-4">
                 <div>
                   <Label htmlFor="signup-name" required>
-                    Full Name
+                    Nome Completo
                   </Label>
                   <Input
                     id="signup-name"
                     type="text"
-                    placeholder="John Doe"
+                    placeholder="João Silva"
                     value={signupFullName}
                     onChange={(e) => setSignupFullName(e.target.value)}
                     error={signupErrors.fullName}
@@ -261,12 +261,12 @@ const Auth: React.FC = () => {
 
                 <div>
                   <Label htmlFor="signup-email" required>
-                    Email
+                    E-mail
                   </Label>
                   <Input
                     id="signup-email"
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder="seu@email.com"
                     value={signupEmail}
                     onChange={(e) => setSignupEmail(e.target.value)}
                     error={signupErrors.email}
@@ -276,7 +276,7 @@ const Auth: React.FC = () => {
 
                 <div>
                   <Label htmlFor="signup-password" required>
-                    Password
+                    Senha
                   </Label>
                   <Input
                     id="signup-password"
@@ -291,7 +291,7 @@ const Auth: React.FC = () => {
 
                 <div>
                   <Label htmlFor="signup-confirm-password" required>
-                    Confirm Password
+                    Confirmar Senha
                   </Label>
                   <Input
                     id="signup-confirm-password"
@@ -309,7 +309,7 @@ const Auth: React.FC = () => {
                     id="terms"
                     checked={acceptTerms}
                     onChange={(e) => setAcceptTerms(e.target.checked)}
-                    label="I accept the terms and conditions"
+                    label="Eu aceito os termos e condições"
                     disabled={loading}
                   />
                   {signupErrors.terms && (
@@ -318,7 +318,7 @@ const Auth: React.FC = () => {
                 </div>
 
                 <Button type="submit" loading={loading} fullWidth>
-                  Create Account
+                  Criar Conta
                 </Button>
               </form>
             </TabsContent>
@@ -331,7 +331,7 @@ const Auth: React.FC = () => {
             onClick={() => setLocation('/')}
             className="text-sm text-slate-400 hover:text-slate-300 transition-colors"
           >
-            Back to home
+            Voltar para início
           </button>
         </div>
       </div>
@@ -340,20 +340,20 @@ const Auth: React.FC = () => {
       <Dialog open={showResetModal} onOpenChange={setShowResetModal}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Reset Password</DialogTitle>
+            <DialogTitle>Redefinir Senha</DialogTitle>
             <DialogDescription>
-              Enter your email address and we'll send you a link to reset your password.
+              Digite seu endereço de e-mail e enviaremos um link para redefinir sua senha.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleResetPassword} className="px-6 py-6 space-y-6">
             <div>
               <Label htmlFor="reset-email" required>
-                Email
+                E-mail
               </Label>
               <Input
                 id="reset-email"
                 type="email"
-                placeholder="your@email.com"
+                placeholder="seu@email.com"
                 value={resetEmail}
                 onChange={(e) => setResetEmail(e.target.value)}
                 disabled={loading}
@@ -369,10 +369,10 @@ const Auth: React.FC = () => {
                 }}
                 disabled={loading}
               >
-                Cancel
+                Cancelar
               </Button>
               <Button type="submit" loading={loading}>
-                Send Reset Link
+                Enviar Link de Redefinição
               </Button>
             </div>
           </form>

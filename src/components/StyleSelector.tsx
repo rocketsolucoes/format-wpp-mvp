@@ -14,24 +14,24 @@ interface Style {
 const styles: Style[] = [
   {
     id: 'casual',
-    name: 'Casual Friendly',
-    description: 'Warm and conversational tone',
+    name: 'Casual Amigável',
+    description: 'Tom caloroso e conversacional',
     icon: Smile,
     color: 'green',
     isPro: false,
   },
   {
     id: 'sales',
-    name: 'Persuasive Sales',
-    description: 'High-conversion copy with urgency',
+    name: 'Vendas Persuasivo',
+    description: 'Copy de alta conversão com urgência',
     icon: Flame,
     color: 'orange',
     isPro: false,
   },
   {
     id: 'announcement',
-    name: 'Important Announcement',
-    description: 'Clear and authoritative notices',
+    name: 'Anúncio Importante',
+    description: 'Avisos claros e autoritários',
     icon: Megaphone,
     color: 'red',
     isPro: false,
@@ -66,24 +66,24 @@ const colorClasses = {
 };
 
 const tooltips: Record<string, string> = {
-  casual: `Perfect for:
-• Friendly messages
-• Product announcements
-• General communication
+  casual: `Perfeito para:
+• Mensagens amigáveis
+• Anúncios de produtos
+• Comunicação geral
 
-Adds emojis and formatting while keeping your original text.`,
-  sales: `Perfect for:
-• Promotions and offers
-• Product launches
-• Sales messages
+Adiciona emojis e formatação mantendo seu texto original.`,
+  sales: `Perfeito para:
+• Promoções e ofertas
+• Lançamentos de produtos
+• Mensagens de vendas
 
-Highlights prices and benefits with bold formatting and emojis.`,
-  announcement: `Perfect for:
-• Official notices
-• Important updates
-• Team communications
+Destaca preços e benefícios com negrito e emojis.`,
+  announcement: `Perfeito para:
+• Avisos oficiais
+• Atualizações importantes
+• Comunicações de equipe
 
-Organizes information clearly with structured formatting.`,
+Organiza informações claramente com formatação estruturada.`,
 };
 
 export function StyleSelector({ selectedStyle, onStyleChange }: StyleSelectorProps) {

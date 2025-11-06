@@ -29,10 +29,10 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
-  { label: 'Format Text', icon: Sparkles, href: '/format' },
-  { label: 'History', icon: History, href: '/history' },
-  { label: 'Settings', icon: Settings, href: '/settings' },
+  { label: 'Painel', icon: LayoutDashboard, href: '/dashboard' },
+  { label: 'Formatar Texto', icon: Sparkles, href: '/format' },
+  { label: 'Histórico', icon: History, href: '/history' },
+  { label: 'Configurações', icon: Settings, href: '/settings' },
 ];
 
 interface DashboardSidebarProps {
@@ -110,7 +110,7 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
           <button
             onClick={onToggleCollapse}
             className="p-1.5 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white flex-shrink-0"
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-label={collapsed ? "Expandir barra lateral" : "Recolher barra lateral"}
           >
             {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
           </button>
@@ -147,7 +147,7 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-white truncate">
-                  {user.full_name || 'User'}
+                  {user.full_name || 'Usuário'}
                 </p>
                 <p className="text-xs text-slate-400 truncate">
                   {user.email}
@@ -163,7 +163,7 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
           <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-lg">
             <Zap className="w-4 h-4 text-emerald-400 flex-shrink-0" />
             <span className="text-sm font-semibold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-              Unlimited
+              Ilimitado
             </span>
           </div>
         </div>
@@ -174,7 +174,7 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
           <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-3 space-y-2.5">
             <div className="space-y-1.5">
               <div className="flex items-center justify-between text-xs">
-                <span className="text-slate-400">Credits</span>
+                <span className="text-slate-400">Créditos</span>
                 <span className={`font-semibold ${
                   (user?.credits_remaining || 0) > 10 ? 'text-emerald-400' :
                   (user?.credits_remaining || 0) > 5 ? 'text-yellow-400' :
@@ -193,7 +193,7 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
               className="text-sm py-2"
               onClick={() => window.location.href = '/pricing'}
             >
-              Upgrade to Pro
+              Fazer Upgrade para o Pro
             </Button>
           </div>
         </div>
@@ -235,7 +235,7 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
               <div className="pt-4 pb-2 px-2">
                 <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   <Shield className="w-3 h-3" />
-                  <span>Admin</span>
+                  <span>Administrador</span>
                 </div>
               </div>
             )}
@@ -247,11 +247,11 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
                     ? 'bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 text-emerald-400 border border-emerald-500/20'
                     : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
                 }`}
-                title={collapsed ? 'Prompt Manager' : undefined}
+                title={collapsed ? 'Gerenciar Prompts' : undefined}
               >
                 <div className="flex items-center gap-2.5">
                   <Wrench className="w-4 h-4 flex-shrink-0" />
-                  {!collapsed && <span className="font-medium text-sm whitespace-nowrap">Prompt Manager</span>}
+                  {!collapsed && <span className="font-medium text-sm whitespace-nowrap">Gerenciar Prompts</span>}
                 </div>
                 {!collapsed && (
                   <Badge className="text-xs bg-red-500/10 text-red-400 border-red-500/20">
@@ -271,10 +271,10 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
           size="sm"
           onClick={handleSignOut}
           className={`${collapsed ? 'w-full justify-center' : 'justify-start'} text-red-400 hover:text-red-300 hover:bg-red-500/10`}
-          title={collapsed ? 'Sign Out' : undefined}
+          title={collapsed ? 'Sair' : undefined}
         >
           <LogOut className="w-4 h-4" />
-          {!collapsed && <span className="ml-2">Sign Out</span>}
+          {!collapsed && <span className="ml-2">Sair</span>}
         </Button>
       </div>
     </div>
