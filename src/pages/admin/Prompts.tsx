@@ -244,6 +244,7 @@ export default function Prompts() {
     if (!currentEditingId) {
       console.error('No currentEditingId');
       toast.error('No prompt selected');
+      setShowSaveDialog(false);
       return;
     }
 
@@ -251,6 +252,7 @@ export default function Prompts() {
     if (!currentPrompt) {
       console.error('Prompt not found');
       toast.error('Prompt not found');
+      setShowSaveDialog(false);
       return;
     }
 
@@ -259,6 +261,9 @@ export default function Prompts() {
 
     try {
       console.log('Updating prompt in database...');
+      console.log('Prompt ID:', currentEditingId);
+      console.log('New version:', currentPrompt.version + 1);
+
       const { data, error } = await supabase
         .from('formatting_prompts')
         .update({
@@ -272,18 +277,22 @@ export default function Prompts() {
       if (error) {
         console.error('Database error:', error);
         toast.error(`Failed: ${error.message}`);
+        setSaving(false);
         return;
       }
 
       console.log('Save successful!', data);
       toast.success('Prompt saved!');
 
-      const { data: updatedPrompts } = await supabase
+      const { data: updatedPrompts, error: fetchError } = await supabase
         .from('formatting_prompts')
         .select('*')
         .order('style_id');
 
-      if (updatedPrompts) {
+      if (fetchError) {
+        console.error('Error fetching updated prompts:', fetchError);
+      } else if (updatedPrompts) {
+        console.log('Updated prompts loaded:', updatedPrompts.length);
         setPrompts(updatedPrompts);
       }
 
@@ -293,7 +302,7 @@ export default function Prompts() {
       setShowSaveDialog(false);
     } catch (err) {
       console.error('Exception:', err);
-      toast.error('Error saving');
+      toast.error(err instanceof Error ? err.message : 'Error saving');
     } finally {
       console.log('Setting saving to false...');
       setSaving(false);
@@ -747,7 +756,8 @@ export default function Prompts() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 console.log('=== CANCEL CLICKED ===');
                 setSaving(false);
                 setShowSaveDialog(false);
@@ -755,13 +765,16 @@ export default function Prompts() {
             >
               Cancel
             </AlertDialogCancel>
-            <Button
-              onClick={handleSaveConfirm}
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                console.log('=== CONTINUE BUTTON CLICKED ===');
+                handleSaveConfirm();
+              }}
               disabled={saving}
-              className="bg-gradient-to-r from-emerald-500 to-cyan-500"
             >
               {saving ? 'Saving...' : 'Continue'}
-            </Button>
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
