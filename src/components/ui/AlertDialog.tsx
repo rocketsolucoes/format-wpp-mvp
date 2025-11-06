@@ -54,12 +54,25 @@ export function AlertDialogCancel({ children, onClick }: AlertDialogCancelProps)
 
 interface AlertDialogActionProps {
   children: ReactNode;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
 }
 
 export function AlertDialogAction({ children, onClick, disabled }: AlertDialogActionProps) {
-  return <Button onClick={onClick} disabled={disabled}>{children}</Button>;
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (disabled) return;
+    onClick?.(e);
+  };
+
+  return (
+    <Button
+      onClick={handleClick}
+      disabled={disabled}
+      type="button"
+    >
+      {children}
+    </Button>
+  );
 }
 
 interface AlertDialogProps {

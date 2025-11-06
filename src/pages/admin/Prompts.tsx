@@ -78,6 +78,10 @@ export default function Prompts() {
   const [saving, setSaving] = useState(false);
 
   const [testInput, setTestInput] = useState('');
+
+  useEffect(() => {
+    console.log('Saving state changed:', saving);
+  }, [saving]);
   const [testOutput, setTestOutput] = useState('');
   const [testLoading, setTestLoading] = useState(false);
 
@@ -234,35 +238,27 @@ export default function Prompts() {
   };
 
   const handleSaveConfirm = async () => {
-    console.log('handleSaveConfirm called', { currentEditingId, saving });
+    console.log('=== SAVE CONFIRM CLICKED ===');
+    console.log('Current state:', { saving, currentEditingId, showSaveDialog });
 
     if (!currentEditingId) {
-      console.error('No currentEditingId found');
-      toast.error('No prompt selected for editing');
-      setShowSaveDialog(false);
-      setSaving(false);
+      console.error('No currentEditingId');
+      toast.error('No prompt selected');
       return;
     }
 
+    const currentPrompt = prompts.find(p => p.id === currentEditingId);
+    if (!currentPrompt) {
+      console.error('Prompt not found');
+      toast.error('Prompt not found');
+      return;
+    }
+
+    console.log('Setting saving to true...');
+    setSaving(true);
+
     try {
-      console.log('Starting save process...');
-      setSaving(true);
-
-      const currentPrompt = prompts.find(p => p.id === currentEditingId);
-      if (!currentPrompt) {
-        console.error('Prompt not found in prompts array');
-        toast.error('Prompt not found');
-        setSaving(false);
-        setShowSaveDialog(false);
-        return;
-      }
-
-      console.log('Attempting to save prompt:', {
-        id: currentEditingId,
-        oldVersion: currentPrompt.version,
-        newVersion: currentPrompt.version + 1,
-      });
-
+      console.log('Updating prompt in database...');
       const { data, error } = await supabase
         .from('formatting_prompts')
         .update({
@@ -274,49 +270,33 @@ export default function Prompts() {
         .select();
 
       if (error) {
-        console.error('Supabase error saving prompt:', error);
-        toast.error(`Failed to save prompt: ${error.message}`);
-        setSaving(false);
-        setShowSaveDialog(false);
+        console.error('Database error:', error);
+        toast.error(`Failed: ${error.message}`);
         return;
       }
 
-      if (!data || data.length === 0) {
-        console.error('No data returned after update');
-        toast.error('Update succeeded but no data returned');
-        setSaving(false);
-        setShowSaveDialog(false);
-        return;
-      }
+      console.log('Save successful!', data);
+      toast.success('Prompt saved!');
 
-      console.log('Prompt saved successfully, refreshing list...');
-      toast.success('Prompt saved successfully!');
-
-      const { data: updatedPrompts, error: fetchError } = await supabase
+      const { data: updatedPrompts } = await supabase
         .from('formatting_prompts')
         .select('*')
         .order('style_id');
 
-      if (fetchError) {
-        console.error('Error fetching updated prompts:', fetchError);
-        toast.error('Saved but failed to refresh list');
-      } else if (updatedPrompts) {
-        console.log('Prompts list refreshed');
+      if (updatedPrompts) {
         setPrompts(updatedPrompts);
       }
 
       setEditMode(false);
       setEditedPrompt('');
       setCurrentEditingId(null);
-      setSaving(false);
       setShowSaveDialog(false);
-      console.log('Save process completed successfully');
     } catch (err) {
-      console.error('Exception in handleSaveConfirm:', err);
-      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
-      toast.error(`Error while saving: ${errorMessage}`);
+      console.error('Exception:', err);
+      toast.error('Error saving');
+    } finally {
+      console.log('Setting saving to false...');
       setSaving(false);
-      setShowSaveDialog(false);
     }
   };
 
@@ -748,30 +728,40 @@ export default function Prompts() {
         </div>
       </div>
 
-      <AlertDialog open={showSaveDialog} onOpenChange={(open) => {
-        if (!open) {
-          setSaving(false);
-        }
-        setShowSaveDialog(open);
-      }}>
+      <AlertDialog
+        open={showSaveDialog}
+        onOpenChange={(open) => {
+          console.log('Dialog onOpenChange:', open);
+          if (!open) {
+            setSaving(false);
+          }
+          setShowSaveDialog(open);
+        }}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Save Prompt Changes?</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure? This will affect all future formatting operations. The prompt version will be incremented.
+              Are you sure? This will affect all future formatting operations.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => {
-              console.log('Cancel clicked, resetting saving state');
-              setSaving(false);
-              setShowSaveDialog(false);
-            }}>
+            <AlertDialogCancel
+              onClick={() => {
+                console.log('=== CANCEL CLICKED ===');
+                setSaving(false);
+                setShowSaveDialog(false);
+              }}
+            >
               Cancel
             </AlertDialogCancel>
-            <AlertDialogAction onClick={handleSaveConfirm} disabled={saving}>
+            <Button
+              onClick={handleSaveConfirm}
+              disabled={saving}
+              className="bg-gradient-to-r from-emerald-500 to-cyan-500"
+            >
               {saving ? 'Saving...' : 'Continue'}
-            </AlertDialogAction>
+            </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
