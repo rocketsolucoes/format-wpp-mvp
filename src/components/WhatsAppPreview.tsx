@@ -115,10 +115,10 @@ export function WhatsAppPreview({ text, isLoading = false }: WhatsAppPreviewProp
   return (
     <Card className="border-slate-700 overflow-hidden">
       <CardContent className="p-4">
-        <div className="mx-auto" style={{ maxWidth: '375px' }}>
+        <div className="mx-auto" style={{ maxWidth: '420px' }}>
           <div
             className="relative bg-gradient-to-b from-slate-900 to-slate-800 rounded-[2.5rem] shadow-2xl overflow-hidden"
-            style={{ aspectRatio: '375/667' }}
+            style={{ aspectRatio: '9/16' }}
           >
             <div className="absolute inset-0 border-[12px] border-slate-900 rounded-[2.5rem] pointer-events-none"></div>
 
@@ -162,7 +162,7 @@ export function WhatsAppPreview({ text, isLoading = false }: WhatsAppPreviewProp
                   </div>
                 ) : text ? (
                   <div className="flex justify-end animate-in fade-in slide-in-from-bottom-2 duration-300">
-                    <div className="relative bg-[#005c4b] rounded-lg rounded-br-sm p-3 max-w-[80%] shadow-md">
+                    <div className="relative bg-[#005c4b] rounded-lg rounded-br-sm p-3 max-w-[85%] shadow-md">
                       <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[8px] border-l-transparent border-t-[8px] border-t-[#005c4b] transform translate-x-[8px]"></div>
 
                       <div
