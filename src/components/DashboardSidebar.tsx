@@ -47,8 +47,6 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminCheckDone, setAdminCheckDone] = useState(false);
 
-  const creditUsage = user?.plan === 'free' ? (100 - (user?.credits_remaining || 0)) : 0;
-  const creditPercentage = user?.plan === 'free' ? (creditUsage / 100) * 100 : 100;
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -160,29 +158,6 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
         </div>
       )}
 
-      {user && !collapsed && (
-        <div className="px-3 py-2 border-b border-slate-800">
-          {user.plan === 'pro' || user.plan === 'enterprise' ? (
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-lg">
-              <Zap className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-              <span className="text-sm font-semibold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                Unlimited
-              </span>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
-              <Coins className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-              <span className={`text-sm font-semibold ${
-                user.credits_remaining > 10 ? 'text-emerald-400' :
-                user.credits_remaining > 5 ? 'text-yellow-400' :
-                'text-red-400'
-              }`}>
-                {user.credits_remaining} credits
-              </span>
-            </div>
-          )}
-        </div>
-      )}
       <nav className="flex-1 px-2 py-3 space-y-1 overflow-y-auto pt-4">
         {navItems.map((item) => {
           const Icon = item.icon;
