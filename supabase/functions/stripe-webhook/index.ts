@@ -122,7 +122,7 @@ Deno.serve(async (req: Request) => {
             .from("profiles")
             .update({
               subscription_status: subscription.status,
-              subscription_tier: "pro",
+              plan: "pro",
               updated_at: new Date().toISOString(),
             })
             .eq("id", userId);
@@ -186,7 +186,7 @@ Deno.serve(async (req: Request) => {
             .from("profiles")
             .update({
               subscription_status: subscription.status,
-              subscription_tier: subscription.status === "active" ? "pro" : "free",
+              plan: subscription.status === "active" ? "pro" : "free",
               updated_at: new Date().toISOString(),
             })
             .eq("id", customerData.user_id);
@@ -227,7 +227,7 @@ Deno.serve(async (req: Request) => {
             .from("profiles")
             .update({
               subscription_status: "canceled",
-              subscription_tier: "free",
+              plan: "free",
               updated_at: new Date().toISOString(),
             })
             .eq("id", customerData.user_id);

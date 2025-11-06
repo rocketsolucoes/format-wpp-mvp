@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'wouter';
+import { Route, Switch, useLocation } from 'wouter';
 import { AuthProvider } from './contexts/AuthContext';
 import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -10,10 +10,11 @@ import Format from './pages/Format';
 import History from './pages/History';
 import Settings from './pages/Settings';
 import Pricing from './pages/Pricing';
-import Tips from './pages/Tips';
 import Success from './pages/Success';
 import Cancel from './pages/Cancel';
 import TestStripe from './pages/TestStripe';
+
+const protectedRoutes = ['/dashboard', '/format', '/history', '/settings', '/success'];
 
 /**
  * Main App Component
@@ -28,13 +29,15 @@ import TestStripe from './pages/TestStripe';
  * - /format : Página de formatação (protegida)
  * - /history : Histórico de formatações (protegida)
  * - /settings : Configurações (protegida)
- * - /tips : Dicas e tutoriais (protegida)
  */
 function App() {
+  const [location] = useLocation();
+  const isProtectedRoute = protectedRoutes.includes(location);
+
   return (
     <AuthProvider>
       <div className="min-h-screen bg-slate-950 text-white">
-        <Header />
+        {!isProtectedRoute && <Header />}
 
         <Switch>
           {/* Rota pública - Home */}
@@ -74,12 +77,6 @@ function App() {
           <Route path="/settings">
             <ProtectedRoute>
               <Settings />
-            </ProtectedRoute>
-          </Route>
-
-          <Route path="/tips">
-            <ProtectedRoute>
-              <Tips />
             </ProtectedRoute>
           </Route>
 

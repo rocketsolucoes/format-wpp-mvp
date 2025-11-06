@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { Search, Calendar, Eye, Copy, Trash, ArrowDown, X, Sparkles } from 'lucide-react';
+import { DashboardLayout } from '../layouts/DashboardLayout';
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -179,15 +180,24 @@ export default function History() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
-        <p>Please sign in to view your history</p>
-      </div>
+      <DashboardLayout>
+        <div className="flex items-center justify-center h-full">
+          <p>Please sign in to view your history</p>
+        </div>
+      </DashboardLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      <div className="container mx-auto px-4 py-8">
+    <DashboardLayout>
+      <div className="px-4 py-4 sm:px-6 lg:px-8 border-b border-slate-800 bg-slate-950">
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Formatting History</h1>
+        <p className="text-sm text-slate-400">
+          {totalCount > 0 ? `${totalCount} ${totalCount === 1 ? 'record' : 'records'} found` : 'View and manage your previous formatting requests'}
+        </p>
+      </div>
+
+      <div className="px-4 py-6 sm:px-6 lg:px-8">
         {!isPro && !bannerDismissed && (
           <div className="mb-6 p-4 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30 rounded-lg flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -212,16 +222,7 @@ export default function History() {
           </div>
         )}
 
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-            Formatting History
-          </h1>
-          <p className="text-slate-400">
-            {totalCount} {totalCount === 1 ? 'record' : 'records'} found
-          </p>
-        </div>
-
-        <div className="sticky top-0 z-10 bg-slate-950/95 backdrop-blur-sm pb-6 mb-6 border-b border-slate-800">
+        <div className="sticky top-0 z-10 bg-slate-950/95 backdrop-blur-sm pb-4 mb-6 border-b border-slate-800">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -466,6 +467,6 @@ export default function History() {
         variant="destructive"
         onAction={handleDelete}
       />
-    </div>
+    </DashboardLayout>
   );
 }

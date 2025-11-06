@@ -55,6 +55,8 @@ export async function formatText(
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const apiUrl = `${supabaseUrl}/functions/v1/format-text`;
 
+  console.log('Formatting with styleId:', styleId);
+
   try {
     const response = await fetch(apiUrl, {
       method: 'POST',

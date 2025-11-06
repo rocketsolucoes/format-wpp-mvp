@@ -13,6 +13,7 @@ import {
   Check,
   X as XIcon,
 } from 'lucide-react';
+import { DashboardLayout } from '../layouts/DashboardLayout';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/Tabs';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -379,22 +380,22 @@ export default function Settings() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
-        <p>Please sign in to access settings</p>
-      </div>
+      <DashboardLayout>
+        <div className="flex items-center justify-center h-full">
+          <p>Please sign in to access settings</p>
+        </div>
+      </DashboardLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-            Settings
-          </h1>
-          <p className="text-slate-400">Manage your account and preferences</p>
-        </div>
+    <DashboardLayout>
+      <div className="px-4 py-4 sm:px-6 lg:px-8 border-b border-slate-800 bg-slate-950">
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Settings</h1>
+        <p className="text-sm text-slate-400">Manage your account settings and preferences</p>
+      </div>
 
+      <div className="px-4 py-6 sm:px-6 lg:px-8">
         <Tabs defaultValue="profile">
           <TabsList className="flex flex-wrap gap-2 mb-8 w-full">
             <TabsTrigger value="profile" className="flex items-center justify-center gap-2">
@@ -885,6 +886,6 @@ export default function Settings() {
         variant="destructive"
         onAction={handleDeleteAccount}
       />
-    </div>
+    </DashboardLayout>
   );
 }

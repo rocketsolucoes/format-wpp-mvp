@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, RefreshCw, Sparkles } from 'lucide-react';
+import { RefreshCw, Sparkles } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { useAuth } from '../hooks/useAuth';
 import { supabase } from '../lib/supabase';
-import { DashboardSidebar } from '../components/DashboardSidebar';
+import { DashboardLayout } from '../layouts/DashboardLayout';
 import { DashboardStats } from '../components/DashboardStats';
 import { RecentFormatting } from '../components/RecentFormatting';
 import { UsageChart } from '../components/UsageChart';
-import { Sheet, SheetContent } from '../components/ui/Sheet';
 import { Button } from '../components/ui/Button';
 import { Alert, AlertDescription } from '../components/ui/Alert';
 
@@ -16,7 +15,9 @@ interface StatsData {
   this_month: number;
   last_month: number;
   total_tokens: number;
-  avg_tokens_per_format: number;
+  avg_tokens: number;
+  favorite_style_id?: string;
+  favorite_style_name?: string;
 }
 
 interface FormattingItem {
@@ -36,7 +37,6 @@ interface ChartDataPoint {
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
   const [, setLocation] = useLocation();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [stats, setStats] = useState<StatsData | null>(null);
   const [recentItems, setRecentItems] = useState<FormattingItem[]>([]);
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
@@ -83,47 +83,26 @@ const Dashboard: React.FC = () => {
   }, [user]);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-950">
-      <aside className="hidden lg:flex lg:w-72 border-r border-slate-800">
-        <DashboardSidebar />
-      </aside>
-
-      <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-        <SheetContent onClose={() => setMobileMenuOpen(false)}>
-          <DashboardSidebar onNavigate={() => setMobileMenuOpen(false)} />
-        </SheetContent>
-      </Sheet>
-
-      <main className="flex-1 overflow-y-auto">
-        <div className="sticky top-0 z-10 bg-slate-950/80 backdrop-blur-lg border-b border-slate-800">
-          <div className="px-4 py-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setMobileMenuOpen(true)}
-                  className="lg:hidden p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
-                >
-                  <Menu className="w-6 h-6" />
-                </button>
-                <div>
-                  <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-                  <p className="text-sm text-slate-400">Welcome back, {user?.full_name || 'User'}!</p>
-                </div>
-              </div>
-              <Button
-                variant="outline"
-                onClick={fetchDashboardData}
-                disabled={loading}
-                className="gap-2"
-              >
-                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                <span className="hidden sm:inline">Refresh</span>
-              </Button>
-            </div>
+    <DashboardLayout>
+      <div className="px-4 py-4 sm:px-6 lg:px-8 border-b border-slate-800 bg-slate-950">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Dashboard</h1>
+            <p className="text-sm text-slate-400">Welcome back, {user?.full_name || 'User'}!</p>
           </div>
+          <Button
+            variant="outline"
+            onClick={fetchDashboardData}
+            disabled={loading}
+            className="gap-2"
+          >
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            <span className="hidden sm:inline">Refresh</span>
+          </Button>
         </div>
+      </div>
 
-        <div className="px-4 py-6 sm:px-6 lg:px-8 space-y-8">
+      <div className="px-4 py-6 sm:px-6 lg:px-8 space-y-8">
           {error && (
             <Alert variant="danger">
               <AlertDescription>
@@ -173,8 +152,7 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+    </DashboardLayout>
   );
 };
 

@@ -52,10 +52,11 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
     const token = authHeader.replace("Bearer ", "");
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    // Client com service role para verificar usuário
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
 
     if (authError || !user) {
       return new Response(
@@ -67,7 +68,19 @@ Deno.serve(async (req: Request) => {
       );
     }
 
+    // Client com o token do usuário para operações que respeitam RLS
+    const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+      global: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    });
+
     const { text, styleId }: FormatRequest = await req.json();
+
+    console.log("Received styleId:", styleId);
+    console.log("Text length:", text.length);
 
     if (!text || text.length < 10) {
       return new Response(
@@ -109,7 +122,7 @@ Deno.serve(async (req: Request) => {
       return new Response(
         JSON.stringify({ error: "User profile not found" }),
         {
-          status: 404,
+          status: 114,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         }
       );
@@ -126,16 +139,17 @@ Deno.serve(async (req: Request) => {
     }
 
     const stylePrompts: Record<string, string> = {
-      professional: "Rewrite the following text in a professional, formal business style. Maintain the original meaning but use sophisticated language, proper grammar, and a formal tone.",
-      casual: "Rewrite the following text in a casual, friendly, conversational style. Keep it natural and approachable while maintaining clarity.",
-      concise: "Rewrite the following text to be more concise and to-the-point. Remove unnecessary words while preserving the core message and meaning.",
-      creative: "Rewrite the following text in a creative, engaging, and expressive style. Use vivid language, metaphors, and dynamic phrasing to make it more interesting.",
-      technical: "Rewrite the following text in a clear, precise technical style. Use appropriate terminology and maintain accuracy while being informative.",
+      casual: "You are a casual text formatter. Rewrite the user's text in a casual, friendly, conversational style suitable for WhatsApp. Keep it natural and approachable while maintaining clarity. Format with proper line breaks and emojis where appropriate for WhatsApp. ONLY return the rewritten text, nothing else.",
+      sales: "You are a persuasive sales text formatter. Rewrite the user's text using high-conversion copywriting techniques suitable for WhatsApp. Use urgency, social proof, clear benefits, and compelling calls-to-action. Highlight prices and benefits with bold formatting and emojis. Format with proper line breaks and emphasis for WhatsApp. ONLY return the rewritten text, nothing else.",
+      announcement: "You are an announcement text formatter. Rewrite the user's text as a clear and authoritative notice suitable for WhatsApp. Use direct language, proper structure, and emphasize key information. Organize information clearly with structured formatting. Format with proper line breaks and emojis for WhatsApp readability. ONLY return the rewritten text, nothing else.",
     };
 
     const systemPrompt = styleId && stylePrompts[styleId]
       ? stylePrompts[styleId]
-      : "Improve the following text by fixing grammar, improving clarity, and enhancing readability while maintaining the original tone and meaning.";
+      : "You are a text formatter. Improve the user's text by fixing grammar, improving clarity, and enhancing readability while maintaining the original tone and meaning. Format with proper line breaks for WhatsApp. ONLY return the improved text, nothing else.";
+
+    console.log("Selected prompt for style:", styleId, "| Using default:", !stylePrompts[styleId]);
+    console.log("System prompt (first 100 chars):", systemPrompt.substring(0, 100));
 
     const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -185,7 +199,7 @@ Deno.serve(async (req: Request) => {
         .eq("id", user.id);
     }
 
-    await supabase
+    const { error: insertError } = await supabase
       .from("formatting_history")
       .insert({
         user_id: user.id,
@@ -194,6 +208,12 @@ Deno.serve(async (req: Request) => {
         style_id: styleId || null,
         tokens_used: tokensUsed,
       });
+
+    if (insertError) {
+      console.error("Failed to save to history:", insertError);
+    } else {
+      console.log("Successfully saved to history for user:", user.id);
+    }
 
     const response: FormatResponse = {
       formatted_text: formattedText,
@@ -212,7 +232,7 @@ Deno.serve(async (req: Request) => {
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
+      },
     );
   }
 });
