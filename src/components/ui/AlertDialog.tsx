@@ -2,6 +2,20 @@ import React, { ReactNode } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './Dialog';
 import { Button } from './Button';
 
+interface AlertDialogRootProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  children: ReactNode;
+}
+
+export function AlertDialog({ open, onOpenChange, children }: AlertDialogRootProps) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      {children}
+    </Dialog>
+  );
+}
+
 interface AlertDialogContentProps {
   children: ReactNode;
   className?: string;
@@ -76,7 +90,7 @@ export function AlertDialogAction({ children, onClick, disabled }: AlertDialogAc
   );
 }
 
-interface AlertDialogProps {
+interface SimpleAlertDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   title: string;
@@ -88,7 +102,7 @@ interface AlertDialogProps {
   variant?: 'default' | 'destructive';
 }
 
-export function AlertDialog({
+export function SimpleAlertDialog({
   open,
   onOpenChange,
   title,
@@ -98,7 +112,7 @@ export function AlertDialog({
   onAction,
   onCancel,
   variant = 'default',
-}: AlertDialogProps) {
+}: SimpleAlertDialogProps) {
   const handleCancel = () => {
     onCancel?.();
     onOpenChange(false);
