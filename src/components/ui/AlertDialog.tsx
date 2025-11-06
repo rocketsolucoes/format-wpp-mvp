@@ -1,6 +1,66 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './Dialog';
 import { Button } from './Button';
+
+interface AlertDialogContentProps {
+  children: ReactNode;
+  className?: string;
+}
+
+export function AlertDialogContent({ children, className = '' }: AlertDialogContentProps) {
+  return <DialogContent className={className}>{children}</DialogContent>;
+}
+
+interface AlertDialogHeaderProps {
+  children: ReactNode;
+}
+
+export function AlertDialogHeader({ children }: AlertDialogHeaderProps) {
+  return <DialogHeader>{children}</DialogHeader>;
+}
+
+interface AlertDialogTitleProps {
+  children: ReactNode;
+}
+
+export function AlertDialogTitle({ children }: AlertDialogTitleProps) {
+  return <DialogTitle>{children}</DialogTitle>;
+}
+
+interface AlertDialogDescriptionProps {
+  children: ReactNode;
+}
+
+export function AlertDialogDescription({ children }: AlertDialogDescriptionProps) {
+  return <DialogDescription>{children}</DialogDescription>;
+}
+
+interface AlertDialogFooterProps {
+  children: ReactNode;
+}
+
+export function AlertDialogFooter({ children }: AlertDialogFooterProps) {
+  return <div className="flex justify-end gap-3 mt-6">{children}</div>;
+}
+
+interface AlertDialogCancelProps {
+  children: ReactNode;
+  onClick?: () => void;
+}
+
+export function AlertDialogCancel({ children, onClick }: AlertDialogCancelProps) {
+  return <Button variant="outline" onClick={onClick}>{children}</Button>;
+}
+
+interface AlertDialogActionProps {
+  children: ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+}
+
+export function AlertDialogAction({ children, onClick, disabled }: AlertDialogActionProps) {
+  return <Button onClick={onClick} disabled={disabled}>{children}</Button>;
+}
 
 interface AlertDialogProps {
   open: boolean;

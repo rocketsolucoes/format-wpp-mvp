@@ -13,8 +13,10 @@ import Pricing from './pages/Pricing';
 import Success from './pages/Success';
 import Cancel from './pages/Cancel';
 import TestStripe from './pages/TestStripe';
+import AdminRoute from './components/AdminRoute';
+import AdminPrompts from './pages/admin/Prompts';
 
-const protectedRoutes = ['/dashboard', '/format', '/history', '/settings', '/success'];
+const protectedRoutes = ['/dashboard', '/format', '/history', '/settings', '/success', '/admin/prompts'];
 
 /**
  * Main App Component
@@ -29,6 +31,7 @@ const protectedRoutes = ['/dashboard', '/format', '/history', '/settings', '/suc
  * - /format : Página de formatação (protegida)
  * - /history : Histórico de formatações (protegida)
  * - /settings : Configurações (protegida)
+ * - /admin/prompts : Gerenciamento de prompts (protegida - admin only)
  */
 function App() {
   const [location] = useLocation();
@@ -83,6 +86,15 @@ function App() {
           <Route path="/success">
             <ProtectedRoute>
               <Success />
+            </ProtectedRoute>
+          </Route>
+
+          {/* Rota admin - Gerenciamento de prompts */}
+          <Route path="/admin/prompts">
+            <ProtectedRoute>
+              <AdminRoute>
+                <AdminPrompts />
+              </AdminRoute>
             </ProtectedRoute>
           </Route>
 
