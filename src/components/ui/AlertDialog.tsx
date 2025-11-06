@@ -8,7 +8,7 @@ interface AlertDialogContentProps {
 }
 
 export function AlertDialogContent({ children, className = '' }: AlertDialogContentProps) {
-  return <DialogContent className={className}>{children}</DialogContent>;
+  return <DialogContent className={`p-6 ${className}`}>{children}</DialogContent>;
 }
 
 interface AlertDialogHeaderProps {
@@ -16,7 +16,7 @@ interface AlertDialogHeaderProps {
 }
 
 export function AlertDialogHeader({ children }: AlertDialogHeaderProps) {
-  return <DialogHeader>{children}</DialogHeader>;
+  return <div className="mb-4">{children}</div>;
 }
 
 interface AlertDialogTitleProps {
@@ -40,7 +40,7 @@ interface AlertDialogFooterProps {
 }
 
 export function AlertDialogFooter({ children }: AlertDialogFooterProps) {
-  return <div className="flex justify-end gap-3 mt-6">{children}</div>;
+  return <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-slate-800">{children}</div>;
 }
 
 interface AlertDialogCancelProps {
@@ -69,6 +69,7 @@ export function AlertDialogAction({ children, onClick, disabled }: AlertDialogAc
       onClick={handleClick}
       disabled={disabled}
       type="button"
+      className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {children}
     </Button>
