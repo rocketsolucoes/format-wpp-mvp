@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, Lock, Clock, Save, X, TestTube2 } from 'lucide-react';
+import { Settings, Lock, Clock, Save, X, TestTube2, History, User, ChevronDown } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
@@ -29,6 +29,9 @@ import {
   DialogTitle,
 } from '../../components/ui/Dialog';
 import { toast } from '../../components/ui/Toaster';
+import { Badge } from '../../components/ui/Badge';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../../components/ui/Collapsible';
+import { ScrollArea } from '../../components/ui/ScrollArea';
 
 interface FormattingPrompt {
   id: string;
@@ -40,6 +43,20 @@ interface FormattingPrompt {
   version: number;
   created_at: string;
   updated_at: string;
+}
+
+interface AuditLogEntry {
+  id: string;
+  prompt_id: string;
+  user_id: string;
+  action: string;
+  old_value: { prompt?: string } | null;
+  new_value: { prompt?: string } | null;
+  created_at: string;
+  profiles?: {
+    full_name: string | null;
+    email: string;
+  };
 }
 
 const MAX_PROMPT_LENGTH = 5000;
@@ -63,6 +80,11 @@ export default function Prompts() {
   const [testInput, setTestInput] = useState('');
   const [testOutput, setTestOutput] = useState('');
   const [testLoading, setTestLoading] = useState(false);
+
+  const [historyData, setHistoryData] = useState<Record<string, AuditLogEntry[]>>({});
+  const [historyLoading, setHistoryLoading] = useState<Record<string, boolean>>({});
+  const [showDiffModal, setShowDiffModal] = useState(false);
+  const [selectedDiff, setSelectedDiff] = useState<AuditLogEntry | null>(null);
 
   useEffect(() => {
     const checkAdminAccess = async () => {
@@ -314,6 +336,71 @@ export default function Prompts() {
     }
   };
 
+  const fetchHistory = async (promptId: string) => {
+    if (historyData[promptId]) return;
+
+    try {
+      setHistoryLoading(prev => ({ ...prev, [promptId]: true }));
+
+      const { data, error } = await supabase
+        .from('prompt_audit_log')
+        .select(`
+          id,
+          prompt_id,
+          user_id,
+          action,
+          old_value,
+          new_value,
+          created_at,
+          profiles:user_id (
+            full_name,
+            email
+          )
+        `)
+        .eq('prompt_id', promptId)
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      if (error) {
+        console.error('Error fetching history:', error);
+        toast.error('Failed to load change history');
+        return;
+      }
+
+      setHistoryData(prev => ({ ...prev, [promptId]: data || [] }));
+    } catch (err) {
+      console.error('Error in fetchHistory:', err);
+      toast.error('An error occurred while loading history');
+    } finally {
+      setHistoryLoading(prev => ({ ...prev, [promptId]: false }));
+    }
+  };
+
+  const formatRelativeTime = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    if (diffDays < 30) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  };
+
+  const handleViewDiff = (entry: AuditLogEntry) => {
+    setSelectedDiff(entry);
+    setShowDiffModal(true);
+  };
+
   const renderPromptCard = (styleId: string) => {
     if (loading) {
       return (
@@ -462,6 +549,105 @@ export default function Prompts() {
               </Button>
             </div>
           )}
+
+          {!isEditing && (
+            <div className="pt-6 mt-6 border-t border-slate-800">
+              <Collapsible>
+                <CollapsibleTrigger className="flex items-center gap-2 w-full text-left hover:text-emerald-400 transition-colors group">
+                  <History className="w-4 h-4" />
+                  <span className="text-sm font-medium">Change History</span>
+                  <ChevronDown className="w-4 h-4 ml-auto group-data-[state=open]:rotate-180 transition-transform" />
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <div className="mt-4">
+                    {!historyData[prompt.id] && !historyLoading[prompt.id] && (
+                      <Button
+                        onClick={() => fetchHistory(prompt.id)}
+                        variant="outline"
+                        size="sm"
+                        className="w-full"
+                      >
+                        Load History
+                      </Button>
+                    )}
+
+                    {historyLoading[prompt.id] && (
+                      <div className="space-y-3">
+                        <Skeleton className="h-16 w-full" />
+                        <Skeleton className="h-16 w-full" />
+                        <Skeleton className="h-16 w-full" />
+                      </div>
+                    )}
+
+                    {historyData[prompt.id] && historyData[prompt.id].length === 0 && (
+                      <div className="py-8 text-center">
+                        <History className="w-12 h-12 mx-auto text-slate-600 mb-2" />
+                        <p className="text-sm text-slate-500">No changes yet</p>
+                      </div>
+                    )}
+
+                    {historyData[prompt.id] && historyData[prompt.id].length > 0 && (
+                      <div className="relative pl-6 space-y-4">
+                        <div className="absolute left-2 top-2 bottom-2 w-px bg-slate-700" />
+                        {historyData[prompt.id].map((entry, index) => (
+                          <div
+                            key={entry.id}
+                            className="relative hover:bg-slate-900/50 -ml-6 pl-6 pr-4 py-3 rounded-lg transition-colors group"
+                          >
+                            <div
+                              className={`absolute left-2 top-5 w-2 h-2 rounded-full ${
+                                entry.action === 'create'
+                                  ? 'bg-emerald-500'
+                                  : entry.action === 'update'
+                                  ? 'bg-blue-500'
+                                  : 'bg-slate-500'
+                              }`}
+                            />
+                            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <Badge
+                                    variant={entry.action === 'create' ? 'default' : 'secondary'}
+                                    className={
+                                      entry.action === 'create'
+                                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                                        : 'bg-blue-500/10 text-blue-400 border-blue-500/20'
+                                    }
+                                  >
+                                    {entry.action}
+                                  </Badge>
+                                  <span className="text-xs text-slate-500">
+                                    {formatRelativeTime(entry.created_at)}
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm text-slate-400">
+                                  <User className="w-3 h-3" />
+                                  <span>
+                                    {entry.profiles?.full_name || 'Unknown User'} (
+                                    {entry.profiles?.email || 'no email'})
+                                  </span>
+                                </div>
+                              </div>
+                              {entry.action === 'update' && entry.old_value && entry.new_value && (
+                                <Button
+                                  onClick={() => handleViewDiff(entry)}
+                                  variant="outline"
+                                  size="sm"
+                                  className="text-xs"
+                                >
+                                  View Changes
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+            </div>
+          )}
         </CardContent>
       </Card>
     );
@@ -595,6 +781,64 @@ export default function Prompts() {
               </Button>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showDiffModal} onOpenChange={setShowDiffModal}>
+        <DialogContent className="max-w-4xl max-h-[80vh]">
+          <DialogHeader>
+            <DialogTitle>View Changes</DialogTitle>
+            <DialogDescription>
+              Compare the previous version with the new version
+            </DialogDescription>
+          </DialogHeader>
+          {selectedDiff && (
+            <div className="mt-4">
+              <div className="flex items-center gap-4 mb-4 pb-4 border-b border-slate-800">
+                <div className="flex items-center gap-2 text-sm">
+                  <User className="w-4 h-4 text-slate-400" />
+                  <span className="text-slate-300">
+                    {selectedDiff.profiles?.full_name || 'Unknown User'}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-slate-500">
+                  <Clock className="w-4 h-4" />
+                  <span>{formatRelativeTime(selectedDiff.created_at)}</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div>
+                  <h4 className="text-sm font-semibold text-slate-300 mb-2">Previous Version</h4>
+                  <ScrollArea className="h-[400px] rounded-lg border border-slate-700 bg-slate-900/50">
+                    <pre className="p-4 text-xs text-slate-400 font-mono whitespace-pre-wrap break-words">
+                      {selectedDiff.old_value?.prompt || 'No previous version'}
+                    </pre>
+                  </ScrollArea>
+                </div>
+                <div>
+                  <h4 className="text-sm font-semibold text-slate-300 mb-2">New Version</h4>
+                  <ScrollArea className="h-[400px] rounded-lg border border-emerald-700/50 bg-emerald-900/10">
+                    <pre className="p-4 text-xs text-emerald-300 font-mono whitespace-pre-wrap break-words">
+                      {selectedDiff.new_value?.prompt || 'No new version'}
+                    </pre>
+                  </ScrollArea>
+                </div>
+              </div>
+
+              <div className="mt-4 flex justify-end">
+                <Button
+                  onClick={() => {
+                    setShowDiffModal(false);
+                    setSelectedDiff(null);
+                  }}
+                  variant="outline"
+                >
+                  Close
+                </Button>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </DashboardLayout>
