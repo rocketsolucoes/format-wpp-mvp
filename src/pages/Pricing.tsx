@@ -30,140 +30,140 @@ export default function Pricing() {
 
   const plans = [
     {
-      name: 'Free',
-      badge: { text: 'Free Forever', variant: 'success' as const },
+      name: 'Gratuito',
+      badge: { text: 'Grátis Para Sempre', variant: 'success' as const },
       price: 0,
       period: 'month',
-      description: 'Perfect for trying out the platform',
+      description: 'Perfeito para experimentar a plataforma',
       features: [
-        { text: '15 formatting per month', included: true },
-        { text: 'Basic AI formatting', included: true },
-        { text: '7-day history', included: true },
-        { text: 'Community access', included: true },
-        { text: 'Custom styles', included: false },
-        { text: 'Priority support', included: false },
-        { text: 'API access', included: false },
+        { text: '15 formatações por mês', included: true },
+        { text: 'Formatação básica por IA', included: true },
+        { text: 'Histórico de 7 dias', included: true },
+        { text: 'Acesso à comunidade', included: true },
+        { text: 'Estilos personalizados', included: false },
+        { text: 'Suporte prioritário', included: false },
+        { text: 'Acesso à API', included: false },
       ],
-      cta: 'Get Started Free',
+      cta: 'Começar Grátis',
       ctaVariant: 'outline' as const,
-      note: 'No credit card required',
+      note: 'Sem cartão de crédito necessário',
       highlighted: false,
       icon: Sparkles,
     },
     {
       name: 'Pro',
-      badge: { text: 'Most Popular', variant: 'default' as const },
+      badge: { text: 'Mais Popular', variant: 'default' as const },
       price: proPrice,
-      period: billingPeriod === 'monthly' ? 'month' : 'month (billed annually)',
-      description: 'Best for professionals and power users',
+      period: billingPeriod === 'monthly' ? 'mês' : 'mês (cobrado anualmente)',
+      description: 'Melhor para profissionais e usuários avançados',
       features: [
-        { text: 'Unlimited formatting', included: true },
-        { text: 'Advanced AI formatting', included: true },
-        { text: 'Complete history', included: true },
-        { text: 'Custom style library', included: true },
-        { text: 'Ready-made templates', included: true },
-        { text: 'Priority support', included: true },
-        { text: 'No ads', included: true },
-        { text: 'Export to PDF', included: true },
+        { text: 'Formatação ilimitada', included: true },
+        { text: 'Formatação avançada por IA', included: true },
+        { text: 'Histórico completo', included: true },
+        { text: 'Biblioteca de estilos personalizados', included: true },
+        { text: 'Modelos prontos', included: true },
+        { text: 'Suporte prioritário', included: true },
+        { text: 'Sem anúncios', included: true },
+        { text: 'Exportar para PDF', included: true },
       ],
-      cta: 'Subscribe to Pro',
+      cta: 'Assinar o Pro',
       ctaVariant: 'default' as const,
-      note: '7-day money-back guarantee',
+      note: 'Garantia de reembolso de 7 dias',
       highlighted: true,
       icon: Zap,
-      savings: savings > 0 ? `Save $${savings}` : undefined,
+      savings: savings > 0 ? `Economize R$${savings}` : undefined,
     },
     {
       name: 'Enterprise',
-      badge: { text: 'For Teams', variant: 'info' as const },
+      badge: { text: 'Para Equipes', variant: 'info' as const },
       price: null,
-      period: 'Custom',
-      description: 'Advanced features for organizations',
+      period: 'Personalizado',
+      description: 'Recursos avançados para organizações',
       features: [
-        { text: 'Everything in Pro +', included: true },
-        { text: 'Dedicated API', included: true },
-        { text: 'White-label option', included: true },
-        { text: 'Guaranteed SLA', included: true },
-        { text: 'Account manager', included: true },
-        { text: 'Custom onboarding', included: true },
-        { text: 'Custom billing', included: true },
-        { text: 'SSO integration', included: true },
+        { text: 'Tudo do Pro +', included: true },
+        { text: 'API dedicada', included: true },
+        { text: 'Opção white-label', included: true },
+        { text: 'SLA garantido', included: true },
+        { text: 'Gerente de conta', included: true },
+        { text: 'Integração personalizada', included: true },
+        { text: 'Cobrança personalizada', included: true },
+        { text: 'Integração SSO', included: true },
       ],
-      cta: 'Talk to Sales',
+      cta: 'Falar com Vendas',
       ctaVariant: 'outline' as const,
-      note: 'Custom pricing for teams',
+      note: 'Preços personalizados para equipes',
       highlighted: false,
       icon: Building,
     },
   ];
 
   const comparisonFeatures = [
-    { name: 'Formatting per month', free: '15', pro: 'Unlimited', enterprise: 'Unlimited' },
-    { name: 'History retention', free: '7 days', pro: 'Forever', enterprise: 'Forever' },
-    { name: 'Custom styles', free: false, pro: true, enterprise: true },
-    { name: 'Templates', free: false, pro: true, enterprise: true },
-    { name: 'Support response time', free: '48h', pro: '4h', enterprise: '1h' },
-    { name: 'API access', free: false, pro: false, enterprise: true },
+    { name: 'Formatações por mês', free: '15', pro: 'Ilimitado', enterprise: 'Ilimitado' },
+    { name: 'Retenção de histórico', free: '7 dias', pro: 'Para sempre', enterprise: 'Para sempre' },
+    { name: 'Estilos personalizados', free: false, pro: true, enterprise: true },
+    { name: 'Modelos', free: false, pro: true, enterprise: true },
+    { name: 'Tempo de resposta do suporte', free: '48h', pro: '4h', enterprise: '1h' },
+    { name: 'Acesso à API', free: false, pro: false, enterprise: true },
     { name: 'White-label', free: false, pro: false, enterprise: true },
-    { name: 'SLA guarantee', free: false, pro: false, enterprise: true },
-    { name: 'Team collaboration', free: false, pro: false, enterprise: true },
+    { name: 'Garantia de SLA', free: false, pro: false, enterprise: true },
+    { name: 'Colaboração em equipe', free: false, pro: false, enterprise: true },
     { name: 'SSO', free: false, pro: false, enterprise: true },
   ];
 
   const faqs = [
     {
-      question: 'How does the trial period work?',
-      answer: 'All new users start with a free account that includes 15 formatting operations per month. You can upgrade to Pro anytime to unlock unlimited access. Pro subscriptions come with a 7-day money-back guarantee, so you can try it risk-free.',
+      question: 'Como funciona o período de teste?',
+      answer: 'Todos os novos usuários começam com uma conta gratuita que inclui 15 operações de formatação por mês. Você pode fazer upgrade para o Pro a qualquer momento para desbloquear acesso ilimitado. As assinaturas Pro vêm com garantia de reembolso de 7 dias, então você pode experimentar sem riscos.',
     },
     {
-      question: 'Can I cancel anytime?',
-      answer: 'Yes, absolutely! You can cancel your subscription at any time from your account settings. If you cancel, you will retain access to Pro features until the end of your billing period. No questions asked, no cancellation fees.',
+      question: 'Posso cancelar a qualquer momento?',
+      answer: 'Sim, absolutamente! Você pode cancelar sua assinatura a qualquer momento nas configurações da sua conta. Se cancelar, você manterá o acesso aos recursos Pro até o final do período de cobrança. Sem perguntas, sem taxas de cancelamento.',
     },
     {
-      question: 'Do credits expire?',
-      answer: 'Free plan credits reset monthly and do not roll over. Pro users have unlimited formatting operations, so there are no credits to worry about. Your usage history is always preserved regardless of your plan.',
+      question: 'Os créditos expiram?',
+      answer: 'Os créditos do plano gratuito são renovados mensalmente e não acumulam. Usuários Pro têm operações de formatação ilimitadas, então não há créditos para se preocupar. Seu histórico de uso é sempre preservado independentemente do seu plano.',
     },
     {
-      question: 'What payment methods do you accept?',
-      answer: 'We accept all major credit cards (Visa, Mastercard, American Express, Discover) and debit cards. All payments are processed securely through Stripe, and we never store your payment information on our servers.',
+      question: 'Quais métodos de pagamento vocês aceitam?',
+      answer: 'Aceitamos todos os principais cartões de crédito (Visa, Mastercard, American Express, Discover) e cartões de débito. Todos os pagamentos são processados de forma segura através do Stripe, e nunca armazenamos suas informações de pagamento em nossos servidores.',
     },
     {
-      question: 'Do you offer refunds?',
-      answer: 'Yes! We offer a 7-day money-back guarantee on all Pro subscriptions. If you are not satisfied with your purchase for any reason, contact us within 7 days of your purchase for a full refund. No questions asked.',
+      question: 'Vocês oferecem reembolso?',
+      answer: 'Sim! Oferecemos garantia de reembolso de 7 dias em todas as assinaturas Pro. Se você não estiver satisfeito com sua compra por qualquer motivo, entre em contato conosco dentro de 7 dias da compra para um reembolso total. Sem perguntas.',
     },
     {
-      question: 'Can I change plans later?',
-      answer: 'Yes, you can upgrade or downgrade your plan at any time from your account settings. When upgrading, you will get immediate access to new features. When downgrading, changes take effect at the end of your current billing period.',
+      question: 'Posso mudar de plano depois?',
+      answer: 'Sim, você pode fazer upgrade ou downgrade do seu plano a qualquer momento nas configurações da sua conta. Ao fazer upgrade, você terá acesso imediato aos novos recursos. Ao fazer downgrade, as mudanças entram em vigor no final do período de cobrança atual.',
     },
     {
-      question: 'Is my data secure?',
-      answer: 'Absolutely. We use industry-standard encryption for all data transmission and storage. Your formatting history is encrypted at rest, and we never share your data with third parties. We are compliant with GDPR and other data protection regulations.',
+      question: 'Meus dados estão seguros?',
+      answer: 'Absolutamente. Usamos criptografia padrão da indústria para toda transmissão e armazenamento de dados. Seu histórico de formatação é criptografado em repouso, e nunca compartilhamos seus dados com terceiros. Estamos em conformidade com a LGPD, GDPR e outros regulamentos de proteção de dados.',
     },
     {
-      question: 'Do you offer discounts for nonprofits?',
-      answer: 'Yes! We offer a 30% discount on Pro plans for registered nonprofit organizations and educational institutions. Contact our sales team with proof of your nonprofit status to get started with the discounted pricing.',
+      question: 'Vocês oferecem descontos para organizações sem fins lucrativos?',
+      answer: 'Sim! Oferecemos 30% de desconto em planos Pro para organizações sem fins lucrativos registradas e instituições educacionais. Entre em contato com nossa equipe de vendas com comprovante de seu status de organização sem fins lucrativos para começar com o preço com desconto.',
     },
   ];
 
   const testimonials = [
     {
-      quote: "This tool has completely transformed how I format messages for my clients. The AI suggestions are spot-on and save me hours every week.",
+      quote: "Esta ferramenta transformou completamente como formato mensagens para meus clientes. As sugestões da IA são precisas e me economizam horas toda semana.",
       name: "Sarah Chen",
-      role: "Content Manager",
+      role: "Gerente de Conteúdo",
       company: "TechCorp",
       initial: "S",
     },
     {
-      quote: "We upgraded to Pro after the first week. The custom styles and templates make our team's communication consistent and professional.",
+      quote: "Fizemos upgrade para o Pro após a primeira semana. Os estilos e modelos personalizados tornam a comunicação da nossa equipe consistente e profissional.",
       name: "Michael Rodriguez",
-      role: "Marketing Director",
+      role: "Diretor de Marketing",
       company: "Growth Labs",
       initial: "M",
     },
     {
-      quote: "The Enterprise plan has been perfect for our organization. The dedicated API and white-label options integrate seamlessly with our workflow.",
+      quote: "O plano Enterprise tem sido perfeito para nossa organização. A API dedicada e as opções white-label se integram perfeitamente ao nosso fluxo de trabalho.",
       name: "Emily Taylor",
-      role: "VP of Operations",
+      role: "VP de Operações",
       company: "Enterprise Co",
       initial: "E",
     },
@@ -182,19 +182,19 @@ export default function Pricing() {
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-            Choose the Perfect Plan for You
+            Escolha o Plano Perfeito para Você
           </h1>
           <p className="text-xl text-slate-400 mb-8">
-            Start free and upgrade when you need
+            Comece grátis e faça upgrade quando precisar
           </p>
 
           <Tabs value={billingPeriod} onValueChange={(value) => setBillingPeriod(value as BillingPeriod)} className="inline-flex">
             <TabsList>
-              <TabsTrigger value="monthly">Monthly</TabsTrigger>
+              <TabsTrigger value="monthly">Mensal</TabsTrigger>
               <TabsTrigger value="annual">
-                Annual
+                Anual
                 {billingPeriod === 'annual' && (
-                  <Badge variant="success" className="ml-2">Save 20%</Badge>
+                  <Badge variant="success" className="ml-2">Economize 20%</Badge>
                 )}
               </TabsTrigger>
             </TabsList>
@@ -246,7 +246,7 @@ export default function Pricing() {
                         )}
                       </>
                     ) : (
-                      <div className="text-4xl font-bold">Contact Sales</div>
+                      <div className="text-4xl font-bold">Falar com Vendas</div>
                     )}
                   </div>
                 </CardHeader>
@@ -293,13 +293,13 @@ export default function Pricing() {
         </div>
 
         <div className="mb-24 max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12">Compare Plans</h2>
+          <h2 className="text-4xl font-bold text-center mb-12">Comparar Planos</h2>
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full border-collapse">
               <thead>
                 <tr className="border-b border-slate-800">
-                  <th className="text-left p-4 text-slate-400 font-semibold">Feature</th>
-                  <th className="text-center p-4 text-slate-400 font-semibold">Free</th>
+                  <th className="text-left p-4 text-slate-400 font-semibold">Recurso</th>
+                  <th className="text-center p-4 text-slate-400 font-semibold">Gratuito</th>
                   <th className="text-center p-4 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 font-semibold text-emerald-400">
                     Pro
                   </th>
@@ -399,7 +399,7 @@ export default function Pricing() {
         </div>
 
         <div className="mb-24 max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+          <h2 className="text-4xl font-bold text-center mb-12">Perguntas Frequentes</h2>
           <div className="space-y-4">
             {faqs.map((faq, index) => (
               <Card
@@ -424,7 +424,7 @@ export default function Pricing() {
         </div>
 
         <div className="mb-24 max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12">What Our Users Say</h2>
+          <h2 className="text-4xl font-bold text-center mb-12">O Que Nossos Usuários Dizem</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
               <Card key={index} className="border-slate-800">
@@ -452,48 +452,48 @@ export default function Pricing() {
         </div>
 
         <div className="max-w-4xl mx-auto bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-2xl p-12 text-center border border-emerald-500/20">
-          <h2 className="text-4xl font-bold mb-4">Ready to Get Started?</h2>
+          <h2 className="text-4xl font-bold mb-4">Pronto para Começar?</h2>
           <p className="text-xl text-slate-300 mb-8">
-            Join thousands of users formatting messages professionally
+            Junte-se a milhares de usuários formatando mensagens profissionalmente
           </p>
           <Button
             onClick={() => setLocation('/auth')}
             size="lg"
             className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-lg px-8 py-6"
           >
-            Create Free Account
+            Criar Conta Gratuita
           </Button>
-          <p className="text-sm text-slate-400 mt-4">No credit card required</p>
+          <p className="text-sm text-slate-400 mt-4">Sem cartão de crédito necessário</p>
         </div>
       </div>
 
       <Dialog open={contactModalOpen} onOpenChange={setContactModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Contact Sales</DialogTitle>
+            <DialogTitle>Falar com Vendas</DialogTitle>
             <DialogDescription>
-              Fill out the form below and our team will get back to you within 24 hours.
+              Preencha o formulário abaixo e nossa equipe entrará em contato em até 24 horas.
             </DialogDescription>
           </DialogHeader>
           <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); setContactModalOpen(false); }}>
             <div>
-              <Label htmlFor="name">Full Name</Label>
-              <Input id="name" placeholder="John Doe" required />
+              <Label htmlFor="name">Nome Completo</Label>
+              <Input id="name" placeholder="João Silva" required />
             </div>
             <div>
-              <Label htmlFor="email">Work Email</Label>
-              <Input id="email" type="email" placeholder="john@company.com" required />
+              <Label htmlFor="email">E-mail Corporativo</Label>
+              <Input id="email" type="email" placeholder="joao@empresa.com" required />
             </div>
             <div>
-              <Label htmlFor="company">Company Name</Label>
-              <Input id="company" placeholder="Acme Corp" required />
+              <Label htmlFor="company">Nome da Empresa</Label>
+              <Input id="company" placeholder="Empresa LTDA" required />
             </div>
             <div>
-              <Label htmlFor="team-size">Team Size</Label>
-              <Input id="team-size" placeholder="e.g., 10-50" required />
+              <Label htmlFor="team-size">Tamanho da Equipe</Label>
+              <Input id="team-size" placeholder="ex: 10-50" required />
             </div>
             <Button type="submit" className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500">
-              Send Message
+              Enviar Mensagem
             </Button>
           </form>
         </DialogContent>

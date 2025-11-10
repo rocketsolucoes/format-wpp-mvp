@@ -88,12 +88,12 @@ export default function Settings() {
     if (!file) return;
 
     if (file.size > 2 * 1024 * 1024) {
-      toast.error('File size must be less than 2MB');
+      toast.error('O arquivo deve ter menos de 2MB');
       return;
     }
 
     if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-      toast.error('Only JPG, PNG, and WebP formats are allowed');
+      toast.error('Apenas formatos JPG, PNG e WebP são permitidos');
       return;
     }
 
@@ -130,7 +130,7 @@ export default function Settings() {
       return publicUrl;
     } catch (error) {
       console.error('Error uploading avatar:', error);
-      toast.error('Failed to upload avatar');
+      toast.error('Falha ao enviar avatar');
       return null;
     } finally {
       setUploadProgress(0);
@@ -158,10 +158,10 @@ export default function Settings() {
       });
 
       setAvatarFile(null);
-      toast.success('Profile updated successfully');
+      toast.success('Perfil atualizado com sucesso');
     } catch (error) {
       console.error('Error updating profile:', error);
-      toast.error('Failed to update profile');
+      toast.error('Falha ao atualizar perfil');
     } finally {
       setLoading(false);
     }
@@ -184,17 +184,17 @@ export default function Settings() {
 
   const handleChangePassword = async () => {
     if (!newPassword || !confirmPassword) {
-      toast.error('Please fill in all fields');
+      toast.error('Por favor, preencha todos os campos');
       return;
     }
 
     if (newPassword.length < 8) {
-      toast.error('Password must be at least 8 characters');
+      toast.error('A senha deve ter pelo menos 8 caracteres');
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      toast.error('Passwords do not match');
+      toast.error('As senhas não coincidem');
       return;
     }
 
@@ -210,10 +210,10 @@ export default function Settings() {
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
-      toast.success('Password updated successfully');
+      toast.success('Senha atualizada com sucesso');
     } catch (error: any) {
       console.error('Error changing password:', error);
-      toast.error(error.message || 'Failed to update password');
+      toast.error(error.message || 'Falha ao atualizar senha');
     } finally {
       setLoading(false);
     }
@@ -232,11 +232,11 @@ export default function Settings() {
       if (error) throw error;
 
       await signOut();
-      toast.success('Account deleted successfully');
+      toast.success('Conta excluída com sucesso');
       setLocation('/');
     } catch (error) {
       console.error('Error deleting account:', error);
-      toast.error('Failed to delete account');
+      toast.error('Falha ao excluir conta');
     } finally {
       setLoading(false);
       setDeleteDialogOpen(false);
@@ -261,10 +261,10 @@ export default function Settings() {
 
       if (error) throw error;
 
-      toast.success('Notification preferences saved');
+      toast.success('Preferências de notificação salvas');
     } catch (error) {
       console.error('Error saving notifications:', error);
-      toast.error('Failed to save preferences');
+      toast.error('Falha ao salvar preferências');
     } finally {
       setLoading(false);
     }
@@ -288,10 +288,10 @@ export default function Settings() {
 
       if (error) throw error;
 
-      toast.success('Privacy preferences saved');
+      toast.success('Preferências de privacidade salvas');
     } catch (error) {
       console.error('Error saving privacy:', error);
-      toast.error('Failed to save preferences');
+      toast.error('Falha ao salvar preferências');
     } finally {
       setLoading(false);
     }
@@ -332,10 +332,10 @@ export default function Settings() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      toast.success('Data exported successfully');
+      toast.success('Dados exportados com sucesso');
     } catch (error) {
       console.error('Error exporting data:', error);
-      toast.error('Failed to export data');
+      toast.error('Falha ao exportar dados');
     } finally {
       setLoading(false);
     }
@@ -347,7 +347,7 @@ export default function Settings() {
 
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        toast.error('Please sign in');
+        toast.error('Por favor, faça login');
         return;
       }
 
@@ -372,7 +372,7 @@ export default function Settings() {
       window.location.href = url;
     } catch (error) {
       console.error('Error opening portal:', error);
-      toast.error('Failed to open billing portal');
+      toast.error('Falha ao abrir portal de cobrança');
     } finally {
       setLoading(false);
     }
@@ -382,7 +382,7 @@ export default function Settings() {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center h-full">
-          <p>Please sign in to access settings</p>
+          <p>Por favor, faça login para acessar as configurações</p>
         </div>
       </DashboardLayout>
     );
@@ -391,8 +391,8 @@ export default function Settings() {
   return (
     <DashboardLayout>
       <div className="px-4 py-4 sm:px-6 lg:px-8 border-b border-slate-800 bg-slate-950">
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Settings</h1>
-        <p className="text-sm text-slate-400">Manage your account settings and preferences</p>
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Configurações</h1>
+        <p className="text-sm text-slate-400">Gerencie as configurações e preferências da sua conta</p>
       </div>
 
       <div className="px-4 py-6 sm:px-6 lg:px-8">
@@ -400,23 +400,23 @@ export default function Settings() {
           <TabsList className="flex flex-wrap gap-2 mb-8 w-full">
             <TabsTrigger value="profile" className="flex items-center justify-center gap-2">
               <User className="w-4 h-4" />
-              <span>Profile</span>
+              <span>Perfil</span>
             </TabsTrigger>
             <TabsTrigger value="account" className="flex items-center justify-center gap-2">
               <Lock className="w-4 h-4" />
-              <span>Account</span>
+              <span>Conta</span>
             </TabsTrigger>
             <TabsTrigger value="notifications" className="flex items-center justify-center gap-2">
               <Bell className="w-4 h-4" />
-              <span>Notifications</span>
+              <span>Notificações</span>
             </TabsTrigger>
             <TabsTrigger value="privacy" className="flex items-center justify-center gap-2">
               <Shield className="w-4 h-4" />
-              <span>Privacy</span>
+              <span>Privacidade</span>
             </TabsTrigger>
             <TabsTrigger value="billing" className="flex items-center justify-center gap-2">
               <CreditCard className="w-4 h-4" />
-              <span>Plan & Billing</span>
+              <span>Plano e Cobrança</span>
             </TabsTrigger>
           </TabsList>
 
@@ -446,7 +446,7 @@ export default function Settings() {
                     onClick={() => fileInputRef.current?.click()}
                   >
                     <Upload className="w-4 h-4 mr-2" />
-                    Change Photo
+                    Alterar Foto
                   </Button>
                   {uploadProgress > 0 && (
                     <div className="w-full max-w-xs mt-2">
@@ -459,35 +459,35 @@ export default function Settings() {
                     </div>
                   )}
                   <p className="text-xs text-slate-500 mt-2">
-                    JPG, PNG, or WebP. Max 2MB.
+                    JPG, PNG ou WebP. Máximo 2MB.
                   </p>
                 </div>
 
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="fullName">Full Name</Label>
+                    <Label htmlFor="fullName">Nome Completo</Label>
                     <Input
                       id="fullName"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      placeholder="John Doe"
+                      placeholder="João Silva"
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email">E-mail</Label>
                     <Input
                       id="email"
                       value={user.email}
                       disabled
                       className="bg-slate-800/50 text-slate-500 cursor-not-allowed"
                     />
-                    <p className="text-xs text-slate-500 mt-1">Email cannot be changed</p>
+                    <p className="text-xs text-slate-500 mt-1">O e-mail não pode ser alterado</p>
                   </div>
 
                   <div>
                     <Label htmlFor="bio">
-                      Bio <span className="text-slate-500">(Optional)</span>
+                      Bio <span className="text-slate-500">(Opcional)</span>
                     </Label>
                     <textarea
                       id="bio"
@@ -495,11 +495,11 @@ export default function Settings() {
                       onChange={(e) => setBio(e.target.value.slice(0, 200))}
                       maxLength={200}
                       rows={3}
-                      placeholder="Tell us about yourself..."
+                      placeholder="Conte-nos sobre você..."
                       className="w-full px-4 py-2 rounded-md border border-slate-700 bg-slate-900 text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
                     />
                     <p className="text-xs text-slate-500 mt-1 text-right">
-                      {bio.length}/200 characters
+                      {bio.length}/200 caracteres
                     </p>
                   </div>
 
@@ -508,7 +508,7 @@ export default function Settings() {
                     disabled={!hasProfileChanges || loading}
                     className="w-full"
                   >
-                    Save Changes
+                    Salvar Alterações
                   </Button>
                 </div>
               </CardContent>
@@ -519,11 +519,11 @@ export default function Settings() {
             <div className="space-y-6 max-w-2xl mx-auto">
               <Card className="border-slate-800">
                 <CardHeader>
-                  <CardTitle>Change Password</CardTitle>
+                  <CardTitle>Alterar Senha</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <Label htmlFor="currentPassword">Current Password</Label>
+                    <Label htmlFor="currentPassword">Senha Atual</Label>
                     <Input
                       id="currentPassword"
                       type="password"
@@ -534,7 +534,7 @@ export default function Settings() {
                   </div>
 
                   <div>
-                    <Label htmlFor="newPassword">New Password</Label>
+                    <Label htmlFor="newPassword">Nova Senha</Label>
                     <Input
                       id="newPassword"
                       type="password"
@@ -545,7 +545,7 @@ export default function Settings() {
                     {newPassword && (
                       <div className="mt-2">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs text-slate-400">Password strength</span>
+                          <span className="text-xs text-slate-400">Força da senha</span>
                           <span className={`text-xs font-medium ${
                             passwordStrength.label === 'Weak' ? 'text-red-400' :
                             passwordStrength.label === 'Medium' ? 'text-yellow-400' :
@@ -565,7 +565,7 @@ export default function Settings() {
                   </div>
 
                   <div>
-                    <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                    <Label htmlFor="confirmPassword">Confirmar Nova Senha</Label>
                     <Input
                       id="confirmPassword"
                       type="password"
@@ -574,23 +574,23 @@ export default function Settings() {
                       placeholder="••••••••"
                     />
                     {confirmPassword && confirmPassword !== newPassword && (
-                      <p className="text-xs text-red-400 mt-1">Passwords do not match</p>
+                      <p className="text-xs text-red-400 mt-1">As senhas não coincidem</p>
                     )}
                   </div>
 
                   <Button onClick={handleChangePassword} disabled={loading} className="w-full">
-                    Update Password
+                    Atualizar Senha
                   </Button>
                 </CardContent>
               </Card>
 
               <Card className="border-red-900/50">
                 <CardHeader>
-                  <CardTitle className="text-red-400">Danger Zone</CardTitle>
+                  <CardTitle className="text-red-400">Zona de Perigo</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-slate-400 mb-4">
-                    Once you delete your account, there is no going back. Please be certain.
+                    Uma vez que você excluir sua conta, não há como voltar atrás. Por favor, tenha certeza.
                   </p>
                   <Button
                     variant="destructive"
@@ -598,7 +598,7 @@ export default function Settings() {
                     className="w-full"
                   >
                     <Trash className="w-4 h-4 mr-2" />
-                    Delete Account
+                    Excluir Conta
                   </Button>
                 </CardContent>
               </Card>
@@ -609,13 +609,13 @@ export default function Settings() {
             <Card className="border-slate-800 max-w-2xl mx-auto">
               <CardContent className="p-6 space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">Email Notifications</h3>
+                  <h3 className="text-lg font-semibold mb-4">Notificações por E-mail</h3>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium">Credits running low</p>
+                        <p className="font-medium">Créditos acabando</p>
                         <p className="text-sm text-slate-400">
-                          Get notified when your credits are almost depleted
+                          Seja notificado quando seus créditos estiverem quase esgotados
                         </p>
                       </div>
                       <Switch
@@ -628,9 +628,9 @@ export default function Settings() {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium">Weekly summary</p>
+                        <p className="font-medium">Resumo semanal</p>
                         <p className="text-sm text-slate-400">
-                          Receive a weekly summary of your activity
+                          Receba um resumo semanal de sua atividade
                         </p>
                       </div>
                       <Switch
@@ -643,9 +643,9 @@ export default function Settings() {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium">News and updates</p>
+                        <p className="font-medium">Notícias e atualizações</p>
                         <p className="text-sm text-slate-400">
-                          Stay informed about new features and improvements
+                          Fique informado sobre novos recursos e melhorias
                         </p>
                       </div>
                       <Switch
@@ -658,9 +658,9 @@ export default function Settings() {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium">Marketing emails</p>
+                        <p className="font-medium">E-mails de marketing</p>
                         <p className="text-sm text-slate-400">
-                          Receive promotional offers and tips
+                          Receba ofertas promocionais e dicas
                         </p>
                       </div>
                       <Switch
@@ -674,7 +674,7 @@ export default function Settings() {
                 </div>
 
                 <Button onClick={handleSaveNotifications} disabled={loading} className="w-full">
-                  Save Preferences
+                  Salvar Preferências
                 </Button>
               </CardContent>
             </Card>
@@ -684,13 +684,13 @@ export default function Settings() {
             <Card className="border-slate-800 max-w-2xl mx-auto">
               <CardContent className="p-6 space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">Data Collection</h3>
+                  <h3 className="text-lg font-semibold mb-4">Coleta de Dados</h3>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium">Usage analytics</p>
+                        <p className="font-medium">Análise de uso</p>
                         <p className="text-sm text-slate-400">
-                          Help us improve the product by sharing usage data
+                          Ajude-nos a melhorar o produto compartilhando dados de uso
                         </p>
                       </div>
                       <Switch
@@ -703,9 +703,9 @@ export default function Settings() {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium">Anonymous data sharing</p>
+                        <p className="font-medium">Compartilhamento de dados anônimos</p>
                         <p className="text-sm text-slate-400">
-                          Share anonymized data for product improvement
+                          Compartilhe dados anonimizados para melhoria do produto
                         </p>
                       </div>
                       <Switch
@@ -718,9 +718,9 @@ export default function Settings() {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium">Public profile</p>
+                        <p className="font-medium">Perfil público</p>
                         <p className="text-sm text-slate-400">
-                          Show your profile publicly (coming soon)
+                          Mostre seu perfil publicamente (em breve)
                         </p>
                       </div>
                       <Switch
@@ -743,7 +743,7 @@ export default function Settings() {
                       rel="noopener noreferrer"
                       className="flex items-center text-emerald-400 hover:text-emerald-300"
                     >
-                      Privacy Policy
+                      Política de Privacidade
                       <ExternalLink className="w-4 h-4 ml-1" />
                     </a>
                     <a
@@ -752,16 +752,16 @@ export default function Settings() {
                       rel="noopener noreferrer"
                       className="flex items-center text-emerald-400 hover:text-emerald-300"
                     >
-                      Terms of Service
+                      Termos de Serviço
                       <ExternalLink className="w-4 h-4 ml-1" />
                     </a>
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">Data Export</h3>
+                  <h3 className="text-lg font-semibold mb-4">Exportar Dados</h3>
                   <p className="text-sm text-slate-400 mb-4">
-                    Download all your data in JSON format (LGPD/GDPR compliance)
+                    Baixe todos os seus dados em formato JSON (conformidade LGPD/GDPR)
                   </p>
                   <Button
                     variant="outline"
@@ -770,7 +770,7 @@ export default function Settings() {
                     className="w-full"
                   >
                     <Download className="w-4 h-4 mr-2" />
-                    Export My Data
+                    Exportar Meus Dados
                   </Button>
                 </div>
 
@@ -787,66 +787,66 @@ export default function Settings() {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-6">
                     <div>
-                      <h3 className="text-2xl font-bold">Current Plan</h3>
+                      <h3 className="text-2xl font-bold">Plano Atual</h3>
                       <p className="text-slate-400">
-                        {isPro ? 'You are on the Pro plan' : 'You are on the Free plan'}
+                        {isPro ? 'Você está no plano Pro' : 'Você está no plano Gratuito'}
                       </p>
                     </div>
                     <Badge variant={isPro ? 'default' : 'secondary'} className="text-lg px-4 py-2">
-                      {isPro ? 'Pro' : 'Free'}
+                      {isPro ? 'Pro' : 'Gratuito'}
                     </Badge>
                   </div>
 
                   {isPro && (
                     <div className="mb-6 space-y-2">
                       <div className="flex justify-between">
-                        <span className="text-slate-400">Price</span>
+                        <span className="text-slate-400">Preço</span>
                         <span className="font-semibold">R$ 19,90/month</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-400">Status</span>
                         <span className="text-green-400 font-semibold">
-                          {user.subscription_status === 'active' ? 'Active' : user.subscription_status}
+                          {user.subscription_status === 'active' ? 'Ativo' : user.subscription_status}
                         </span>
                       </div>
                     </div>
                   )}
 
                   <div className="mb-6">
-                    <h4 className="font-semibold mb-3">Features</h4>
+                    <h4 className="font-semibold mb-3">Recursos</h4>
                     <div className="space-y-2">
                       {isPro ? (
                         <>
                           <div className="flex items-center gap-2">
                             <Check className="w-5 h-5 text-emerald-400" />
-                            <span>Unlimited formatting</span>
+                            <span>Formatação ilimitada</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Check className="w-5 h-5 text-emerald-400" />
-                            <span>Complete history access</span>
+                            <span>Acesso ao histórico completo</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Check className="w-5 h-5 text-emerald-400" />
-                            <span>Priority support</span>
+                            <span>Suporte prioritário</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Check className="w-5 h-5 text-emerald-400" />
-                            <span>Advanced formatting styles</span>
+                            <span>Estilos de formatação avançados</span>
                           </div>
                         </>
                       ) : (
                         <>
                           <div className="flex items-center gap-2">
                             <Check className="w-5 h-5 text-emerald-400" />
-                            <span>100 credits per month</span>
+                            <span>100 créditos por mês</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Check className="w-5 h-5 text-emerald-400" />
-                            <span>7 days history</span>
+                            <span>7 dias de histórico</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <XIcon className="w-5 h-5 text-slate-600" />
-                            <span className="text-slate-500">Priority support</span>
+                            <span className="text-slate-500">Suporte prioritário</span>
                           </div>
                         </>
                       )}
@@ -859,7 +859,7 @@ export default function Settings() {
                       disabled={loading}
                       className="w-full"
                     >
-                      Manage Subscription
+                      Gerenciar Assinatura
                     </Button>
                   ) : (
                     <Button
@@ -879,10 +879,10 @@ export default function Settings() {
       <AlertDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
-        title="Are you absolutely sure?"
-        description="This action cannot be undone. All your data will be permanently deleted."
-        cancelText="Cancel"
-        actionText="Delete Permanently"
+        title="Você tem certeza absoluta?"
+        description="Esta ação não pode ser desfeita. Todos os seus dados serão excluídos permanentemente."
+        cancelText="Cancelar"
+        actionText="Excluir Permanentemente"
         variant="destructive"
         onAction={handleDeleteAccount}
       />

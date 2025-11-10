@@ -106,7 +106,7 @@ export default function History() {
       setTotalCount(count || 0);
     } catch (error) {
       console.error('Error fetching records:', error);
-      toast.error('Error loading history');
+      toast.error('Erro ao carregar histórico');
     } finally {
       setLoading(false);
     }
@@ -124,7 +124,7 @@ export default function History() {
 
   const handleCopy = (text: string, type: 'original' | 'formatted') => {
     navigator.clipboard.writeText(text);
-    toast.success(`${type === 'original' ? 'Original' : 'Formatted'} text copied!`);
+    toast.success(`Texto ${type === 'original' ? 'original' : 'formatado'} copiado!`);
   };
 
   const handleDelete = async () => {
@@ -138,12 +138,12 @@ export default function History() {
 
       if (error) throw error;
 
-      toast.success('Record deleted');
+      toast.success('Registro excluído');
       setRecords(records.filter((r) => r.id !== recordToDelete));
       setTotalCount(totalCount - 1);
     } catch (error) {
       console.error('Error deleting record:', error);
-      toast.error('Error deleting record');
+      toast.error('Erro ao excluir registro');
     } finally {
       setRecordToDelete(null);
     }
@@ -182,7 +182,7 @@ export default function History() {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center h-full">
-          <p>Please sign in to view your history</p>
+          <p>Por favor, faça login para ver seu histórico</p>
         </div>
       </DashboardLayout>
     );
@@ -191,9 +191,9 @@ export default function History() {
   return (
     <DashboardLayout>
       <div className="px-4 py-4 sm:px-6 lg:px-8 border-b border-slate-800 bg-slate-950">
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Formatting History</h1>
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Histórico de Formatação</h1>
         <p className="text-sm text-slate-400">
-          {totalCount > 0 ? `${totalCount} ${totalCount === 1 ? 'record' : 'records'} found` : 'View and manage your previous formatting requests'}
+          {totalCount > 0 ? `${totalCount} ${totalCount === 1 ? 'registro encontrado' : 'registros encontrados'}` : 'Visualize e gerencie suas solicitações de formatação anteriores'}
         </p>
       </div>
 
@@ -203,7 +203,7 @@ export default function History() {
             <div className="flex items-center gap-3">
               <Sparkles className="w-5 h-5 text-emerald-400" />
               <p className="text-slate-200">
-                Upgrade to Pro and get access to complete history
+                Faça upgrade para o Pro e tenha acesso ao histórico completo
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -213,7 +213,7 @@ export default function History() {
                 onClick={() => setLocation('/pricing')}
                 className="bg-gradient-to-r from-emerald-500 to-cyan-500"
               >
-                Upgrade
+                Fazer Upgrade
               </Button>
               <Button variant="ghost" size="sm" onClick={dismissBanner}>
                 <X className="w-4 h-4" />
@@ -228,7 +228,7 @@ export default function History() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
               <Input
                 type="text"
-                placeholder="Search in texts..."
+                placeholder="Buscar nos textos..."
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
@@ -249,17 +249,17 @@ export default function History() {
                   }}
                   className="pl-10 w-full md:w-48"
                 >
-                  <option value="all">All time</option>
-                  <option value="7days">Last 7 days</option>
-                  <option value="30days">Last 30 days</option>
-                  <option value="3months">Last 3 months</option>
+                  <option value="all">Todo o período</option>
+                  <option value="7days">Últimos 7 dias</option>
+                  <option value="30days">Últimos 30 dias</option>
+                  <option value="3months">Últimos 3 meses</option>
                 </Select>
               </div>
             )}
 
             {hasActiveFilters && (
               <Button variant="outline" onClick={clearFilters}>
-                Clear Filters
+                Limpar Filtros
               </Button>
             )}
           </div>
@@ -299,18 +299,18 @@ export default function History() {
                 <Search className="w-12 h-12 text-slate-600" />
               </div>
             </div>
-            <h2 className="text-2xl font-bold mb-2 text-slate-300">No formatting found</h2>
+            <h2 className="text-2xl font-bold mb-2 text-slate-300">Nenhuma formatação encontrada</h2>
             <p className="text-slate-500 mb-6">
               {hasActiveFilters
-                ? 'Try adjusting your filters'
-                : 'Start formatting text to see your history here'}
+                ? 'Tente ajustar seus filtros'
+                : 'Comece a formatar textos para ver seu histórico aqui'}
             </p>
             {!hasActiveFilters && (
               <Button
                 onClick={() => setLocation('/format')}
                 className="bg-gradient-to-r from-emerald-500 to-cyan-500"
               >
-                Start Formatting
+                Começar a Formatar
               </Button>
             )}
           </div>
@@ -327,7 +327,7 @@ export default function History() {
                       <div className="flex flex-col gap-2">
                         <p className="text-sm text-slate-400">{formatDate(record.created_at)}</p>
                         <Badge variant={isPro ? 'default' : 'secondary'} className="w-fit">
-                          {isPro ? 'Pro' : 'Free'}
+                          {isPro ? 'Pro' : 'Gratuito'}
                         </Badge>
                         <p className="text-xs text-slate-500">{record.tokens_used} tokens</p>
                       </div>
@@ -343,7 +343,7 @@ export default function History() {
                           <ArrowDown className="w-5 h-5 text-slate-600" />
                         </div>
                         <div>
-                          <p className="text-xs text-slate-500 mb-1">Formatted:</p>
+                          <p className="text-xs text-slate-500 mb-1">Formatado:</p>
                           <p className="text-sm text-slate-300">
                             {truncateText(record.output_text)}
                           </p>
@@ -357,7 +357,7 @@ export default function History() {
                           onClick={() => setSelectedRecord(record)}
                         >
                           <Eye className="w-4 h-4 mr-2" />
-                          View Full
+                          Ver Completo
                         </Button>
                         <Button
                           variant="outline"
@@ -365,7 +365,7 @@ export default function History() {
                           onClick={() => handleCopy(record.output_text, 'formatted')}
                         >
                           <Copy className="w-4 h-4 mr-2" />
-                          Copy
+                          Copiar
                         </Button>
                         <Button
                           variant="ghost"
@@ -374,7 +374,7 @@ export default function History() {
                           className="text-red-400 hover:text-red-300 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity"
                         >
                           <Trash className="w-4 h-4 mr-2" />
-                          Delete
+                          Excluir
                         </Button>
                       </div>
                     </div>
@@ -390,17 +390,17 @@ export default function History() {
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage(currentPage - 1)}
                 >
-                  Previous
+                  Anterior
                 </Button>
                 <p className="text-sm text-slate-400">
-                  Page {currentPage} of {totalPages}
+                  Página {currentPage} de {totalPages}
                 </p>
                 <Button
                   variant="outline"
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage(currentPage + 1)}
                 >
-                  Next
+                  Próxima
                 </Button>
               </div>
             )}
@@ -419,7 +419,7 @@ export default function History() {
             <>
               <div className="grid lg:grid-cols-2 gap-6 mt-4">
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-400 mb-2">Original Text</h3>
+                  <h3 className="text-sm font-semibold text-slate-400 mb-2">Texto Original</h3>
                   <textarea
                     readOnly
                     value={selectedRecord.input_text}
@@ -427,7 +427,7 @@ export default function History() {
                   />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-400 mb-2">Formatted Text</h3>
+                  <h3 className="text-sm font-semibold text-slate-400 mb-2">Texto Formatado</h3>
                   <textarea
                     readOnly
                     value={selectedRecord.output_text}
@@ -441,16 +441,16 @@ export default function History() {
                   onClick={() => handleCopy(selectedRecord.input_text, 'original')}
                 >
                   <Copy className="w-4 h-4 mr-2" />
-                  Copy Original
+                  Copiar Original
                 </Button>
                 <Button
                   variant="outline"
                   onClick={() => handleCopy(selectedRecord.output_text, 'formatted')}
                 >
                   <Copy className="w-4 h-4 mr-2" />
-                  Copy Formatted
+                  Copiar Formatado
                 </Button>
-                <Button onClick={() => setSelectedRecord(null)}>Close</Button>
+                <Button onClick={() => setSelectedRecord(null)}>Fechar</Button>
               </div>
             </>
           )}
@@ -460,10 +460,10 @@ export default function History() {
       <AlertDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
-        title="Are you sure?"
-        description="This action cannot be undone. This will permanently delete this formatting record."
-        cancelText="Cancel"
-        actionText="Delete"
+        title="Tem certeza?"
+        description="Esta ação não pode ser desfeita. Isso excluirá permanentemente este registro de formatação."
+        cancelText="Cancelar"
+        actionText="Excluir"
         variant="destructive"
         onAction={handleDelete}
       />
