@@ -11,11 +11,13 @@ export interface User {
   email: string;
   full_name: string | null;
   avatar_url: string | null;
+  bio?: string | null;
   plan: 'free' | 'pro' | 'enterprise';
   subscription_tier: 'free' | 'pro' | 'enterprise';
   subscription_status: string | null;
   credits_remaining: number;
   created_at: string;
+  preferences?: any;
 }
 
 /**
@@ -86,11 +88,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         email: data.email,
         full_name: data.full_name,
         avatar_url: data.avatar_url,
+        bio: data.bio,
         plan: data.subscription_tier || data.plan,
         subscription_tier: data.subscription_tier,
         subscription_status: data.subscription_status,
         credits_remaining: data.credits_remaining,
         created_at: data.created_at,
+        preferences: data.preferences,
       };
     } catch (err) {
       console.error('Error in fetchUserProfile:', err);

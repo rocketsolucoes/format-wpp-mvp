@@ -23,7 +23,7 @@ import { Switch } from '../components/ui/Switch';
 import Avatar from '../components/ui/Avatar';
 import { Badge } from '../components/ui/Badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../components/ui/Dialog';
-import { AlertDialog } from '../components/ui/AlertDialog';
+import { SimpleAlertDialog } from '../components/ui/AlertDialog';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../components/ui/Table';
 import { useAuth } from '../hooks/useAuth';
 import { supabase } from '../lib/supabase';
@@ -37,6 +37,7 @@ export default function Settings() {
   const [fullName, setFullName] = useState('');
   const [bio, setBio] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
+  const [originalAvatarUrl, setOriginalAvatarUrl] = useState('');
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -62,26 +63,42 @@ export default function Settings() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [initialBio, setInitialBio] = useState('');
 
   const isPro = user?.subscription_tier === 'pro';
 
   useEffect(() => {
-    if (user) {
-      setFullName(user.full_name || '');
-      setAvatarUrl(user.avatar_url || '');
-      setBio('');
+    const loadUserData = async () => {
+      if (user) {
+        setFullName(user.full_name || '');
+        const userAvatar = user.avatar_url || '';
+        setAvatarUrl(userAvatar);
+        setOriginalAvatarUrl(userAvatar);
 
-      const prefs = user.preferences as any || {};
-      if (prefs.notifications) {
-        setNotifications(prefs.notifications);
-      }
-      if (prefs.privacy) {
-        setPrivacy(prefs.privacy);
-      }
-    }
-  }, [user?.avatar_url, user?.full_name]);
+        const { data } = await supabase
+          .from('profiles')
+          .select('bio, preferences')
+          .eq('id', user.id)
+          .maybeSingle();
 
-  const hasProfileChanges = fullName !== (user?.full_name || '') || bio !== '' || avatarFile !== null;
+        if (data) {
+          const userBio = data.bio || '';
+          setBio(userBio);
+          setInitialBio(userBio);
+          const prefs = data.preferences as any || {};
+          if (prefs.notifications) {
+            setNotifications(prefs.notifications);
+          }
+          if (prefs.privacy) {
+            setPrivacy(prefs.privacy);
+          }
+        }
+      }
+    };
+    loadUserData();
+  }, [user?.id]);
+
+  const hasProfileChanges = fullName !== (user?.full_name || '') || bio !== initialBio || avatarFile !== null;
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -110,6 +127,16 @@ export default function Settings() {
 
     try {
       setUploadProgress(10);
+
+      if (originalAvatarUrl) {
+        const oldPath = originalAvatarUrl.split('/avatars/')[1];
+        if (oldPath) {
+          await supabase.storage
+            .from('avatars')
+            .remove([`avatars/${oldPath}`]);
+        }
+      }
+
       const fileExt = avatarFile.name.split('.').pop();
       const fileName = `${user.id}-${Date.now()}.${fileExt}`;
       const filePath = `avatars/${fileName}`;
@@ -131,6 +158,7 @@ export default function Settings() {
     } catch (error) {
       console.error('Error uploading avatar:', error);
       toast.error('Falha ao enviar avatar');
+      setAvatarUrl(originalAvatarUrl);
       return null;
     } finally {
       setUploadProgress(0);
@@ -148,6 +176,10 @@ export default function Settings() {
         const uploadedUrl = await uploadAvatar();
         if (uploadedUrl) {
           newAvatarUrl = uploadedUrl;
+          setOriginalAvatarUrl(uploadedUrl);
+        } else {
+          setLoading(false);
+          return;
         }
       }
 
@@ -158,10 +190,12 @@ export default function Settings() {
       });
 
       setAvatarFile(null);
+      setInitialBio(bio);
       toast.success('Perfil atualizado com sucesso');
     } catch (error) {
       console.error('Error updating profile:', error);
       toast.error('Falha ao atualizar perfil');
+      setAvatarUrl(originalAvatarUrl);
     } finally {
       setLoading(false);
     }
@@ -183,7 +217,7 @@ export default function Settings() {
   const passwordStrength = getPasswordStrength(newPassword);
 
   const handleChangePassword = async () => {
-    if (!newPassword || !confirmPassword) {
+    if (!currentPassword || !newPassword || !confirmPassword) {
       toast.error('Por favor, preencha todos os campos');
       return;
     }
@@ -198,8 +232,28 @@ export default function Settings() {
       return;
     }
 
+    if (newPassword === currentPassword) {
+      toast.error('A nova senha deve ser diferente da atual');
+      return;
+    }
+
     try {
       setLoading(true);
+
+      if (!user?.email) {
+        toast.error('E-mail do usuário não encontrado');
+        return;
+      }
+
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: currentPassword,
+      });
+
+      if (signInError) {
+        toast.error('Senha atual incorreta');
+        return;
+      }
 
       const { error } = await supabase.auth.updateUser({
         password: newPassword,
@@ -222,14 +276,23 @@ export default function Settings() {
   const handleDeleteAccount = async () => {
     if (!user) return;
 
+    if (deleteConfirmText.toLowerCase() !== 'excluir') {
+      toast.error('Por favor, digite "excluir" para confirmar');
+      return;
+    }
+
     try {
       setLoading(true);
 
-      const { error } = await supabase.rpc('delete_user', {
-        user_id: user.id,
-      });
+      await supabase
+        .from('formatting_history')
+        .delete()
+        .eq('user_id', user.id);
 
-      if (error) throw error;
+      await supabase
+        .from('profiles')
+        .delete()
+        .eq('id', user.id);
 
       await signOut();
       toast.success('Conta excluída com sucesso');
@@ -240,6 +303,7 @@ export default function Settings() {
     } finally {
       setLoading(false);
       setDeleteDialogOpen(false);
+      setDeleteConfirmText('');
     }
   };
 
@@ -307,17 +371,26 @@ export default function Settings() {
         .from('profiles')
         .select('*')
         .eq('id', user.id)
-        .single();
+        .maybeSingle();
 
       const { data: historyData } = await supabase
         .from('formatting_history')
         .select('*')
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      const { data: subscriptionData } = await supabase
+        .from('subscriptions')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
 
       const exportData = {
         profile: profileData,
-        history: historyData,
+        subscription: subscriptionData,
+        history: historyData || [],
         exportDate: new Date().toISOString(),
+        totalFormatting: historyData?.length || 0,
       };
 
       const blob = new Blob([JSON.stringify(exportData, null, 2)], {
@@ -326,7 +399,7 @@ export default function Settings() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `my-data-${Date.now()}.json`;
+      a.download = `magic-formatter-data-${Date.now()}.json`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -396,25 +469,25 @@ export default function Settings() {
       </div>
 
       <div className="px-4 py-6 sm:px-6 lg:px-8">
-        <Tabs defaultValue="profile">
-          <TabsList className="flex flex-wrap gap-2 mb-8 w-full">
-            <TabsTrigger value="profile" className="flex items-center justify-center gap-2">
+        <Tabs defaultValue="profile" className="w-full">
+          <TabsList className="mb-8 w-full overflow-x-auto flex-nowrap scrollbar-hide">
+            <TabsTrigger value="profile" className="flex items-center justify-center gap-2 flex-shrink-0">
               <User className="w-4 h-4" />
               <span>Perfil</span>
             </TabsTrigger>
-            <TabsTrigger value="account" className="flex items-center justify-center gap-2">
+            <TabsTrigger value="account" className="flex items-center justify-center gap-2 flex-shrink-0">
               <Lock className="w-4 h-4" />
               <span>Conta</span>
             </TabsTrigger>
-            <TabsTrigger value="notifications" className="flex items-center justify-center gap-2">
+            <TabsTrigger value="notifications" className="flex items-center justify-center gap-2 flex-shrink-0">
               <Bell className="w-4 h-4" />
               <span>Notificações</span>
             </TabsTrigger>
-            <TabsTrigger value="privacy" className="flex items-center justify-center gap-2">
+            <TabsTrigger value="privacy" className="flex items-center justify-center gap-2 flex-shrink-0">
               <Shield className="w-4 h-4" />
               <span>Privacidade</span>
             </TabsTrigger>
-            <TabsTrigger value="billing" className="flex items-center justify-center gap-2">
+            <TabsTrigger value="billing" className="flex items-center justify-center gap-2 flex-shrink-0">
               <CreditCard className="w-4 h-4" />
               <span>Plano e Cobrança</span>
             </TabsTrigger>
@@ -515,8 +588,8 @@ export default function Settings() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="account">
-            <div className="space-y-6 max-w-2xl mx-auto">
+          <TabsContent value="account" className="space-y-6">
+            <div className="max-w-2xl mx-auto space-y-6">
               <Card className="border-slate-800">
                 <CardHeader>
                   <CardTitle>Alterar Senha</CardTitle>
@@ -592,10 +665,21 @@ export default function Settings() {
                   <p className="text-slate-400 mb-4">
                     Uma vez que você excluir sua conta, não há como voltar atrás. Por favor, tenha certeza.
                   </p>
+                  <div className="mb-4">
+                    <Label htmlFor="deleteConfirm">Digite "excluir" para confirmar</Label>
+                    <Input
+                      id="deleteConfirm"
+                      value={deleteConfirmText}
+                      onChange={(e) => setDeleteConfirmText(e.target.value)}
+                      placeholder="excluir"
+                      className="mt-2"
+                    />
+                  </div>
                   <Button
                     variant="destructive"
                     onClick={() => setDeleteDialogOpen(true)}
                     className="w-full"
+                    disabled={deleteConfirmText.toLowerCase() !== 'excluir'}
                   >
                     <Trash className="w-4 h-4 mr-2" />
                     Excluir Conta
@@ -876,7 +960,7 @@ export default function Settings() {
         </Tabs>
       </div>
 
-      <AlertDialog
+      <SimpleAlertDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
         title="Você tem certeza absoluta?"
