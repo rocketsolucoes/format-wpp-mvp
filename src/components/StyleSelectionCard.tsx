@@ -1,5 +1,4 @@
 import React from 'react';
-import { useLocation } from 'wouter';
 import { Card, CardContent } from './ui/Card';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
@@ -53,12 +52,10 @@ export function StyleSelectionCard({
   onSelect,
 }: StyleSelectionCardProps) {
   const colors = colorClasses[accentColor];
-  const [, setLocation] = useLocation();
 
   const handleSelect = () => {
     localStorage.setItem('selectedStyle', styleId);
     localStorage.setItem('lastUsedStyle', styleId);
-    setLocation('/format');
     if (onSelect) {
       onSelect();
     }
