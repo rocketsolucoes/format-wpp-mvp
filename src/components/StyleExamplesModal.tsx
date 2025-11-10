@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/Dialog';
 import { Button } from './ui/Button';
 import { useLocation } from 'wouter';
 import { X } from 'lucide-react';
+import { WhatsAppPreviewCompact } from './WhatsAppPreviewCompact';
 
 interface StyleExamplesModalProps {
   open: boolean;
@@ -137,19 +138,17 @@ export function StyleExamplesModal({ open, onOpenChange }: StyleExamplesModalPro
                   <h4 className="text-sm font-semibold text-slate-200">{example.title}</h4>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-3 p-3">
-                  <div>
+                <div className="p-3">
+                  <div className="mb-3">
                     <p className="text-xs font-semibold text-slate-400 mb-1.5">Antes:</p>
-                    <div className="bg-slate-900/50 p-2 rounded border border-slate-700 min-h-[80px]">
+                    <div className="bg-slate-900/50 p-2 rounded border border-slate-700">
                       <p className="text-xs text-slate-300">{example.before}</p>
                     </div>
                   </div>
 
                   <div>
-                    <p className="text-xs font-semibold text-slate-400 mb-1.5">Depois:</p>
-                    <div className="bg-slate-900/50 p-2 rounded border border-slate-700 min-h-[80px]">
-                      <p className="text-xs text-slate-300 whitespace-pre-wrap">{example.after}</p>
-                    </div>
+                    <p className="text-xs font-semibold text-slate-400 mb-1.5">Depois (como aparece no WhatsApp):</p>
+                    <WhatsAppPreviewCompact text={example.after} />
                   </div>
                 </div>
               </div>

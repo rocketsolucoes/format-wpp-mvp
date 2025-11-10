@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/Dialog';
 import { Button } from './ui/Button';
 import { useLocation } from 'wouter';
 import { X } from 'lucide-react';
+import { WhatsAppPreviewCompact } from './WhatsAppPreviewCompact';
 
 interface StyleComparisonModalProps {
   open: boolean;
@@ -86,10 +87,9 @@ export function StyleComparisonModal({ open, onOpenChange }: StyleComparisonModa
                 </div>
 
                 <div className="flex-1 p-3">
-                  <div className="mb-3 min-h-[150px]">
-                    <div className="text-xs text-slate-300 whitespace-pre-wrap bg-slate-900/50 p-2 rounded border border-slate-700">
-                      {style.example}
-                    </div>
+                  <div className="mb-3">
+                    <p className="text-xs font-semibold text-slate-400 mb-2">Como aparece no WhatsApp:</p>
+                    <WhatsAppPreviewCompact text={style.example} />
                   </div>
 
                   <Button
