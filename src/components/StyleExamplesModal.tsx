@@ -96,7 +96,7 @@ export function StyleExamplesModal({ open, onOpenChange }: StyleExamplesModalPro
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl mx-auto">
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="text-lg">Exemplos de Formatação</DialogTitle>
@@ -109,7 +109,7 @@ export function StyleExamplesModal({ open, onOpenChange }: StyleExamplesModalPro
           </div>
         </DialogHeader>
 
-        <div className="py-2">
+        <div className="py-2 max-h-[70vh] overflow-y-auto px-6">
           <div className="flex gap-2 border-b border-slate-700 mb-4">
             {Object.entries(EXAMPLES).map(([key, style]) => (
               <button

@@ -10,13 +10,20 @@ interface DialogProps {
 export function Dialog({ open, onOpenChange, children }: DialogProps) {
   if (!open) return null;
 
+  React.useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
       <div
         className="fixed inset-0 bg-black/70 backdrop-blur-sm"
         onClick={() => onOpenChange(false)}
       />
-      <div className="relative z-50 w-full">
+      <div className="relative z-50 w-full mx-auto my-8">
         {children}
       </div>
     </div>

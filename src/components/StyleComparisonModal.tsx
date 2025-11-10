@@ -50,7 +50,7 @@ export function StyleComparisonModal({ open, onOpenChange }: StyleComparisonModa
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-5xl max-h-[85vh] overflow-y-auto">
+      <DialogContent className="max-w-5xl mx-auto">
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="text-lg">Comparação de Estilos</DialogTitle>
@@ -63,7 +63,7 @@ export function StyleComparisonModal({ open, onOpenChange }: StyleComparisonModa
           </div>
         </DialogHeader>
 
-        <div className="py-2">
+        <div className="py-2 max-h-[70vh] overflow-y-auto px-6">
           <div className="mb-4 p-3 bg-slate-800/50 rounded-lg border border-slate-700">
             <p className="text-xs font-semibold text-slate-400 mb-1">Texto Original:</p>
             <p className="text-sm text-slate-200">{SAMPLE_TEXT}</p>
