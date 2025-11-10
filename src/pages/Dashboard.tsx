@@ -222,6 +222,7 @@ const Dashboard: React.FC = () => {
                 data={chartData}
                 loading={loading}
                 isPro={user?.plan !== 'free'}
+                userId={user?.id}
               />
             </div>
           </div>
