@@ -1,10 +1,11 @@
 import React from 'react';
-import { FileText, Coins, Crown, TrendingUp, TrendingDown } from 'lucide-react';
+import { FileText, Crown, TrendingUp, TrendingDown } from 'lucide-react';
 import { Card, CardContent } from './ui/Card';
 import { Badge } from './ui/Badge';
-import { Progress } from './ui/Progress';
 import { Skeleton } from './ui/Skeleton';
 import { Button } from './ui/Button';
+import { EnhancedCreditsCard } from './EnhancedCreditsCard';
+import { useLocation } from 'wouter';
 
 interface StatsData {
   total_formatting: number;
@@ -19,26 +20,15 @@ interface DashboardStatsProps {
 }
 
 export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
+  const [, setLocation] = useLocation();
+
   const monthTrend = stats && stats.last_month > 0
     ? ((stats.this_month - stats.last_month) / stats.last_month) * 100
     : 0;
 
-  const calculateResetDate = (createdAt: string): string => {
-    const created = new Date(createdAt);
-    const nextReset = new Date(created);
-    nextReset.setDate(created.getDate() + 30);
-
-    const now = new Date();
-    while (nextReset < now) {
-      nextReset.setDate(nextReset.getDate() + 30);
-    }
-
-    return nextReset.toLocaleDateString('pt-BR');
+  const handleUpgradeClick = () => {
+    setLocation('/pricing');
   };
-
-  const resetDate = user?.created_at
-    ? calculateResetDate(user.created_at)
-    : 'Desconhecido';
 
   if (loading) {
     return (
@@ -75,36 +65,14 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
         </CardContent>
       </Card>
 
-      <Card className="hover:border-cyan-500/50 transition-colors">
-        <CardContent className="space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">Créditos Restantes</span>
-            <div className="p-2 bg-cyan-500/10 rounded-lg">
-              <Coins className="w-5 h-5 text-cyan-400" />
-            </div>
-          </div>
-          <div className="text-3xl font-bold text-white">
-            {user?.plan === 'free' ? user?.credits_remaining || 0 : '∞'}
-          </div>
-          {user?.plan === 'free' ? (
-            <>
-              <Progress value={user?.credits_remaining || 0} max={30} className="h-1.5" />
-              <div className="text-xs text-slate-400">
-                Renova em {resetDate}
-              </div>
-            </>
-          ) : (
-            <div className="text-xs text-emerald-400">Formatação ilimitada</div>
-          )}
-        </CardContent>
-      </Card>
+      <EnhancedCreditsCard user={user} onUpgradeClick={handleUpgradeClick} />
 
-      <Card className="hover:border-purple-500/50 transition-colors">
+      <Card className="hover:border-blue-500/50 transition-colors">
         <CardContent className="space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-sm text-slate-400">Plano Atual</span>
-            <div className="p-2 bg-purple-500/10 rounded-lg">
-              <Crown className="w-5 h-5 text-purple-400" />
+            <div className="p-2 bg-blue-500/10 rounded-lg">
+              <Crown className="w-5 h-5 text-blue-400" />
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -119,7 +87,7 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
             <Button
               variant="outline"
               className="w-full text-xs py-1.5"
-              onClick={() => window.location.href = '/pricing'}
+              onClick={handleUpgradeClick}
             >
               Fazer Upgrade
             </Button>
