@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, Sparkles } from 'lucide-react';
+import { RefreshCw, Sparkles, Search, BookOpen, Zap } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { useAuth } from '../hooks/useAuth';
 import { supabase } from '../lib/supabase';
@@ -9,6 +9,9 @@ import { RecentFormatting } from '../components/RecentFormatting';
 import { UsageChart } from '../components/UsageChart';
 import { Button } from '../components/ui/Button';
 import { Alert, AlertDescription } from '../components/ui/Alert';
+import { StyleSelectionCard } from '../components/StyleSelectionCard';
+import { StyleComparisonModal } from '../components/StyleComparisonModal';
+import { StyleExamplesModal } from '../components/StyleExamplesModal';
 
 interface StatsData {
   total_formatting: number;
@@ -43,6 +46,9 @@ const Dashboard: React.FC = () => {
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [comparisonModalOpen, setComparisonModalOpen] = useState(false);
+  const [examplesModalOpen, setExamplesModalOpen] = useState(false);
+  const [lastUsedStyle, setLastUsedStyle] = useState<string | null>(null);
 
   const fetchDashboardData = async () => {
     if (!user) return;
@@ -81,7 +87,21 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     fetchDashboardData();
+    const savedStyle = localStorage.getItem('lastUsedStyle');
+    setLastUsedStyle(savedStyle);
   }, [user]);
+
+  const handleStyleSelect = (styleId: string, styleName: string) => {
+    localStorage.setItem('selectedStyle', styleId);
+    localStorage.setItem('lastUsedStyle', styleId);
+    setLocation('/format');
+  };
+
+  const handleQuickFormat = () => {
+    const style = lastUsedStyle || 'casual';
+    localStorage.setItem('selectedStyle', style);
+    setLocation('/format');
+  };
 
   return (
     <DashboardLayout>
@@ -118,23 +138,76 @@ const Dashboard: React.FC = () => {
             </Alert>
           )}
 
-          <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-2xl p-6 text-center">
-            <Sparkles className="w-10 h-10 mx-auto mb-3 text-emerald-400" />
-            <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-              Pronto para Formatar?
-            </h2>
-            <p className="text-slate-400 mb-4">
-              Transforme suas mensagens com formatação por IA
-            </p>
-            <div className="flex justify-center">
-              <Button
-                onClick={() => setLocation('/format')}
-                size="lg"
-                className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all hover:scale-105"
+          <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-2xl p-6">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                Pronto para Formatar?
+              </h2>
+              <p className="text-slate-400">
+                Escolha seu estilo:
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+              <StyleSelectionCard
+                styleId="casual"
+                icon="😊"
+                title="Casual"
+                subtitle="Friendly"
+                description="Tom caloroso, emojis moderados"
+                exampleBadge="Perfeito para atendimento"
+                accentColor="emerald"
+                isLastUsed={lastUsedStyle === 'casual'}
+                onSelect={() => handleStyleSelect('casual', 'Casual')}
+              />
+              <StyleSelectionCard
+                styleId="sales"
+                icon="🔥"
+                title="Sales"
+                subtitle="Persuasive"
+                description="Texto em negrito, alto impacto"
+                exampleBadge="Ótimo para promoções"
+                accentColor="orange"
+                isLastUsed={lastUsedStyle === 'sales'}
+                onSelect={() => handleStyleSelect('sales', 'Sales')}
+              />
+              <StyleSelectionCard
+                styleId="announcement"
+                icon="📢"
+                title="Official"
+                subtitle="Announcement"
+                description="Profissional, estruturado"
+                exampleBadge="Ideal para avisos"
+                accentColor="blue"
+                isLastUsed={lastUsedStyle === 'announcement'}
+                onSelect={() => handleStyleSelect('announcement', 'Official')}
+              />
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
+              <button
+                onClick={() => setComparisonModalOpen(true)}
+                className="text-slate-400 hover:text-emerald-400 transition-colors flex items-center gap-1.5"
               >
-                <Sparkles className="w-5 h-5 mr-2" />
-                Começar a Formatar
-              </Button>
+                <Search className="w-4 h-4" />
+                Comparar Todos os Estilos
+              </button>
+              <span className="text-slate-700">•</span>
+              <button
+                onClick={() => setExamplesModalOpen(true)}
+                className="text-slate-400 hover:text-emerald-400 transition-colors flex items-center gap-1.5"
+              >
+                <BookOpen className="w-4 h-4" />
+                Ver Exemplos
+              </button>
+              <span className="text-slate-700">•</span>
+              <button
+                onClick={handleQuickFormat}
+                className="text-slate-400 hover:text-emerald-400 transition-colors flex items-center gap-1.5"
+              >
+                <Zap className="w-4 h-4" />
+                Formatação Rápida
+              </button>
             </div>
           </div>
 
@@ -153,6 +226,16 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         </div>
+
+        <StyleComparisonModal
+          open={comparisonModalOpen}
+          onOpenChange={setComparisonModalOpen}
+        />
+
+        <StyleExamplesModal
+          open={examplesModalOpen}
+          onOpenChange={setExamplesModalOpen}
+        />
     </DashboardLayout>
   );
 };
