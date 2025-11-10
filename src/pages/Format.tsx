@@ -38,10 +38,8 @@ export default function Format() {
       setSelectedStyle(selectedStyleFromDashboard);
       localStorage.removeItem('selectedStyle');
 
-      toast({
-        title: 'Estilo selecionado',
-        description: `Estilo ${selectedStyleFromDashboard === 'casual' ? 'Casual' : selectedStyleFromDashboard === 'sales' ? 'Sales' : 'Official'} foi selecionado. Cole seu texto para começar!`,
-      });
+      const styleName = selectedStyleFromDashboard === 'casual' ? 'Casual' : selectedStyleFromDashboard === 'sales' ? 'Sales' : 'Official';
+      toast.success(`Estilo ${styleName} selecionado. Cole seu texto para começar!`);
     }
   }, []);
 
@@ -144,7 +142,7 @@ export default function Format() {
       ? `whatsapp://send?text=${encodedText}`
       : `https://web.whatsapp.com/send?text=${encodedText}`;
 
-    toast.info('Abrindo WhatsApp...');
+    toast.success('Abrindo WhatsApp...');
 
     try {
       const newWindow = window.open(whatsappUrl, '_blank');
