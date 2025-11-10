@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'wouter';
 import { Card, CardContent } from './ui/Card';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
@@ -52,11 +53,21 @@ export function StyleSelectionCard({
   onSelect,
 }: StyleSelectionCardProps) {
   const colors = colorClasses[accentColor];
+  const [, setLocation] = useLocation();
+
+  const handleSelect = () => {
+    localStorage.setItem('selectedStyle', styleId);
+    localStorage.setItem('lastUsedStyle', styleId);
+    setLocation('/format');
+    if (onSelect) {
+      onSelect();
+    }
+  };
 
   return (
     <Card
       className={`relative border ${colors.border} ${colors.bg} transition-all duration-200 hover:shadow-md ${colors.shadow} hover:scale-102 cursor-pointer group`}
-      onClick={onSelect}
+      onClick={handleSelect}
     >
       <CardContent className="p-4 text-center space-y-2">
         {isLastUsed && (
@@ -79,7 +90,7 @@ export function StyleSelectionCard({
           className={`w-full ${colors.button} border transition-all text-xs h-8`}
           onClick={(e) => {
             e.stopPropagation();
-            onSelect();
+            handleSelect();
           }}
         >
           Usar {title}

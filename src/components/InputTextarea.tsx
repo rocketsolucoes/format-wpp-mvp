@@ -45,7 +45,7 @@ const InputTextarea: React.FC<InputTextareaProps> = ({ value, onChange, disabled
       <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-lg shadow-lg overflow-hidden">
         {/* Header do card */}
         <div className="px-4 py-3 border-b border-slate-800 flex justify-between items-center">
-          <h3 className="text-sm font-semibold text-slate-300">Input Text</h3>
+          <h3 className="text-sm font-semibold text-slate-300">Texto de Entrada</h3>
 
           {/* Contador de caracteres */}
           <span className={`text-sm font-mono ${getCounterColor()}`}>
@@ -58,7 +58,7 @@ const InputTextarea: React.FC<InputTextareaProps> = ({ value, onChange, disabled
           value={value}
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled}
-          placeholder="Paste your WhatsApp message here... (minimum 10 characters)"
+          placeholder="Cole sua mensagem do WhatsApp aqui... (mínimo 10 caracteres)"
           className={`w-full min-h-[400px] p-4 bg-transparent text-slate-100 placeholder-slate-600 resize-none focus:outline-none ${
             disabled ? 'opacity-50 cursor-not-allowed' : ''
           } ${
@@ -72,8 +72,8 @@ const InputTextarea: React.FC<InputTextareaProps> = ({ value, onChange, disabled
           <div className="px-4 py-2 bg-red-500/10 border-t border-red-500/20">
             <p className="text-xs text-red-400">
               {value.trim().length < minLength
-                ? `Please enter at least ${minLength} characters (${minLength - value.trim().length} more needed)`
-                : `Maximum ${maxLength} characters exceeded by ${value.length - maxLength}`}
+                ? `Por favor, insira pelo menos ${minLength} caracteres (faltam ${minLength - value.trim().length})`
+                : `Máximo de ${maxLength} caracteres excedido em ${value.length - maxLength}`}
             </p>
           </div>
         )}

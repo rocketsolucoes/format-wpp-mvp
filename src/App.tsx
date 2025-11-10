@@ -109,9 +109,9 @@ function AppContent() {
             <div className="min-h-screen flex items-center justify-center">
               <div className="text-center">
                 <h1 className="text-6xl font-bold text-slate-700 mb-4">404</h1>
-                <p className="text-slate-400 mb-6">Page not found</p>
+                <p className="text-slate-400 mb-6">Página não encontrada</p>
                 <a href="/" className="text-emerald-400 hover:text-emerald-300 transition-colors">
-                  Go back home
+                  Voltar para o início
                 </a>
               </div>
             </div>

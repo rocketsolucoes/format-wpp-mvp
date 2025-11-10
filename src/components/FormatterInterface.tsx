@@ -31,9 +31,9 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
     if (inputText.trim().length === 0) {
       setValidationError(null);
     } else if (inputText.trim().length < 10) {
-      setValidationError('Text must be at least 10 characters');
+      setValidationError('O texto deve ter pelo menos 10 caracteres');
     } else if (inputText.length > 5000) {
-      setValidationError('Text must be less than 5000 characters');
+      setValidationError('O texto deve ter menos de 5000 caracteres');
     } else {
       setValidationError(null);
     }
@@ -58,17 +58,17 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
     }
     setIsFormatting(false);
     setProgress(0);
-    toast.info('Formatting cancelled');
+    toast.info('Formatação cancelada');
   };
 
   const handleFormat = async () => {
     if (!isInputValid()) {
-      toast.error(validationError || 'Please enter valid text');
+      toast.error(validationError || 'Por favor, insira um texto válido');
       return;
     }
 
     if (!user) {
-      toast.error('Please sign in to format text');
+      toast.error('Por favor, faça login para formatar texto');
       setLocation('/auth');
       return;
     }
@@ -97,11 +97,11 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
       }
 
       if (result.credits_remaining === 0) {
-        toast.warning('You have used all your credits!');
+        toast.warning('Você usou todos os seus créditos!');
       } else if (result.credits_remaining > 0 && result.credits_remaining <= 5) {
-        toast.warning(`Only ${result.credits_remaining} credits remaining`);
+        toast.warning(`Apenas ${result.credits_remaining} créditos restantes`);
       } else {
-        toast.success(`Text formatted successfully! ${result.credits_remaining >= 0 ? `${result.credits_remaining} credits remaining` : ''}`);
+        toast.success(`Texto formatado com sucesso! ${result.credits_remaining >= 0 ? `${result.credits_remaining} créditos restantes` : ''}`);
       }
     } catch (error) {
       setProgress(0);
@@ -109,11 +109,11 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
       if (error instanceof FormatterError) {
         switch (error.code) {
           case 'AUTH_REQUIRED':
-            toast.error('Please sign in again');
+            toast.error('Por favor, faça login novamente');
             setLocation('/auth');
             break;
           case 'NO_CREDITS':
-            toast.error('No credits remaining. Please upgrade your plan.');
+            toast.error('Sem créditos restantes. Por favor, faça upgrade do seu plano.');
             if (onNoCredits) {
               onNoCredits();
             }
@@ -122,15 +122,15 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
             toast.error(error.message);
             break;
           case 'NETWORK_ERROR':
-            toast.error('Network error. Please check your connection.');
+            toast.error('Erro de rede. Por favor, verifique sua conexão.');
             break;
           case 'SERVER_ERROR':
           default:
-            toast.error('Failed to format text. Please try again.');
+            toast.error('Falha ao formatar texto. Por favor, tente novamente.');
             break;
         }
       } else {
-        toast.error('An unexpected error occurred');
+        toast.error('Ocorreu um erro inesperado');
       }
 
       console.error('Formatting error:', error);
@@ -145,7 +145,7 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
   return (
     <section id="formatter" className="container mx-auto px-4 py-16">
       <h2 className="text-3xl font-bold text-center mb-12 text-slate-100">
-        Format Your Message
+        Formate Sua Mensagem
       </h2>
 
       <div className="max-w-6xl mx-auto">
@@ -172,7 +172,7 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
           <div className="flex items-center justify-between max-w-6xl mx-auto">
             <div className="flex items-center gap-4">
               <span className={`text-sm font-medium ${getCharCountColor()}`}>
-                {inputText.length} / 5000 characters
+                {inputText.length} / 5000 caracteres
               </span>
             </div>
           </div>
@@ -181,14 +181,14 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
             <div className="max-w-6xl mx-auto space-y-2">
               <div className="flex items-center justify-between text-sm text-slate-400">
                 <span className="flex items-center gap-2">
-                  <span className="animate-pulse">Formatting</span>
+                  <span className="animate-pulse">Formatando</span>
                   <span className="flex gap-1">
                     <span className="animate-bounce" style={{ animationDelay: '0ms' }}>.</span>
                     <span className="animate-bounce" style={{ animationDelay: '150ms' }}>.</span>
                     <span className="animate-bounce" style={{ animationDelay: '300ms' }}>.</span>
                   </span>
                 </span>
-                <span>Estimated time: 2-5 seconds</span>
+                <span>Tempo estimado: 2-5 segundos</span>
               </div>
               <Progress value={progress} max={100} />
             </div>
@@ -201,7 +201,7 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
                 className="px-8 py-4 bg-slate-800 hover:bg-slate-700 rounded-lg font-semibold text-white transition-all duration-300 flex items-center gap-2 border border-slate-700"
               >
                 <X className="w-5 h-5" />
-                Cancel
+                Cancelar
               </button>
             ) : (
               <button
@@ -210,7 +210,7 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
                 className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-lg font-semibold text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2"
               >
                 <Sparkles className="w-5 h-5" />
-                Format with AI
+                Formatar com IA
               </button>
             )}
           </div>

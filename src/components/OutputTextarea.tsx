@@ -31,7 +31,7 @@ const OutputTextarea: React.FC<OutputTextareaProps> = ({ value, disabled = false
   const handleCopy = async () => {
     // Verifica se há texto para copiar
     if (!value.trim()) {
-      toast.error('No text to copy');
+      toast.error('Nenhum texto para copiar');
       return;
     }
 
@@ -43,7 +43,7 @@ const OutputTextarea: React.FC<OutputTextareaProps> = ({ value, disabled = false
       setCopied(true);
 
       // Mostra notificação de sucesso
-      toast.success('Copied to clipboard!');
+      toast.success('Copiado para a área de transferência!');
 
       // Reseta o ícone após 2 segundos
       setTimeout(() => {
@@ -51,7 +51,7 @@ const OutputTextarea: React.FC<OutputTextareaProps> = ({ value, disabled = false
       }, 2000);
     } catch (error) {
       // Tratamento de erro caso a cópia falhe
-      toast.error('Failed to copy text');
+      toast.error('Falha ao copiar texto');
       console.error('Copy error:', error);
     }
   };
@@ -62,14 +62,14 @@ const OutputTextarea: React.FC<OutputTextareaProps> = ({ value, disabled = false
       <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-lg shadow-lg overflow-hidden">
         {/* Header do card */}
         <div className="px-4 py-3 border-b border-slate-800 flex justify-between items-center">
-          <h3 className="text-sm font-semibold text-slate-300">Formatted Output</h3>
+          <h3 className="text-sm font-semibold text-slate-300">Saída Formatada</h3>
 
           {/* Botão de copiar */}
           <button
             onClick={handleCopy}
             disabled={!value.trim() || disabled}
             className="p-2 hover:bg-slate-800 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            title="Copy to clipboard"
+            title="Copiar para área de transferência"
           >
             {/* Alterna entre ícone de Copy e Check */}
             {copied ? (
@@ -84,7 +84,7 @@ const OutputTextarea: React.FC<OutputTextareaProps> = ({ value, disabled = false
         <textarea
           value={value}
           readOnly
-          placeholder="Your formatted text will appear here..."
+          placeholder="Seu texto formatado aparecerá aqui..."
           className={`w-full min-h-[400px] p-4 bg-transparent text-slate-100 placeholder-slate-600 resize-none focus:outline-none ${
             disabled ? 'opacity-50' : ''
           }`}
@@ -95,7 +95,7 @@ const OutputTextarea: React.FC<OutputTextareaProps> = ({ value, disabled = false
           <div className="px-4 py-2 bg-emerald-500/10 border-t border-emerald-500/20">
             <p className="text-xs text-emerald-400 flex items-center gap-2">
               <Check className="w-3 h-3" />
-              Ready to use in WhatsApp
+              Pronto para usar no WhatsApp
             </p>
           </div>
         )}
