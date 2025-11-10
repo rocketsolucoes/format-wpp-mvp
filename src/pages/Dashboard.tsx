@@ -7,6 +7,8 @@ import { DashboardLayout } from '../layouts/DashboardLayout';
 import { DashboardStats } from '../components/DashboardStats';
 import { RecentFormatting } from '../components/RecentFormatting';
 import { UsageChart } from '../components/UsageChart';
+import { StyleDistributionChart } from '../components/StyleDistributionChart';
+import { ActivityHeatmap } from '../components/ActivityHeatmap';
 import { Button } from '../components/ui/Button';
 import { Alert, AlertDescription } from '../components/ui/Alert';
 import { StyleSelectionCard } from '../components/StyleSelectionCard';
@@ -213,17 +215,36 @@ const Dashboard: React.FC = () => {
 
           <DashboardStats stats={stats} loading={loading} user={user} />
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <RecentFormatting items={recentItems} loading={loading} onRefresh={fetchDashboardData} />
-            </div>
-            <div className="space-y-6">
+          <div className="space-y-6">
+            {user?.plan !== 'free' && (
               <UsageChart
                 data={chartData}
                 loading={loading}
-                isPro={user?.plan !== 'free'}
+                isPro={true}
                 userId={user?.id}
               />
+            )}
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <RecentFormatting items={recentItems} loading={loading} onRefresh={fetchDashboardData} />
+              </div>
+              <div className="space-y-6">
+                {user?.plan === 'free' && (
+                  <UsageChart
+                    data={chartData}
+                    loading={loading}
+                    isPro={false}
+                    userId={user?.id}
+                  />
+                )}
+                {user?.plan !== 'free' && (
+                  <>
+                    <StyleDistributionChart userId={user?.id || ''} isPro={true} />
+                    <ActivityHeatmap userId={user?.id || ''} isPro={true} />
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>

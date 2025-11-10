@@ -4,8 +4,8 @@ import { Skeleton } from './ui/Skeleton';
 import { Badge } from './ui/Badge';
 import { Button } from './ui/Button';
 import { Separator } from './ui/Separator';
-import { BarChart3, TrendingUp, FileDown, Target, Calendar } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Dot } from 'recharts';
+import { BarChart3, TrendingUp, FileDown, Target, Calendar, Download, Filter, Activity, Award, Flame, PieChart as PieChartIcon, Grid3x3 } from 'lucide-react';
+import { LineChart, Line, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Dot, PieChart, Pie, Cell } from 'recharts';
 import { supabase } from '../lib/supabase';
 import { useLocation } from 'wouter';
 
@@ -276,6 +276,10 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
     );
   }
 
+  const [selectedPeriod, setSelectedPeriod] = useState<'7d' | '30d' | '90d'>('30d');
+  const [viewMode, setViewMode] = useState<'area' | 'line' | 'bar'>('area');
+  const [styleFilters, setStyleFilters] = useState<string[]>(['casual', 'sales', 'announcement']);
+
   if (loading) {
     return (
       <Card>
@@ -292,52 +296,238 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
 
   const formattedData = data.map(item => ({
     ...item,
-    date: new Date(item.date).toLocaleDateString('pt-BR', { month: 'short', day: 'numeric' })
+    date: new Date(item.date).toLocaleDateString('pt-BR', { month: 'short', day: 'numeric' }),
+    dateObj: new Date(item.date)
   }));
 
   const maxCount = data.length > 0 ? Math.max(...data.map(item => item.format_count)) : 1;
-  const avgCount = data.length > 0
-    ? data.reduce((sum, item) => sum + item.format_count, 0) / data.length
-    : 0;
+  const totalFormats = data.reduce((sum, item) => sum + item.format_count, 0);
+  const avgCount = data.length > 0 ? totalFormats / data.length : 0;
+  const peakDay = data.length > 0 ? data.reduce((max, item) => item.format_count > max.format_count ? item : max, data[0]) : null;
+
+  const prevPeriodStart = data.length > 0 ? Math.floor(data.length / 2) : 0;
+  const firstHalfSum = data.slice(0, prevPeriodStart).reduce((sum, item) => sum + item.format_count, 0);
+  const secondHalfSum = data.slice(prevPeriodStart).reduce((sum, item) => sum + item.format_count, 0);
+  const trendPercentage = firstHalfSum > 0 ? ((secondHalfSum - firstHalfSum) / firstHalfSum) * 100 : 0;
+
+  const exportToCSV = () => {
+    const csvContent = [
+      ['Data', 'Formatações', 'Tokens'],
+      ...data.map(item => [
+        new Date(item.date).toLocaleDateString('pt-BR'),
+        item.format_count,
+        item.token_count
+      ])
+    ].map(row => row.join(',')).join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `uso-whatsformat-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+  };
+
+  const CustomAreaTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div className="bg-slate-900/95 backdrop-blur-sm border border-emerald-500/30 rounded-lg px-4 py-3 shadow-xl">
+          <p className="text-xs font-semibold text-white mb-2">{data.date}</p>
+          <div className="space-y-1">
+            <p className="text-sm text-emerald-400 font-bold">
+              {data.format_count} {data.format_count === 1 ? 'formatação' : 'formatações'}
+            </p>
+            <p className="text-xs text-slate-400">
+              {data.token_count.toLocaleString()} tokens
+            </p>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
-    <Card>
+    <Card className="overflow-hidden">
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-4">
           <div>
-            <CardTitle>Gráfico de Uso</CardTitle>
+            <div className="flex items-center gap-2">
+              <CardTitle>Análise de Uso Avançada</CardTitle>
+              <Badge className="bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-400 border-emerald-500/30">
+                Pro
+              </Badge>
+            </div>
             <CardDescription>
-              Últimos 30 dias • Média: {avgCount.toFixed(1)} por dia
+              Dashboard completo de métricas e insights
             </CardDescription>
           </div>
-          <Badge className="bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-400 border-emerald-500/30">
-            Pro
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={exportToCSV}
+              className="gap-2 text-xs"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Exportar</span>
+            </Button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/20 rounded-lg p-3">
+            <div className="flex items-center gap-2 mb-1">
+              <Activity className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="text-xs text-slate-400">Total</span>
+            </div>
+            <p className="text-2xl font-bold text-white">{totalFormats}</p>
+            <p className="text-xs text-emerald-400">formatações</p>
+          </div>
+
+          <div className="bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border border-cyan-500/20 rounded-lg p-3">
+            <div className="flex items-center gap-2 mb-1">
+              <BarChart3 className="w-3.5 h-3.5 text-cyan-400" />
+              <span className="text-xs text-slate-400">Média/dia</span>
+            </div>
+            <p className="text-2xl font-bold text-white">{avgCount.toFixed(1)}</p>
+            <p className="text-xs text-cyan-400">por dia</p>
+          </div>
+
+          <div className="bg-gradient-to-br from-orange-500/10 to-orange-500/5 border border-orange-500/20 rounded-lg p-3">
+            <div className="flex items-center gap-2 mb-1">
+              <Flame className="w-3.5 h-3.5 text-orange-400" />
+              <span className="text-xs text-slate-400">Pico</span>
+            </div>
+            <p className="text-2xl font-bold text-white">{peakDay?.format_count || 0}</p>
+            <p className="text-xs text-orange-400 truncate">
+              {peakDay ? new Date(peakDay.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }) : '-'}
+            </p>
+          </div>
+
+          <div className="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/20 rounded-lg p-3">
+            <div className="flex items-center gap-2 mb-1">
+              <TrendingUp className="w-3.5 h-3.5 text-blue-400" />
+              <span className="text-xs text-slate-400">Tendência</span>
+            </div>
+            <p className="text-2xl font-bold text-white">
+              {trendPercentage > 0 ? '+' : ''}{trendPercentage.toFixed(0)}%
+            </p>
+            <p className="text-xs text-blue-400">vs período anterior</p>
+          </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <div className="h-64 w-full">
-          <div className="flex items-end justify-between h-full gap-1 px-2">
-            {formattedData.map((item, index) => {
-              const height = maxCount > 0 ? (item.format_count / maxCount) * 100 : 0;
-              return (
-                <div key={index} className="flex-1 flex flex-col items-center group">
-                  <div
-                    className="w-full bg-gradient-to-t from-emerald-500 to-cyan-500 rounded-t hover:opacity-80 transition-opacity relative"
-                    style={{ height: `${height}%`, minHeight: item.format_count > 0 ? '4px' : '0' }}
-                  >
-                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                      {item.format_count}
-                    </div>
-                  </div>
-                  {formattedData.length <= 15 && (
-                    <span className="text-xs text-slate-500 mt-2 rotate-45 origin-left">
-                      {item.date}
-                    </span>
-                  )}
-                </div>
-              );
-            })}
+
+      <CardContent className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Button
+              variant={viewMode === 'area' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setViewMode('area')}
+              className="text-xs"
+            >
+              Área
+            </Button>
+            <Button
+              variant={viewMode === 'line' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setViewMode('line')}
+              className="text-xs"
+            >
+              Linha
+            </Button>
+          </div>
+          <div className="text-xs text-slate-400">
+            Últimos {data.length} dias
+          </div>
+        </div>
+
+        <div className="h-72 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            {viewMode === 'area' ? (
+              <AreaChart data={formattedData}>
+                <defs>
+                  <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.05}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.2} />
+                <XAxis
+                  dataKey="date"
+                  stroke="#64748b"
+                  fontSize={11}
+                  tickLine={false}
+                  interval="preserveStartEnd"
+                />
+                <YAxis
+                  stroke="#64748b"
+                  fontSize={11}
+                  tickLine={false}
+                  allowDecimals={false}
+                />
+                <Tooltip content={<CustomAreaTooltip />} />
+                <Area
+                  type="monotone"
+                  dataKey="format_count"
+                  stroke="#10b981"
+                  strokeWidth={3}
+                  fill="url(#colorGradient)"
+                  animationDuration={1000}
+                />
+              </AreaChart>
+            ) : (
+              <LineChart data={formattedData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.2} />
+                <XAxis
+                  dataKey="date"
+                  stroke="#64748b"
+                  fontSize={11}
+                  tickLine={false}
+                  interval="preserveStartEnd"
+                />
+                <YAxis
+                  stroke="#64748b"
+                  fontSize={11}
+                  tickLine={false}
+                  allowDecimals={false}
+                />
+                <Tooltip content={<CustomAreaTooltip />} />
+                <Line
+                  type="monotone"
+                  dataKey="format_count"
+                  stroke="#10b981"
+                  strokeWidth={3}
+                  dot={{ fill: '#10b981', strokeWidth: 2, r: 4 }}
+                  activeDot={{ r: 6, fill: '#10b981' }}
+                  animationDuration={1000}
+                />
+              </LineChart>
+            )}
+          </ResponsiveContainer>
+        </div>
+
+        <Separator />
+
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Award className="w-4 h-4 text-yellow-400" />
+            <span className="text-sm font-semibold text-white">Insights Pro</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-3">
+              <p className="text-slate-400 mb-1">Melhor desempenho</p>
+              <p className="text-white font-semibold">
+                {peakDay ? `${new Date(peakDay.date).toLocaleDateString('pt-BR', { weekday: 'long' })} (${peakDay.format_count} formatações)` : 'Sem dados'}
+              </p>
+            </div>
+            <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-3">
+              <p className="text-slate-400 mb-1">Tokens processados</p>
+              <p className="text-white font-semibold">
+                {data.reduce((sum, item) => sum + item.token_count, 0).toLocaleString()} no período
+              </p>
+            </div>
           </div>
         </div>
       </CardContent>
