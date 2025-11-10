@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch, useLocation } from 'wouter';
 import { AuthProvider } from './contexts/AuthContext';
+import { useAuth } from './hooks/useAuth';
 import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
@@ -33,14 +34,19 @@ const protectedRoutes = ['/dashboard', '/format', '/history', '/settings', '/suc
  * - /settings : Configurações (protegida)
  * - /admin/prompts : Gerenciamento de prompts (protegida - admin only)
  */
-function App() {
+function AppContent() {
   const [location] = useLocation();
+  const { user } = useAuth();
   const isProtectedRoute = protectedRoutes.includes(location);
 
+  // Não mostrar Header se:
+  // 1. É uma rota protegida (usa DashboardLayout)
+  // 2. É a página de pricing e o usuário está logado (usa DashboardLayout)
+  const shouldShowHeader = !isProtectedRoute && !(location === '/pricing' && user);
+
   return (
-    <AuthProvider>
-      <div className="min-h-screen bg-slate-950 text-white">
-        {!isProtectedRoute && <Header />}
+    <div className="min-h-screen bg-slate-950 text-white">
+      {shouldShowHeader && <Header />}
 
         <Switch>
           {/* Rota pública - Home */}
@@ -112,6 +118,13 @@ function App() {
           </Route>
         </Switch>
       </div>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
     </AuthProvider>
   );
 }
