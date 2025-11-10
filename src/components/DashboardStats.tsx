@@ -75,7 +75,7 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
           </div>
           {user?.plan === 'free' ? (
             <>
-              <Progress value={user?.credits_remaining || 0} max={100} className="h-1.5" />
+              <Progress value={user?.credits_remaining || 0} max={30} className="h-1.5" />
               <div className="text-xs text-slate-400">
                 Renova em {resetDate}
               </div>

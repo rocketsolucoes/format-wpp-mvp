@@ -47,7 +47,7 @@ export default function Pricing() {
       period: 'month',
       description: 'Perfeito para experimentar a plataforma',
       features: [
-        { text: '15 formatações por mês', included: true },
+        { text: '30 créditos por mês', included: true },
         { text: 'Formatação básica por IA', included: true },
         { text: 'Histórico de 7 dias', included: true },
         { text: 'Acesso à comunidade', included: true },
@@ -109,7 +109,7 @@ export default function Pricing() {
   ];
 
   const comparisonFeatures = [
-    { name: 'Formatações por mês', free: '15', pro: 'Ilimitado', enterprise: 'Ilimitado' },
+    { name: 'Formatações por mês', free: '30', pro: 'Ilimitado', enterprise: 'Ilimitado' },
     { name: 'Retenção de histórico', free: '7 dias', pro: 'Para sempre', enterprise: 'Para sempre' },
     { name: 'Estilos personalizados', free: false, pro: true, enterprise: true },
     { name: 'Modelos', free: false, pro: true, enterprise: true },
@@ -124,7 +124,7 @@ export default function Pricing() {
   const faqs = [
     {
       question: 'Como funciona o período de teste?',
-      answer: 'Todos os novos usuários começam com uma conta gratuita que inclui 15 operações de formatação por mês. Você pode fazer upgrade para o Pro a qualquer momento para desbloquear acesso ilimitado. As assinaturas Pro vêm com garantia de reembolso de 7 dias, então você pode experimentar sem riscos.',
+      answer: 'Todos os novos usuários começam com uma conta gratuita que inclui 30 créditos por mês. Você pode fazer upgrade para o Pro a qualquer momento para desbloquear acesso ilimitado. As assinaturas Pro vêm com garantia de reembolso de 7 dias, então você pode experimentar sem riscos.',
     },
     {
       question: 'Posso cancelar a qualquer momento?',

@@ -57,7 +57,7 @@ export function UpgradeModal({ open, onOpenChange, onUpgrade }: UpgradeModalProp
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start gap-2 text-slate-400">
                   <Check className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                  <span>100 credits/month</span>
+                  <span>30 créditos por mês</span>
                 </li>
                 <li className="flex items-start gap-2 text-slate-400">
                   <Check className="h-4 w-4 mt-0.5 flex-shrink-0" />

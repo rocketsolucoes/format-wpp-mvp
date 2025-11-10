@@ -143,7 +143,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           plan: 'free',
           subscription_tier: 'free',
           subscription_status: null,
-          credits_remaining: 100,
+          credits_remaining: 30,
         });
 
         if (profileError) {

@@ -838,7 +838,7 @@ export default function Settings() {
                         <>
                           <div className="flex items-center gap-2">
                             <Check className="w-5 h-5 text-emerald-400" />
-                            <span>100 créditos por mês</span>
+                            <span>30 créditos por mês</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Check className="w-5 h-5 text-emerald-400" />

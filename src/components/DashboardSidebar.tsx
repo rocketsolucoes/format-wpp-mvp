@@ -180,10 +180,10 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
                   (user?.credits_remaining || 0) > 5 ? 'text-yellow-400' :
                   'text-red-400'
                 }`}>
-                  {user?.credits_remaining || 0} / 100
+                  {user?.credits_remaining || 0} / 30
                 </span>
               </div>
-              <Progress value={user?.credits_remaining || 0} max={100} className="h-1.5" />
+              <Progress value={user?.credits_remaining || 0} max={30} className="h-1.5" />
             </div>
 
             <Button
