@@ -41,7 +41,6 @@ const styles: Style[] = [
 interface StyleSelectorProps {
   selectedStyle: string;
   onStyleChange: (styleId: string) => void;
-  userPlan: 'free' | 'pro' | 'enterprise';
 }
 
 const colorClasses = {

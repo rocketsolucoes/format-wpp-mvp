@@ -13,7 +13,7 @@ interface StyleExamplesModalProps {
 const EXAMPLES = {
   casual: {
     title: 'Casual',
-    subtitle: 'Friendly',
+    subtitle: 'Amigável',
     icon: '😊',
     color: 'emerald',
     examples: [
@@ -36,7 +36,7 @@ const EXAMPLES = {
   },
   sales: {
     title: 'Sales',
-    subtitle: 'Persuasive',
+    subtitle: 'Persuasivo',
     icon: '🔥',
     color: 'orange',
     examples: [
@@ -59,7 +59,7 @@ const EXAMPLES = {
   },
   announcement: {
     title: 'Official',
-    subtitle: 'Announcement',
+    subtitle: 'Anúncio',
     icon: '📢',
     color: 'blue',
     examples: [

@@ -16,7 +16,7 @@ const STYLE_COMPARISONS = [
   {
     id: 'casual',
     title: 'Casual',
-    subtitle: 'Friendly',
+    subtitle: 'Amigável',
     icon: '😊',
     color: 'emerald',
     example: '📱 Oi! Olha que oferta legal! 😊\n\nNotebook com Core i7 e 16GB de RAM por apenas R$ 2.800! 💻✨\n\nTá disponível! Me chama se tiver interesse! 👍'
@@ -24,7 +24,7 @@ const STYLE_COMPARISONS = [
   {
     id: 'sales',
     title: 'Sales',
-    subtitle: 'Persuasive',
+    subtitle: 'Persuasivo',
     icon: '🔥',
     color: 'orange',
     example: '🔥 *OFERTA IMPERDÍVEL!* 🔥\n\n💻 *NOTEBOOK CORE i7* 💻\n📊 16GB RAM — PERFORMANCE MÁXIMA!\n💰 *R$ 2.800* → PREÇO IMBATÍVEL!\n\n⚡ *CORRE!* Unidades limitadas!\n✅ Aproveite AGORA!'
@@ -32,7 +32,7 @@ const STYLE_COMPARISONS = [
   {
     id: 'announcement',
     title: 'Official',
-    subtitle: 'Announcement',
+    subtitle: 'Anúncio',
     icon: '📢',
     color: 'blue',
     example: '📢 *Aviso Importante*\n\n*Disponibilidade de Produto:*\n\n• Equipamento: Notebook\n• Processador: Intel Core i7\n• Memória RAM: 16GB\n• Valor: R$ 2.800,00\n\nProduto disponível para aquisição imediata.\n\nPara mais informações, entre em contato.'
