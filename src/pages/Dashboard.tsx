@@ -138,24 +138,24 @@ const Dashboard: React.FC = () => {
             </Alert>
           )}
 
-          <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-2xl p-6">
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+          <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-xl p-4">
+            <div className="text-center mb-4">
+              <h2 className="text-lg font-bold mb-1 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
                 Pronto para Formatar?
               </h2>
-              <p className="text-slate-400">
+              <p className="text-xs text-slate-400">
                 Escolha seu estilo:
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
               <StyleSelectionCard
                 styleId="casual"
                 icon="😊"
                 title="Casual"
                 subtitle="Friendly"
-                description="Tom caloroso, emojis moderados"
-                exampleBadge="Perfeito para atendimento"
+                description=""
+                exampleBadge=""
                 accentColor="emerald"
                 isLastUsed={lastUsedStyle === 'casual'}
                 onSelect={() => handleStyleSelect('casual', 'Casual')}
@@ -165,8 +165,8 @@ const Dashboard: React.FC = () => {
                 icon="🔥"
                 title="Sales"
                 subtitle="Persuasive"
-                description="Texto em negrito, alto impacto"
-                exampleBadge="Ótimo para promoções"
+                description=""
+                exampleBadge=""
                 accentColor="orange"
                 isLastUsed={lastUsedStyle === 'sales'}
                 onSelect={() => handleStyleSelect('sales', 'Sales')}
@@ -176,37 +176,37 @@ const Dashboard: React.FC = () => {
                 icon="📢"
                 title="Official"
                 subtitle="Announcement"
-                description="Profissional, estruturado"
-                exampleBadge="Ideal para avisos"
+                description=""
+                exampleBadge=""
                 accentColor="blue"
                 isLastUsed={lastUsedStyle === 'announcement'}
                 onSelect={() => handleStyleSelect('announcement', 'Official')}
               />
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
+            <div className="flex flex-wrap items-center justify-center gap-3 text-xs">
               <button
                 onClick={() => setComparisonModalOpen(true)}
-                className="text-slate-400 hover:text-emerald-400 transition-colors flex items-center gap-1.5"
+                className="text-slate-500 hover:text-emerald-400 transition-colors flex items-center gap-1"
               >
-                <Search className="w-4 h-4" />
-                Comparar Todos os Estilos
+                <Search className="w-3 h-3" />
+                Comparar
               </button>
               <span className="text-slate-700">•</span>
               <button
                 onClick={() => setExamplesModalOpen(true)}
-                className="text-slate-400 hover:text-emerald-400 transition-colors flex items-center gap-1.5"
+                className="text-slate-500 hover:text-emerald-400 transition-colors flex items-center gap-1"
               >
-                <BookOpen className="w-4 h-4" />
-                Ver Exemplos
+                <BookOpen className="w-3 h-3" />
+                Exemplos
               </button>
               <span className="text-slate-700">•</span>
               <button
                 onClick={handleQuickFormat}
-                className="text-slate-400 hover:text-emerald-400 transition-colors flex items-center gap-1.5"
+                className="text-slate-500 hover:text-emerald-400 transition-colors flex items-center gap-1"
               >
-                <Zap className="w-4 h-4" />
-                Formatação Rápida
+                <Zap className="w-3 h-3" />
+                Rápida
               </button>
             </div>
           </div>

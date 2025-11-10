@@ -55,38 +55,34 @@ export function StyleSelectionCard({
 
   return (
     <Card
-      className={`relative border-2 ${colors.border} ${colors.bg} transition-all duration-300 hover:shadow-lg ${colors.shadow} hover:scale-105 cursor-pointer group`}
+      className={`relative border ${colors.border} ${colors.bg} transition-all duration-200 hover:shadow-md ${colors.shadow} hover:scale-102 cursor-pointer group`}
       onClick={onSelect}
     >
-      <CardContent className="p-6 text-center space-y-4">
+      <CardContent className="p-4 text-center space-y-2">
         {isLastUsed && (
-          <div className="absolute top-3 right-3">
-            <Badge className={`${colors.badge} text-xs flex items-center gap-1`}>
-              <Check className="w-3 h-3" />
-              Último usado
+          <div className="absolute top-2 right-2">
+            <Badge className={`${colors.badge} text-[10px] px-1.5 py-0.5 flex items-center gap-1`}>
+              <Check className="w-2.5 h-2.5" />
+              Último
             </Badge>
           </div>
         )}
 
-        <div className="text-5xl mb-2">{icon}</div>
+        <div className="text-3xl">{icon}</div>
 
         <div>
-          <h3 className="text-xl font-bold text-slate-200 mb-1">{title}</h3>
-          <p className="text-sm font-medium text-slate-400">{subtitle}</p>
+          <h3 className="text-base font-bold text-slate-200">{title}</h3>
+          <p className="text-xs text-slate-500">{subtitle}</p>
         </div>
 
-        <p className="text-sm text-slate-500 min-h-[40px]">{description}</p>
-
-        <Badge className={`${colors.badge} text-xs`}>{exampleBadge}</Badge>
-
         <Button
-          className={`w-full ${colors.button} border transition-all`}
+          className={`w-full ${colors.button} border transition-all text-xs h-8`}
           onClick={(e) => {
             e.stopPropagation();
             onSelect();
           }}
         >
-          Usar Estilo {title}
+          Usar {title}
         </Button>
       </CardContent>
     </Card>

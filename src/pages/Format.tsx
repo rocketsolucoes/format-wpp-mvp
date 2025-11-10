@@ -24,6 +24,7 @@ export default function Format() {
   useEffect(() => {
     const reformatText = localStorage.getItem('reformat_text');
     const reformatStyle = localStorage.getItem('reformat_style');
+    const selectedStyleFromDashboard = localStorage.getItem('selectedStyle');
 
     if (reformatText) {
       setInputText(reformatText);
@@ -33,6 +34,14 @@ export default function Format() {
     if (reformatStyle) {
       setSelectedStyle(reformatStyle);
       localStorage.removeItem('reformat_style');
+    } else if (selectedStyleFromDashboard) {
+      setSelectedStyle(selectedStyleFromDashboard);
+      localStorage.removeItem('selectedStyle');
+
+      toast({
+        title: 'Estilo selecionado',
+        description: `Estilo ${selectedStyleFromDashboard === 'casual' ? 'Casual' : selectedStyleFromDashboard === 'sales' ? 'Sales' : 'Official'} foi selecionado. Cole seu texto para começar!`,
+      });
     }
   }, []);
 

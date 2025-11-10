@@ -95,66 +95,64 @@ export function StyleExamplesModal({ open, onOpenChange }: StyleExamplesModalPro
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Exemplos de Formatação</DialogTitle>
-          <p className="text-sm text-slate-400 mt-2">
-            Veja exemplos práticos de como cada estilo funciona
-          </p>
+          <DialogTitle className="text-lg">Exemplos de Formatação</DialogTitle>
         </DialogHeader>
 
-        <div className="py-4">
-          <div className="flex gap-2 border-b border-slate-700 mb-6">
+        <div className="py-2">
+          <div className="flex gap-2 border-b border-slate-700 mb-4">
             {Object.entries(EXAMPLES).map(([key, style]) => (
               <button
                 key={key}
                 onClick={() => setActiveTab(key)}
-                className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
+                className={`px-3 py-1.5 text-xs font-medium transition-colors border-b-2 ${
                   activeTab === key
                     ? 'border-emerald-400 text-emerald-400'
                     : 'border-transparent text-slate-400 hover:text-slate-300'
                 }`}
               >
-                <span className="mr-2">{style.icon}</span>
+                <span className="mr-1.5">{style.icon}</span>
                 {style.title}
               </button>
             ))}
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-3">
             {currentStyle.examples.map((example, index) => (
               <div
                 key={index}
                 className="border border-slate-700 rounded-lg overflow-hidden bg-slate-800/30"
               >
-                <div className="p-4 border-b border-slate-700 bg-slate-800/50">
-                  <h4 className="font-semibold text-slate-200">{example.title}</h4>
+                <div className="p-2.5 border-b border-slate-700 bg-slate-800/50">
+                  <h4 className="text-sm font-semibold text-slate-200">{example.title}</h4>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-4 p-4">
+                <div className="grid md:grid-cols-2 gap-3 p-3">
                   <div>
-                    <p className="text-xs font-semibold text-slate-400 mb-2">Antes:</p>
-                    <div className="bg-slate-900/50 p-3 rounded border border-slate-700 min-h-[100px]">
-                      <p className="text-sm text-slate-300">{example.before}</p>
+                    <p className="text-xs font-semibold text-slate-400 mb-1.5">Antes:</p>
+                    <div className="bg-slate-900/50 p-2 rounded border border-slate-700 min-h-[80px]">
+                      <p className="text-xs text-slate-300">{example.before}</p>
                     </div>
                   </div>
 
                   <div>
-                    <p className="text-xs font-semibold text-slate-400 mb-2">Depois:</p>
-                    <div className="bg-slate-900/50 p-3 rounded border border-slate-700 min-h-[100px]">
-                      <p className="text-sm text-slate-300 whitespace-pre-wrap">{example.after}</p>
+                    <p className="text-xs font-semibold text-slate-400 mb-1.5">Depois:</p>
+                    <div className="bg-slate-900/50 p-2 rounded border border-slate-700 min-h-[80px]">
+                      <p className="text-xs text-slate-300 whitespace-pre-wrap">{example.after}</p>
                     </div>
                   </div>
                 </div>
               </div>
             ))}
 
-            <div className="flex justify-center pt-4">
+            <div className="flex justify-center pt-2">
               <Button
                 onClick={() => handleTryStyle(activeTab)}
+                size="sm"
                 className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600"
               >
-                Experimentar Estilo {currentStyle.title}
+                Usar {currentStyle.title}
               </Button>
             </div>
           </div>
