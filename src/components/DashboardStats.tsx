@@ -23,8 +23,21 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
     ? ((stats.this_month - stats.last_month) / stats.last_month) * 100
     : 0;
 
-  const resetDate = user?.credits_reset_date
-    ? new Date(user.credits_reset_date).toLocaleDateString('pt-BR')
+  const calculateResetDate = (createdAt: string): string => {
+    const created = new Date(createdAt);
+    const nextReset = new Date(created);
+    nextReset.setDate(created.getDate() + 30);
+
+    const now = new Date();
+    while (nextReset < now) {
+      nextReset.setDate(nextReset.getDate() + 30);
+    }
+
+    return nextReset.toLocaleDateString('pt-BR');
+  };
+
+  const resetDate = user?.created_at
+    ? calculateResetDate(user.created_at)
     : 'Desconhecido';
 
   if (loading) {

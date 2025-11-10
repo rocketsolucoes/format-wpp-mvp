@@ -15,6 +15,7 @@ export interface User {
   subscription_tier: 'free' | 'pro' | 'enterprise';
   subscription_status: string | null;
   credits_remaining: number;
+  created_at: string;
 }
 
 /**
@@ -89,6 +90,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         subscription_tier: data.subscription_tier,
         subscription_status: data.subscription_status,
         credits_remaining: data.credits_remaining,
+        created_at: data.created_at,
       };
     } catch (err) {
       console.error('Error in fetchUserProfile:', err);
