@@ -5,6 +5,8 @@ import { Badge } from './ui/Badge';
 import { Skeleton } from './ui/Skeleton';
 import { Button } from './ui/Button';
 import { EnhancedCreditsCard } from './EnhancedCreditsCard';
+import { FavoriteStyleCard } from './FavoriteStyleCard';
+import { TimeSavedCard } from './TimeSavedCard';
 import { useLocation } from 'wouter';
 
 interface StatsData {
@@ -30,11 +32,15 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
     setLocation('/pricing');
   };
 
+  const handleTryOtherStyles = () => {
+    setLocation('/format');
+  };
+
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[...Array(4)].map((_, i) => (
-          <Card key={i}>
+        {[...Array(6)].map((_, i) => (
+          <Card key={i} className={i === 1 ? 'md:col-span-2' : ''}>
             <CardContent className="space-y-3">
               <Skeleton className="h-4 w-20" />
               <Skeleton className="h-8 w-24" />
@@ -48,6 +54,38 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <EnhancedCreditsCard user={user} onUpgradeClick={handleUpgradeClick} />
+
+      <FavoriteStyleCard userId={user?.id} onTryOtherStyles={handleTryOtherStyles} />
+
+      <TimeSavedCard userId={user?.id} />
+
+      <Card className="hover:border-yellow-500/50 transition-colors">
+        <CardContent className="space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-slate-400">Este Mês</span>
+            <div className={`p-2 rounded-lg ${
+              monthTrend >= 0 ? 'bg-emerald-500/10' : 'bg-red-500/10'
+            }`}>
+              {monthTrend >= 0 ? (
+                <TrendingUp className="w-5 h-5 text-emerald-400" />
+              ) : (
+                <TrendingDown className="w-5 h-5 text-red-400" />
+              )}
+            </div>
+          </div>
+          <div className="text-3xl font-bold text-white">
+            {stats?.this_month || 0}
+          </div>
+          <div className={`flex items-center gap-1 text-xs ${
+            monthTrend >= 0 ? 'text-emerald-400' : 'text-red-400'
+          }`}>
+            {monthTrend >= 0 ? '+' : ''}{monthTrend.toFixed(1)}%
+            <span className="text-slate-400">vs mês passado</span>
+          </div>
+        </CardContent>
+      </Card>
+
       <Card className="hover:border-emerald-500/50 transition-colors">
         <CardContent className="space-y-3">
           <div className="flex items-center justify-between">
@@ -64,8 +102,6 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
           </div>
         </CardContent>
       </Card>
-
-      <EnhancedCreditsCard user={user} onUpgradeClick={handleUpgradeClick} />
 
       <Card className="hover:border-blue-500/50 transition-colors">
         <CardContent className="space-y-3">
@@ -96,32 +132,6 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
               {user?.plan === 'pro' ? 'R$ 49,90/mês' : 'Preço personalizado'}
             </div>
           )}
-        </CardContent>
-      </Card>
-
-      <Card className="hover:border-yellow-500/50 transition-colors">
-        <CardContent className="space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">Este Mês</span>
-            <div className={`p-2 rounded-lg ${
-              monthTrend >= 0 ? 'bg-emerald-500/10' : 'bg-red-500/10'
-            }`}>
-              {monthTrend >= 0 ? (
-                <TrendingUp className="w-5 h-5 text-emerald-400" />
-              ) : (
-                <TrendingDown className="w-5 h-5 text-red-400" />
-              )}
-            </div>
-          </div>
-          <div className="text-3xl font-bold text-white">
-            {stats?.this_month || 0}
-          </div>
-          <div className={`flex items-center gap-1 text-xs ${
-            monthTrend >= 0 ? 'text-emerald-400' : 'text-red-400'
-          }`}>
-            {monthTrend >= 0 ? '+' : ''}{monthTrend.toFixed(1)}%
-            <span className="text-slate-400">vs mês passado</span>
-          </div>
         </CardContent>
       </Card>
     </div>
