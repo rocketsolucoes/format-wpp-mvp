@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { Search, Calendar, Eye, Copy, Trash, X, Sparkles, Star } from 'lucide-react';
+import { Search, Calendar, Eye, Copy, Trash, X, Sparkles, Star, RefreshCw } from 'lucide-react';
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -21,6 +21,55 @@ interface FormattingRecord {
   tokens_used: number;
   created_at: string;
   is_favorite?: boolean;
+  style_id?: string;
+}
+
+interface StyleBadgeConfig {
+  label: string;
+  icon: string;
+  bgColor: string;
+  textColor: string;
+  borderColor: string;
+}
+
+const STYLE_CONFIGS: Record<string, StyleBadgeConfig> = {
+  casual: {
+    label: 'Casual',
+    icon: '😊',
+    bgColor: 'bg-emerald-500/10',
+    textColor: 'text-emerald-400',
+    borderColor: 'border-emerald-500/20',
+  },
+  sales: {
+    label: 'Sales',
+    icon: '🔥',
+    bgColor: 'bg-orange-500/10',
+    textColor: 'text-orange-400',
+    borderColor: 'border-orange-500/20',
+  },
+  announcement: {
+    label: 'Official',
+    icon: '📢',
+    bgColor: 'bg-blue-500/10',
+    textColor: 'text-blue-400',
+    borderColor: 'border-blue-500/20',
+  },
+};
+
+function StyleBadge({ styleId }: { styleId?: string }) {
+  if (!styleId) return null;
+
+  const config = STYLE_CONFIGS[styleId];
+  if (!config) return null;
+
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${config.bgColor} ${config.textColor} ${config.borderColor}`}
+    >
+      <span>{config.icon}</span>
+      <span>{config.label}</span>
+    </span>
+  );
 }
 
 const ITEMS_PER_PAGE = 10;
@@ -182,9 +231,49 @@ export default function History() {
     return `${day}/${month}/${year} ${hours}:${minutes}`;
   };
 
+  const getRelativeTime = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'Agora mesmo';
+    if (diffMins < 60) return `${diffMins} min atrás`;
+    if (diffHours < 24) return `${diffHours}h atrás`;
+    if (diffDays === 1) return '1 dia atrás';
+    if (diffDays < 30) return `${diffDays} dias atrás`;
+
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
   const truncateText = (text: string, maxLength: number = 100) => {
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + '...';
+  };
+
+  const getCharacterChange = (inputText: string, outputText: string) => {
+    const inputLength = inputText.length;
+    const outputLength = outputText.length;
+    const diff = outputLength - inputLength;
+
+    if (diff > 0) {
+      return `${inputLength} → ${outputLength} chars (+${diff})`;
+    } else if (diff < 0) {
+      return `${inputLength} → ${outputLength} chars (${diff})`;
+    }
+    return `${inputLength} chars`;
+  };
+
+  const handleReformat = (record: FormattingRecord) => {
+    localStorage.setItem('reformat_text', record.input_text);
+    localStorage.setItem('reformat_style', record.style_id || 'casual');
+    setLocation('/format');
+    toast.info('Texto carregado para reformatação');
   };
 
   const handleToggleFavorite = async (record: FormattingRecord) => {
@@ -384,83 +473,80 @@ export default function History() {
                   key={record.id}
                   className="p-4 bg-slate-800/30 rounded-lg hover:bg-slate-800/50 transition-all border border-slate-800 hover:border-slate-700 group"
                 >
-                    <div className="space-y-3">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex items-center gap-3 flex-wrap">
-                          <p className="text-sm text-slate-400">{formatDate(record.created_at)}</p>
-                          <Badge variant={isPro ? 'default' : 'secondary'} className="text-xs">
-                            {isPro ? 'Pro' : 'Gratuito'}
-                          </Badge>
-                          <span className="text-xs text-slate-500">{record.tokens_used} tokens</span>
-                        </div>
-                        {record.is_favorite && (
-                          <span className="text-yellow-400" title="Favorito">
-                            <Star className="w-4 h-4 fill-yellow-400" />
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <div>
-                          <p className="text-xs text-slate-500 mb-1">Original:</p>
-                          <p className="text-sm text-slate-300 line-clamp-2">
-                            {record.input_text}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-slate-500 mb-1">Formatado:</p>
-                          <p className="text-sm text-slate-300 line-clamp-2">
-                            {record.output_text}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2 pt-1 opacity-0 group-hover:opacity-100 md:opacity-100 transition-opacity">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setSelectedRecord(record)}
-                          className="flex-1 sm:flex-none text-xs h-8"
-                        >
-                          <Eye className="w-3.5 h-3.5 mr-1.5" />
-                          Ver
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleCopy(record.output_text, 'formatted')}
-                          className="flex-1 sm:flex-none text-xs h-8"
-                        >
-                          <Copy className="w-3.5 h-3.5 mr-1.5" />
-                          Copiar
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleToggleFavorite(record)}
-                          disabled={favoriteLoading === record.id}
-                          className={`flex-1 sm:flex-none text-xs h-8 ${
-                            record.is_favorite ? 'text-yellow-400 hover:text-yellow-300' : ''
-                          }`}
-                        >
-                          <Star
-                            className={`w-3.5 h-3.5 mr-1.5 ${
-                              favoriteLoading === record.id ? 'animate-pulse' : ''
-                            } ${record.is_favorite ? 'fill-yellow-400' : ''}`}
-                          />
-                          {record.is_favorite ? 'Salvo' : 'Salvar'}
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => openDeleteDialog(record.id)}
-                          className="flex-1 sm:flex-none text-xs h-8 text-red-400 hover:text-red-300 hover:bg-red-500/10"
-                        >
-                          <Trash className="w-3.5 h-3.5 mr-1.5" />
-                          Excluir
-                        </Button>
-                      </div>
+                  <div className="space-y-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <StyleBadge styleId={record.style_id} />
+                      {record.is_favorite && (
+                        <span className="text-yellow-400" title="Favorito">
+                          <Star className="w-4 h-4 fill-yellow-400" />
+                        </span>
+                      )}
                     </div>
+
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-slate-300 line-clamp-2">
+                        {record.output_text}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-xs text-slate-500">
+                      <span>{getRelativeTime(record.created_at)}</span>
+                      <span>•</span>
+                      <span>{getCharacterChange(record.input_text, record.output_text)}</span>
+                      {record.is_favorite && (
+                        <>
+                          <span>•</span>
+                          <span className="text-yellow-400">★ Salvo</span>
+                        </>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 md:opacity-100 transition-opacity">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setSelectedRecord(record)}
+                        className="flex-1 sm:flex-none text-xs h-8"
+                      >
+                        <Eye className="w-3.5 h-3.5 mr-1.5" />
+                        Ver
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleCopy(record.output_text, 'formatted')}
+                        className="flex-1 sm:flex-none text-xs h-8"
+                      >
+                        <Copy className="w-3.5 h-3.5 mr-1.5" />
+                        Copiar
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleReformat(record)}
+                        className="flex-1 sm:flex-none text-xs h-8"
+                      >
+                        <RefreshCw className="w-3.5 h-3.5 mr-1.5" />
+                        Re-formatar
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleToggleFavorite(record)}
+                        disabled={favoriteLoading === record.id}
+                        className={`flex-1 sm:flex-none text-xs h-8 ${
+                          record.is_favorite ? 'text-yellow-400 hover:text-yellow-300' : ''
+                        }`}
+                      >
+                        <Star
+                          className={`w-3.5 h-3.5 mr-1.5 ${
+                            favoriteLoading === record.id ? 'animate-pulse' : ''
+                          } ${record.is_favorite ? 'fill-yellow-400' : ''}`}
+                        />
+                        {record.is_favorite ? 'Salvo' : 'Salvar'}
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
