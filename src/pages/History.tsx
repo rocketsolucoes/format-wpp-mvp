@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { Search, Calendar, Eye, Copy, Trash, ArrowDown, X, Sparkles } from 'lucide-react';
+import { Search, Calendar, Eye, Copy, Trash, ArrowDown, X, Sparkles, Star } from 'lucide-react';
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -20,6 +20,7 @@ interface FormattingRecord {
   output_text: string;
   tokens_used: number;
   created_at: string;
+  is_favorite?: boolean;
 }
 
 const ITEMS_PER_PAGE = 10;
@@ -37,6 +38,8 @@ export default function History() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [recordToDelete, setRecordToDelete] = useState<string | null>(null);
   const [bannerDismissed, setBannerDismissed] = useState(false);
+  const [favoriteFilter, setFavoriteFilter] = useState('all');
+  const [favoriteLoading, setFavoriteLoading] = useState<string | null>(null);
 
   const isPro = user?.subscription_tier === 'pro';
 
@@ -97,6 +100,12 @@ export default function History() {
         query = query.or(`input_text.ilike.%${searchQuery}%,output_text.ilike.%${searchQuery}%`);
       }
 
+      if (favoriteFilter === 'favorites') {
+        query = query.eq('is_favorite', true);
+      } else if (favoriteFilter === 'non-favorites') {
+        query = query.eq('is_favorite', false);
+      }
+
       const { data, error, count } = await query
         .range((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE - 1);
 
@@ -118,7 +127,7 @@ export default function History() {
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, [user, searchQuery, dateFilter, currentPage]);
+  }, [user, searchQuery, dateFilter, currentPage, favoriteFilter]);
 
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
@@ -154,11 +163,12 @@ export default function History() {
     setDeleteDialogOpen(true);
   };
 
-  const hasActiveFilters = searchQuery || dateFilter !== 'all';
+  const hasActiveFilters = searchQuery || dateFilter !== 'all' || favoriteFilter !== 'all';
 
   const clearFilters = () => {
     setSearchQuery('');
     setDateFilter('all');
+    setFavoriteFilter('all');
     setCurrentPage(1);
   };
 
@@ -175,6 +185,49 @@ export default function History() {
   const truncateText = (text: string, maxLength: number = 100) => {
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + '...';
+  };
+
+  const handleToggleFavorite = async (record: FormattingRecord) => {
+    if (favoriteLoading === record.id) return;
+
+    setFavoriteLoading(record.id);
+    const newFavoriteState = !record.is_favorite;
+
+    setRecords(prevRecords =>
+      prevRecords.map(r =>
+        r.id === record.id ? { ...r, is_favorite: newFavoriteState } : r
+      )
+    );
+
+    if (selectedRecord?.id === record.id) {
+      setSelectedRecord({ ...selectedRecord, is_favorite: newFavoriteState });
+    }
+
+    try {
+      const { error } = await supabase
+        .from('formatting_history')
+        .update({ is_favorite: newFavoriteState })
+        .eq('id', record.id);
+
+      if (error) throw error;
+
+      toast.success(newFavoriteState ? 'Adicionado aos favoritos' : 'Removido dos favoritos');
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+      toast.error('Erro ao atualizar favorito');
+
+      setRecords(prevRecords =>
+        prevRecords.map(r =>
+          r.id === record.id ? { ...r, is_favorite: !newFavoriteState } : r
+        )
+      );
+
+      if (selectedRecord?.id === record.id) {
+        setSelectedRecord({ ...selectedRecord, is_favorite: !newFavoriteState });
+      }
+    } finally {
+      setFavoriteLoading(null);
+    }
   };
 
   if (!user) {
@@ -256,6 +309,22 @@ export default function History() {
               </div>
             )}
 
+            <div className="relative">
+              <Star className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+              <Select
+                value={favoriteFilter}
+                onChange={(e) => {
+                  setFavoriteFilter(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="pl-10 w-full md:w-48"
+              >
+                <option value="all">Todos</option>
+                <option value="favorites">Apenas Favoritos</option>
+                <option value="non-favorites">Não Favoritos</option>
+              </Select>
+            </div>
+
             {hasActiveFilters && (
               <Button variant="outline" onClick={clearFilters}>
                 Limpar Filtros
@@ -324,11 +393,19 @@ export default function History() {
                   <CardContent className="p-6">
                     <div className="grid lg:grid-cols-[200px_1fr_150px] gap-6">
                       <div className="flex flex-col gap-2">
-                        <p className="text-sm text-slate-400">{formatDate(record.created_at)}</p>
+                        <div className="flex items-center gap-2">
+                          <p className="text-sm text-slate-400">{formatDate(record.created_at)}</p>
+                          {record.is_favorite && (
+                            <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                          )}
+                        </div>
                         <Badge variant={isPro ? 'default' : 'secondary'} className="w-fit">
                           {isPro ? 'Pro' : 'Gratuito'}
                         </Badge>
                         <p className="text-xs text-slate-500">{record.tokens_used} tokens</p>
+                        {record.is_favorite && (
+                          <p className="text-xs text-yellow-400">★ Salvo</p>
+                        )}
                       </div>
 
                       <div className="space-y-3">
@@ -365,6 +442,20 @@ export default function History() {
                         >
                           <Copy className="w-4 h-4 mr-2" />
                           Copiar
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleToggleFavorite(record)}
+                          disabled={favoriteLoading === record.id}
+                          className={record.is_favorite ? 'text-yellow-400 hover:text-yellow-300 border-yellow-500/30' : ''}
+                        >
+                          <Star
+                            className={`w-4 h-4 mr-2 ${
+                              favoriteLoading === record.id ? 'animate-pulse' : ''
+                            } ${record.is_favorite ? 'fill-yellow-400' : ''}`}
+                          />
+                          {record.is_favorite ? 'Salvo' : 'Salvar'}
                         </Button>
                         <Button
                           variant="ghost"
@@ -411,7 +502,12 @@ export default function History() {
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {selectedRecord && formatDate(selectedRecord.created_at)}
+              <div className="flex items-center gap-3">
+                <span>{selectedRecord && formatDate(selectedRecord.created_at)}</span>
+                {selectedRecord?.is_favorite && (
+                  <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                )}
+              </div>
             </DialogTitle>
           </DialogHeader>
           {selectedRecord && (
@@ -435,6 +531,19 @@ export default function History() {
                 </div>
               </div>
               <div className="flex justify-end gap-3 mt-6">
+                <Button
+                  variant="outline"
+                  onClick={() => handleToggleFavorite(selectedRecord)}
+                  disabled={favoriteLoading === selectedRecord.id}
+                  className={selectedRecord.is_favorite ? 'text-yellow-400 hover:text-yellow-300 border-yellow-500/30' : ''}
+                >
+                  <Star
+                    className={`w-4 h-4 mr-2 ${
+                      favoriteLoading === selectedRecord.id ? 'animate-pulse' : ''
+                    } ${selectedRecord.is_favorite ? 'fill-yellow-400' : ''}`}
+                  />
+                  {selectedRecord.is_favorite ? 'Remover dos Favoritos' : 'Adicionar aos Favoritos'}
+                </Button>
                 <Button
                   variant="outline"
                   onClick={() => handleCopy(selectedRecord.input_text, 'original')}
