@@ -14,7 +14,9 @@ const TabsContext = createContext<TabsContextType | undefined>(undefined);
  * Props do Tabs (container principal)
  */
 interface TabsProps {
-  defaultValue: string;
+  defaultValue?: string;
+  value?: string;
+  onValueChange?: (value: string) => void;
   children: ReactNode;
   className?: string;
 }
@@ -23,9 +25,27 @@ interface TabsProps {
  * Tabs Component
  *
  * Container principal das tabs que gerencia o estado ativo.
+ * Suporta tanto modo controlado (value + onValueChange) quanto não controlado (defaultValue).
  */
-export const Tabs: React.FC<TabsProps> = ({ defaultValue, children, className = '' }) => {
-  const [activeTab, setActiveTab] = useState(defaultValue);
+export const Tabs: React.FC<TabsProps> = ({
+  defaultValue = '',
+  value,
+  onValueChange,
+  children,
+  className = ''
+}) => {
+  const [internalActiveTab, setInternalActiveTab] = useState(defaultValue);
+
+  // Determina se está em modo controlado
+  const isControlled = value !== undefined;
+  const activeTab = isControlled ? value : internalActiveTab;
+
+  const setActiveTab = (newValue: string) => {
+    if (!isControlled) {
+      setInternalActiveTab(newValue);
+    }
+    onValueChange?.(newValue);
+  };
 
   return (
     <TabsContext.Provider value={{ activeTab, setActiveTab }}>
