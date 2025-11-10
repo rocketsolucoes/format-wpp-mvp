@@ -10,6 +10,7 @@ import { Input } from '../components/ui/Input';
 import { Label } from '../components/ui/Label';
 import CheckoutButton from '../components/CheckoutButton';
 import { useAuth } from '../hooks/useAuth';
+import { DashboardLayout } from '../layouts/DashboardLayout';
 
 type BillingPeriod = 'monthly' | 'annual';
 
@@ -177,17 +178,9 @@ export default function Pricing() {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-            Escolha o Plano Perfeito para Você
-          </h1>
-          <p className="text-xl text-slate-400 mb-8">
-            Comece grátis e faça upgrade quando precisar
-          </p>
-
+  const pricingContent = (
+    <div className="px-4 py-6 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
           <Tabs value={billingPeriod} onValueChange={(value) => setBillingPeriod(value as BillingPeriod)} className="inline-flex">
             <TabsList>
               <TabsTrigger value="monthly">Mensal</TabsTrigger>
@@ -465,39 +458,70 @@ export default function Pricing() {
           </Button>
           <p className="text-sm text-slate-400 mt-4">Sem cartão de crédito necessário</p>
         </div>
-      </div>
+    </div>
+  );
 
-      <Dialog open={contactModalOpen} onOpenChange={setContactModalOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Falar com Vendas</DialogTitle>
-            <DialogDescription>
-              Preencha o formulário abaixo e nossa equipe entrará em contato em até 24 horas.
-            </DialogDescription>
-          </DialogHeader>
-          <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); setContactModalOpen(false); }}>
-            <div>
-              <Label htmlFor="name">Nome Completo</Label>
-              <Input id="name" placeholder="João Silva" required />
-            </div>
-            <div>
-              <Label htmlFor="email">E-mail Corporativo</Label>
-              <Input id="email" type="email" placeholder="joao@empresa.com" required />
-            </div>
-            <div>
-              <Label htmlFor="company">Nome da Empresa</Label>
-              <Input id="company" placeholder="Empresa LTDA" required />
-            </div>
-            <div>
-              <Label htmlFor="team-size">Tamanho da Equipe</Label>
-              <Input id="team-size" placeholder="ex: 10-50" required />
-            </div>
-            <Button type="submit" className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500">
-              Enviar Mensagem
-            </Button>
-          </form>
-        </DialogContent>
-      </Dialog>
+  const contactModal = (
+    <Dialog open={contactModalOpen} onOpenChange={setContactModalOpen}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Falar com Vendas</DialogTitle>
+          <DialogDescription>
+            Preencha o formulário abaixo e nossa equipe entrará em contato em até 24 horas.
+          </DialogDescription>
+        </DialogHeader>
+        <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); setContactModalOpen(false); }}>
+          <div>
+            <Label htmlFor="name">Nome Completo</Label>
+            <Input id="name" placeholder="João Silva" required />
+          </div>
+          <div>
+            <Label htmlFor="email">E-mail Corporativo</Label>
+            <Input id="email" type="email" placeholder="joao@empresa.com" required />
+          </div>
+          <div>
+            <Label htmlFor="company">Nome da Empresa</Label>
+            <Input id="company" placeholder="Empresa LTDA" required />
+          </div>
+          <div>
+            <Label htmlFor="team-size">Tamanho da Equipe</Label>
+            <Input id="team-size" placeholder="ex: 10-50" required />
+          </div>
+          <Button type="submit" className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500">
+            Enviar Mensagem
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+
+  if (user) {
+    return (
+      <DashboardLayout>
+        <div className="px-4 py-4 sm:px-6 lg:px-8 border-b border-slate-800 bg-slate-950">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Preços</h1>
+          <p className="text-sm text-slate-400">Escolha o plano perfeito para você</p>
+        </div>
+        {pricingContent}
+        {contactModal}
+      </DashboardLayout>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-white">
+      <div className="container mx-auto px-4 py-16">
+        <div className="text-center mb-16">
+          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+            Escolha o Plano Perfeito para Você
+          </h1>
+          <p className="text-xl text-slate-400 mb-8">
+            Comece grátis e faça upgrade quando precisar
+          </p>
+        </div>
+        {pricingContent}
+        {contactModal}
+      </div>
     </div>
   );
 }
