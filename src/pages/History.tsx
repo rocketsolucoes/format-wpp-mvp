@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { Search, Calendar, Eye, Copy, Trash, ArrowDown, X, Sparkles, Star } from 'lucide-react';
+import { Search, Calendar, Eye, Copy, Trash, X, Sparkles, Star } from 'lucide-react';
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -334,26 +334,20 @@ export default function History() {
         </div>
 
         {loading ? (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {[...Array(5)].map((_, i) => (
               <Card key={i} className="border-slate-800">
-                <CardContent className="p-6">
-                  <div className="grid lg:grid-cols-[200px_1fr_150px] gap-6">
-                    <div className="space-y-2">
-                      <Skeleton className="h-4 w-32" />
-                      <Skeleton className="h-4 w-20" />
-                      <Skeleton className="h-4 w-24" />
+                <CardContent className="p-4">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <Skeleton className="h-6 w-24" />
                     </div>
-                    <div className="space-y-2">
-                      <Skeleton className="h-4 w-full" />
-                      <Skeleton className="h-4 w-3/4" />
-                      <Skeleton className="h-8 w-8 mx-auto my-2" />
-                      <Skeleton className="h-4 w-full" />
-                      <Skeleton className="h-4 w-2/3" />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <Skeleton className="h-10 w-full" />
-                      <Skeleton className="h-10 w-full" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-3 w-48" />
+                    <div className="flex gap-2 pt-2">
+                      <Skeleton className="h-8 w-20" />
+                      <Skeleton className="h-8 w-20" />
+                      <Skeleton className="h-8 w-24" />
                     </div>
                   </div>
                 </CardContent>
@@ -384,74 +378,73 @@ export default function History() {
           </div>
         ) : (
           <>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {records.map((record) => (
-                <Card
+                <div
                   key={record.id}
-                  className="border-slate-800 hover:border-slate-700 transition-colors group"
+                  className="p-4 bg-slate-800/30 rounded-lg hover:bg-slate-800/50 transition-all border border-slate-800 hover:border-slate-700 group"
                 >
-                  <CardContent className="p-6">
-                    <div className="grid lg:grid-cols-[200px_1fr_150px] gap-6">
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-2">
+                    <div className="space-y-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-center gap-3 flex-wrap">
                           <p className="text-sm text-slate-400">{formatDate(record.created_at)}</p>
-                          {record.is_favorite && (
-                            <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                          )}
+                          <Badge variant={isPro ? 'default' : 'secondary'} className="text-xs">
+                            {isPro ? 'Pro' : 'Gratuito'}
+                          </Badge>
+                          <span className="text-xs text-slate-500">{record.tokens_used} tokens</span>
                         </div>
-                        <Badge variant={isPro ? 'default' : 'secondary'} className="w-fit">
-                          {isPro ? 'Pro' : 'Gratuito'}
-                        </Badge>
-                        <p className="text-xs text-slate-500">{record.tokens_used} tokens</p>
                         {record.is_favorite && (
-                          <p className="text-xs text-yellow-400">★ Salvo</p>
+                          <span className="text-yellow-400" title="Favorito">
+                            <Star className="w-4 h-4 fill-yellow-400" />
+                          </span>
                         )}
                       </div>
 
-                      <div className="space-y-3">
+                      <div className="space-y-2">
                         <div>
                           <p className="text-xs text-slate-500 mb-1">Original:</p>
-                          <p className="text-sm text-slate-300">
-                            {truncateText(record.input_text)}
+                          <p className="text-sm text-slate-300 line-clamp-2">
+                            {record.input_text}
                           </p>
-                        </div>
-                        <div className="flex justify-center">
-                          <ArrowDown className="w-5 h-5 text-slate-600" />
                         </div>
                         <div>
                           <p className="text-xs text-slate-500 mb-1">Formatado:</p>
-                          <p className="text-sm text-slate-300">
-                            {truncateText(record.output_text)}
+                          <p className="text-sm text-slate-300 line-clamp-2">
+                            {record.output_text}
                           </p>
                         </div>
                       </div>
 
-                      <div className="flex flex-col gap-2">
+                      <div className="flex items-center gap-2 pt-1 opacity-0 group-hover:opacity-100 md:opacity-100 transition-opacity">
                         <Button
-                          variant="outline"
+                          variant="ghost"
                           size="sm"
                           onClick={() => setSelectedRecord(record)}
+                          className="flex-1 sm:flex-none text-xs h-8"
                         >
-                          <Eye className="w-4 h-4 mr-2" />
-                          Ver Completo
+                          <Eye className="w-3.5 h-3.5 mr-1.5" />
+                          Ver
                         </Button>
                         <Button
-                          variant="outline"
+                          variant="ghost"
                           size="sm"
                           onClick={() => handleCopy(record.output_text, 'formatted')}
+                          className="flex-1 sm:flex-none text-xs h-8"
                         >
-                          <Copy className="w-4 h-4 mr-2" />
+                          <Copy className="w-3.5 h-3.5 mr-1.5" />
                           Copiar
                         </Button>
                         <Button
-                          variant="outline"
+                          variant="ghost"
                           size="sm"
                           onClick={() => handleToggleFavorite(record)}
                           disabled={favoriteLoading === record.id}
-                          className={record.is_favorite ? 'text-yellow-400 hover:text-yellow-300 border-yellow-500/30' : ''}
+                          className={`flex-1 sm:flex-none text-xs h-8 ${
+                            record.is_favorite ? 'text-yellow-400 hover:text-yellow-300' : ''
+                          }`}
                         >
                           <Star
-                            className={`w-4 h-4 mr-2 ${
+                            className={`w-3.5 h-3.5 mr-1.5 ${
                               favoriteLoading === record.id ? 'animate-pulse' : ''
                             } ${record.is_favorite ? 'fill-yellow-400' : ''}`}
                           />
@@ -461,15 +454,14 @@ export default function History() {
                           variant="ghost"
                           size="sm"
                           onClick={() => openDeleteDialog(record.id)}
-                          className="text-red-400 hover:text-red-300 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity"
+                          className="flex-1 sm:flex-none text-xs h-8 text-red-400 hover:text-red-300 hover:bg-red-500/10"
                         >
-                          <Trash className="w-4 h-4 mr-2" />
+                          <Trash className="w-3.5 h-3.5 mr-1.5" />
                           Excluir
                         </Button>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                </div>
               ))}
             </div>
 
