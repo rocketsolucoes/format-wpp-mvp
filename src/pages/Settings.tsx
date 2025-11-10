@@ -175,9 +175,9 @@ export default function Settings() {
     if (/[0-9]/.test(password)) strength++;
     if (/[^a-zA-Z0-9]/.test(password)) strength++;
 
-    if (strength <= 2) return { strength: 33, label: 'Weak', color: 'bg-red-500' };
-    if (strength <= 3) return { strength: 66, label: 'Medium', color: 'bg-yellow-500' };
-    return { strength: 100, label: 'Strong', color: 'bg-green-500' };
+    if (strength <= 2) return { strength: 33, label: 'Fraca', color: 'bg-red-500' };
+    if (strength <= 3) return { strength: 66, label: 'Média', color: 'bg-yellow-500' };
+    return { strength: 100, label: 'Forte', color: 'bg-green-500' };
   };
 
   const passwordStrength = getPasswordStrength(newPassword);
@@ -547,8 +547,8 @@ export default function Settings() {
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-xs text-slate-400">Força da senha</span>
                           <span className={`text-xs font-medium ${
-                            passwordStrength.label === 'Weak' ? 'text-red-400' :
-                            passwordStrength.label === 'Medium' ? 'text-yellow-400' :
+                            passwordStrength.label === 'Fraca' ? 'text-red-400' :
+                            passwordStrength.label === 'Média' ? 'text-yellow-400' :
                             'text-green-400'
                           }`}>
                             {passwordStrength.label}
@@ -775,7 +775,7 @@ export default function Settings() {
                 </div>
 
                 <Button onClick={handleSavePrivacy} disabled={loading} className="w-full">
-                  Save Preferences
+                  Salvar Preferências
                 </Button>
               </CardContent>
             </Card>
@@ -866,7 +866,7 @@ export default function Settings() {
                       onClick={() => setLocation('/pricing')}
                       className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500"
                     >
-                      Upgrade to Pro
+                      Fazer Upgrade para o Pro
                     </Button>
                   )}
                 </CardContent>

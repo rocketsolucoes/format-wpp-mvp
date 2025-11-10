@@ -87,7 +87,7 @@ export default function Format() {
             break;
         }
       } else {
-        toast.error('Something went wrong. Please try again.');
+        toast.error('Algo deu errado. Por favor, tente novamente.');
       }
       console.error('Formatting error:', error);
     } finally {

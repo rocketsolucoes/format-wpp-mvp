@@ -133,7 +133,7 @@ export function WhatsAppPreview({ text, isLoading = false }: WhatsAppPreviewProp
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-white text-xs font-semibold truncate">
-                      Preview
+                      Pré-visualização
                     </div>
                     <div className="text-emerald-200 text-[10px]">online</div>
                   </div>
@@ -180,7 +180,7 @@ export function WhatsAppPreview({ text, isLoading = false }: WhatsAppPreviewProp
                           onClick={() => setShowFullText(true)}
                           className="text-emerald-200 text-xs underline hover:text-emerald-100 transition-colors"
                         >
-                          View Full
+                          Ver Completo
                         </button>
                       )}
 
@@ -198,7 +198,7 @@ export function WhatsAppPreview({ text, isLoading = false }: WhatsAppPreviewProp
                 ) : (
                   <div className="flex items-center justify-center h-full">
                     <div className="text-slate-500 text-xs text-center px-8">
-                      Your formatted message will appear here
+                      Sua mensagem formatada aparecerá aqui
                     </div>
                   </div>
                 )}

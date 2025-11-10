@@ -142,7 +142,7 @@ export function StyleSelector({ selectedStyle, onStyleChange }: StyleSelectorPro
             tabIndex={0}
             role="button"
             title={tooltip}
-            aria-label={`${style.name}${isActive ? ' - Currently selected' : ''}`}
+            aria-label={`${style.name}${isActive ? ' - Selecionado atualmente' : ''}`}
             aria-pressed={isActive}
             onClick={() => handleStyleClick(style, index)}
             onKeyDown={(e) => handleKeyDown(e, index)}

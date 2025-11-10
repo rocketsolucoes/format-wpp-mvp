@@ -33,14 +33,14 @@ const HeroSection: React.FC = () => {
       {/* Título principal com gradiente */}
       <h1 className="text-5xl md:text-6xl font-bold mb-6">
         <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-          WhatsApp Magic Formatter
+          Formatador Mágico para WhatsApp
         </span>
       </h1>
 
       {/* Subtítulo descritivo */}
       <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-8">
-        Transform your plain WhatsApp messages into beautifully formatted, professional text with the power of AI.
-        Stand out in every conversation.
+        Transforme suas mensagens simples do WhatsApp em textos lindamente formatados e profissionais com o poder da IA.
+        Destaque-se em cada conversa.
       </p>
 
       {/* Call-to-Action Button */}
@@ -48,7 +48,7 @@ const HeroSection: React.FC = () => {
         onClick={scrollToFormatter}
         className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-lg font-semibold text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all duration-300 hover:scale-105"
       >
-        Try It Now - It's Free!
+        Experimente Agora - É Grátis!
       </button>
     </section>
   );

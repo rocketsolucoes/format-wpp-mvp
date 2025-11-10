@@ -28,18 +28,18 @@ const FeaturesSection: React.FC = () => {
   const features: Feature[] = [
     {
       icon: <Zap className="w-6 h-6 text-emerald-400" />,
-      title: 'Lightning Fast',
-      description: 'Format your messages in seconds with our AI-powered engine. No more manual formatting struggles.'
+      title: 'Super Rápido',
+      description: 'Formate suas mensagens em segundos com nosso mecanismo movido a IA. Chega de dificuldades com formatação manual.'
     },
     {
       icon: <MessageCircle className="w-6 h-6 text-cyan-400" />,
-      title: 'WhatsApp Optimized',
-      description: 'Specially designed for WhatsApp formatting. Uses bold, italic, strikethrough, and monospace perfectly.'
+      title: 'Otimizado para WhatsApp',
+      description: 'Especialmente projetado para formatação do WhatsApp. Usa negrito, itálico, tachado e monoespaçado perfeitamente.'
     },
     {
       icon: <TrendingUp className="w-6 h-6 text-emerald-400" />,
-      title: 'Professional Impact',
-      description: 'Make your messages stand out. Perfect for business communication, marketing, and personal branding.'
+      title: 'Impacto Profissional',
+      description: 'Faça suas mensagens se destacarem. Perfeito para comunicação empresarial, marketing e marca pessoal.'
     }
   ];
 
@@ -47,12 +47,12 @@ const FeaturesSection: React.FC = () => {
     <section className="container mx-auto px-4 py-16">
       {/* Título da seção */}
       <h2 className="text-3xl font-bold text-center mb-4 text-slate-100">
-        Why Use Magic Formatter?
+        Por que Usar o Magic Formatter?
       </h2>
 
       {/* Subtítulo */}
       <p className="text-center text-slate-400 mb-12 max-w-2xl mx-auto">
-        Transform plain text into engaging, professional WhatsApp messages that capture attention
+        Transforme texto simples em mensagens profissionais e envolventes do WhatsApp que capturam atenção
       </p>
 
       {/* Grid de features - responsivo */}

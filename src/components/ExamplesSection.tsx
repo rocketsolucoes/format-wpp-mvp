@@ -13,33 +13,33 @@ const ExamplesSection: React.FC = () => {
   /**
    * Exemplo de texto antes da formatação
    */
-  const beforeText = `Hi team, just wanted to remind everyone about tomorrow's meeting at 10am. Please bring your project updates. Also, don't forget to review the Q4 goals document I sent last week. Looking forward to seeing everyone there!`;
+  const beforeText = `Oi pessoal, só queria lembrar todos sobre a reunião de amanhã às 10h. Por favor, tragam suas atualizações do projeto. Além disso, não esqueçam de revisar o documento de metas do Q4 que enviei na semana passada. Ansioso para ver todos lá!`;
 
   /**
    * Exemplo de texto após formatação
    * Usa a sintaxe de formatação do WhatsApp
    */
-  const afterText = `*Hi team!* 👋
+  const afterText = `*Oi pessoal!* 👋
 
-Just a friendly reminder about *tomorrow's meeting*:
+Apenas um lembrete amigável sobre a *reunião de amanhã*:
 
-⏰ *Time:* 10 AM
-📋 *Please bring:* Your project updates
+⏰ *Horário:* 10h
+📋 *Por favor tragam:* Suas atualizações do projeto
 
-_Don't forget_ to review the *Q4 goals* document I sent last week.
+_Não esqueçam_ de revisar o documento de *metas Q4* que enviei na semana passada.
 
-Looking forward to seeing everyone there! 🚀`;
+Ansioso para ver todos lá! 🚀`;
 
   return (
     <section className="container mx-auto px-4 py-16 bg-slate-900/30">
       {/* Título da seção */}
       <h2 className="text-3xl font-bold text-center mb-4 text-slate-100">
-        See the Difference
+        Veja a Diferença
       </h2>
 
       {/* Subtítulo */}
       <p className="text-center text-slate-400 mb-12 max-w-2xl mx-auto">
-        Watch how ordinary messages transform into engaging, professional communications
+        Veja como mensagens comuns se transformam em comunicações profissionais e envolventes
       </p>
 
       {/* Grid de exemplos - responsivo */}
@@ -49,7 +49,7 @@ Looking forward to seeing everyone there! 🚀`;
           {/* Header com destaque vermelho */}
           <div className="px-4 py-3 bg-red-500/10 border-b border-red-500/20">
             <h3 className="text-sm font-semibold text-red-400 uppercase tracking-wide">
-              Before
+              Antes
             </h3>
           </div>
 
@@ -63,7 +63,7 @@ Looking forward to seeing everyone there! 🚀`;
           {/* Footer com descrição */}
           <div className="px-4 py-3 bg-slate-800/50 border-t border-slate-800">
             <p className="text-xs text-slate-500">
-              Plain, unformatted text - hard to read and unprofessional
+              Texto simples e sem formatação - difícil de ler e pouco profissional
             </p>
           </div>
         </div>
@@ -73,7 +73,7 @@ Looking forward to seeing everyone there! 🚀`;
           {/* Header com destaque verde */}
           <div className="px-4 py-3 bg-emerald-500/10 border-b border-emerald-500/20">
             <h3 className="text-sm font-semibold text-emerald-400 uppercase tracking-wide">
-              After
+              Depois
             </h3>
           </div>
 
@@ -87,7 +87,7 @@ Looking forward to seeing everyone there! 🚀`;
           {/* Footer com descrição */}
           <div className="px-4 py-3 bg-emerald-500/5 border-t border-emerald-500/20">
             <p className="text-xs text-emerald-400">
-              Formatted, structured, and professional - ready to impress!
+              Formatado, estruturado e profissional - pronto para impressionar!
             </p>
           </div>
         </div>
