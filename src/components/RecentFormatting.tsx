@@ -41,7 +41,15 @@ export function RecentFormatting({ items, loading }: RecentFormattingProps) {
     if (diffMins < 1) return 'Agora mesmo';
     if (diffMins < 60) return `${diffMins} minuto${diffMins > 1 ? 's' : ''} atrás`;
     if (diffHours < 24) return `${diffHours} hora${diffHours > 1 ? 's' : ''} atrás`;
-    return `${diffDays} dia${diffDays > 1 ? 's' : ''} atrás`;
+    if (diffDays < 30) return `${diffDays} dia${diffDays > 1 ? 's' : ''} atrás`;
+
+    // Para datas antigas (mais de 30 dias), mostrar formato brasileiro completo
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
   };
 
   const handleCopy = (text: string, e: React.MouseEvent) => {

@@ -106,7 +106,7 @@ export function WhatsAppPreview({ text, isLoading = false }: WhatsAppPreviewProp
     return renderedLines;
   };
 
-  const currentTime = new Date().toLocaleTimeString('en-US', {
+  const currentTime = new Date().toLocaleTimeString('pt-BR', {
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
