@@ -491,7 +491,7 @@ export default function History() {
       </div>
 
       <Dialog open={!!selectedRecord} onOpenChange={() => setSelectedRecord(null)}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-5xl max-h-[90vh] flex flex-col">
           <DialogHeader>
             <DialogTitle>
               <div className="flex items-center gap-3">
@@ -504,53 +504,65 @@ export default function History() {
           </DialogHeader>
           {selectedRecord && (
             <>
-              <div className="grid lg:grid-cols-2 gap-6 mt-4">
-                <div>
-                  <h3 className="text-sm font-semibold text-slate-400 mb-2">Texto Original</h3>
-                  <textarea
-                    readOnly
-                    value={selectedRecord.input_text}
-                    className="w-full h-64 p-4 rounded-md border border-slate-700 bg-slate-900 text-slate-200 text-sm resize-none focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <h3 className="text-sm font-semibold text-slate-400 mb-2">Texto Formatado</h3>
-                  <textarea
-                    readOnly
-                    value={selectedRecord.output_text}
-                    className="w-full h-64 p-4 rounded-md border border-slate-700 bg-slate-900 text-slate-200 text-sm resize-none focus:outline-none"
-                  />
+              <div className="px-6 py-6 overflow-y-auto flex-1">
+                <div className="grid lg:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <h3 className="text-sm font-semibold text-slate-300 mb-3">Texto Original</h3>
+                    <textarea
+                      readOnly
+                      value={selectedRecord.input_text}
+                      className="w-full h-80 p-4 rounded-lg border-2 border-slate-700 bg-slate-900/50 text-slate-200 text-sm resize-none focus:outline-none focus:border-slate-600 transition-colors"
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <h3 className="text-sm font-semibold text-slate-300 mb-3">Texto Formatado</h3>
+                    <textarea
+                      readOnly
+                      value={selectedRecord.output_text}
+                      className="w-full h-80 p-4 rounded-lg border-2 border-slate-700 bg-slate-900/50 text-slate-200 text-sm resize-none focus:outline-none focus:border-slate-600 transition-colors"
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="flex justify-end gap-3 mt-6">
-                <Button
-                  variant="outline"
-                  onClick={() => handleToggleFavorite(selectedRecord)}
-                  disabled={favoriteLoading === selectedRecord.id}
-                  className={selectedRecord.is_favorite ? 'text-yellow-400 hover:text-yellow-300 border-yellow-500/30' : ''}
-                >
-                  <Star
-                    className={`w-4 h-4 mr-2 ${
-                      favoriteLoading === selectedRecord.id ? 'animate-pulse' : ''
-                    } ${selectedRecord.is_favorite ? 'fill-yellow-400' : ''}`}
-                  />
-                  {selectedRecord.is_favorite ? 'Remover dos Favoritos' : 'Adicionar aos Favoritos'}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => handleCopy(selectedRecord.input_text, 'original')}
-                >
-                  <Copy className="w-4 h-4 mr-2" />
-                  Copiar Original
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => handleCopy(selectedRecord.output_text, 'formatted')}
-                >
-                  <Copy className="w-4 h-4 mr-2" />
-                  Copiar Formatado
-                </Button>
-                <Button onClick={() => setSelectedRecord(null)}>Fechar</Button>
+              <div className="px-6 py-4 border-t border-slate-800 bg-slate-900/30">
+                <div className="flex flex-wrap justify-end gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => handleToggleFavorite(selectedRecord)}
+                    disabled={favoriteLoading === selectedRecord.id}
+                    className={selectedRecord.is_favorite ? 'text-yellow-400 hover:text-yellow-300 border-yellow-500/30' : ''}
+                  >
+                    <Star
+                      className={`w-4 h-4 mr-2 ${
+                        favoriteLoading === selectedRecord.id ? 'animate-pulse' : ''
+                      } ${selectedRecord.is_favorite ? 'fill-yellow-400' : ''}`}
+                    />
+                    <span className="hidden sm:inline">{selectedRecord.is_favorite ? 'Remover dos Favoritos' : 'Adicionar aos Favoritos'}</span>
+                    <span className="sm:hidden">{selectedRecord.is_favorite ? 'Remover' : 'Favoritar'}</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleCopy(selectedRecord.input_text, 'original')}
+                  >
+                    <Copy className="w-4 h-4 mr-2" />
+                    <span className="hidden sm:inline">Copiar Original</span>
+                    <span className="sm:hidden">Original</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleCopy(selectedRecord.output_text, 'formatted')}
+                  >
+                    <Copy className="w-4 h-4 mr-2" />
+                    <span className="hidden sm:inline">Copiar Formatado</span>
+                    <span className="sm:hidden">Formatado</span>
+                  </Button>
+                  <Button
+                    onClick={() => setSelectedRecord(null)}
+                    className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600"
+                  >
+                    Fechar
+                  </Button>
+                </div>
               </div>
             </>
           )}
