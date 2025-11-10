@@ -16,7 +16,7 @@ export function Dialog({ open, onOpenChange, children }: DialogProps) {
         className="fixed inset-0 bg-black/70 backdrop-blur-sm"
         onClick={() => onOpenChange(false)}
       />
-      <div className="relative z-50 w-full max-w-lg">
+      <div className="relative z-50 w-full">
         {children}
       </div>
     </div>
@@ -30,7 +30,7 @@ interface DialogContentProps {
 
 export function DialogContent({ children, className = '' }: DialogContentProps) {
   return (
-    <div className={`bg-slate-900 border-2 border-slate-700 rounded-xl shadow-2xl overflow-hidden ${className}`}>
+    <div className={`bg-slate-900 border-2 border-slate-700 rounded-xl shadow-2xl ${className}`}>
       {children}
     </div>
   );
@@ -61,9 +61,9 @@ interface DialogTitleProps {
   children: React.ReactNode;
 }
 
-export function DialogTitle({ children }: DialogTitleProps) {
+export function DialogTitle({ children, className = '' }: DialogTitleProps & { className?: string }) {
   return (
-    <h2 className="text-xl font-bold text-white">
+    <h2 className={`text-xl font-bold text-white ${className}`}>
       {children}
     </h2>
   );

@@ -2,6 +2,7 @@ import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/Dialog';
 import { Button } from './ui/Button';
 import { useLocation } from 'wouter';
+import { X } from 'lucide-react';
 
 interface StyleComparisonModalProps {
   open: boolean;
@@ -51,7 +52,15 @@ export function StyleComparisonModal({ open, onOpenChange }: StyleComparisonModa
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-5xl max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-lg">Comparação de Estilos</DialogTitle>
+          <div className="flex items-center justify-between">
+            <DialogTitle className="text-lg">Comparação de Estilos</DialogTitle>
+            <button
+              onClick={() => onOpenChange(false)}
+              className="rounded-lg p-2 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
         </DialogHeader>
 
         <div className="py-2">
