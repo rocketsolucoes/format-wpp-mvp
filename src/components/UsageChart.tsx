@@ -22,23 +22,23 @@ export function UsageChart({ data, loading, isPro }: UsageChartProps) {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Usage Chart</CardTitle>
-              <CardDescription>Track your daily formatting activity</CardDescription>
+              <CardTitle>Gráfico de Uso</CardTitle>
+              <CardDescription>Acompanhe sua atividade diária de formatação</CardDescription>
             </div>
-            <Badge variant="info">Pro Feature</Badge>
+            <Badge variant="info">Recurso Pro</Badge>
           </div>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <div className="text-4xl mb-4">📊</div>
             <p className="text-slate-400 mb-4">
-              Upgrade to Pro to unlock detailed usage analytics
+              Faça upgrade para o Pro para desbloquear análises detalhadas de uso
             </p>
             <button
               onClick={() => window.location.href = '/pricing'}
               className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-lg text-white text-sm font-semibold hover:scale-105 transition-transform"
             >
-              Upgrade to Pro
+              Fazer Upgrade para Pro
             </button>
           </div>
         </CardContent>
@@ -50,8 +50,8 @@ export function UsageChart({ data, loading, isPro }: UsageChartProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Usage Chart</CardTitle>
-          <CardDescription>Last 30 days</CardDescription>
+          <CardTitle>Gráfico de Uso</CardTitle>
+          <CardDescription>Últimos 30 dias</CardDescription>
         </CardHeader>
         <CardContent>
           <Skeleton className="h-64 w-full" />
@@ -62,7 +62,7 @@ export function UsageChart({ data, loading, isPro }: UsageChartProps) {
 
   const formattedData = data.map(item => ({
     ...item,
-    date: new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+    date: new Date(item.date).toLocaleDateString('pt-BR', { month: 'short', day: 'numeric' })
   }));
 
   const maxCount = data.length > 0 ? Math.max(...data.map(item => item.format_count)) : 1;
@@ -73,9 +73,9 @@ export function UsageChart({ data, loading, isPro }: UsageChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Usage Chart</CardTitle>
+        <CardTitle>Gráfico de Uso</CardTitle>
         <CardDescription>
-          Last 30 days • Average: {avgCount.toFixed(1)} per day
+          Últimos 30 dias • Média: {avgCount.toFixed(1)} por dia
         </CardDescription>
       </CardHeader>
       <CardContent>

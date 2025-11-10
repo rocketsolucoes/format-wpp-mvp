@@ -38,16 +38,16 @@ export function RecentFormatting({ items, loading }: RecentFormattingProps) {
     const diffHours = Math.floor(diffMs / 3600000);
     const diffDays = Math.floor(diffMs / 86400000);
 
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
-    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-    return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    if (diffMins < 1) return 'Agora mesmo';
+    if (diffMins < 60) return `${diffMins} minuto${diffMins > 1 ? 's' : ''} atrás`;
+    if (diffHours < 24) return `${diffHours} hora${diffHours > 1 ? 's' : ''} atrás`;
+    return `${diffDays} dia${diffDays > 1 ? 's' : ''} atrás`;
   };
 
   const handleCopy = (text: string, e: React.MouseEvent) => {
     e.stopPropagation();
     navigator.clipboard.writeText(text);
-    toast.success('Copied to clipboard!');
+    toast.success('Copiado para a área de transferência!');
   };
 
   if (loading) {
@@ -55,7 +55,7 @@ export function RecentFormatting({ items, loading }: RecentFormattingProps) {
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>Recent Formatting</CardTitle>
+            <CardTitle>Formatações Recentes</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -75,10 +75,10 @@ export function RecentFormatting({ items, loading }: RecentFormattingProps) {
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>Recent Formatting</CardTitle>
+            <CardTitle>Formatações Recentes</CardTitle>
             <Link href="/history">
               <a className="text-sm text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer">
-                View All
+                Ver Tudo
               </a>
             </Link>
           </div>
@@ -87,10 +87,10 @@ export function RecentFormatting({ items, loading }: RecentFormattingProps) {
           {items.length === 0 ? (
             <div className="text-center py-12">
               <FileText className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-              <p className="text-slate-400 mb-4">No formatting yet. Start formatting!</p>
+              <p className="text-slate-400 mb-4">Nenhuma formatação ainda. Comece a formatar!</p>
               <Link href="/">
                 <Button variant="primary" className="text-sm">
-                  Format Text Now
+                  Formatar Texto Agora
                 </Button>
               </Link>
             </div>
@@ -137,17 +137,17 @@ export function RecentFormatting({ items, loading }: RecentFormattingProps) {
         {selectedItem && (
           <DialogContent>
             <DialogHeader onClose={() => setSelectedItem(null)}>
-              <DialogTitle>Formatting Details</DialogTitle>
+              <DialogTitle>Detalhes da Formatação</DialogTitle>
             </DialogHeader>
             <DialogBody className="space-y-4 max-h-96 overflow-y-auto">
               <div>
-                <h4 className="text-sm font-semibold text-slate-400 mb-2">Original Text:</h4>
+                <h4 className="text-sm font-semibold text-slate-400 mb-2">Texto Original:</h4>
                 <div className="p-3 bg-slate-800/50 rounded-lg text-sm text-slate-300 whitespace-pre-wrap">
                   {selectedItem.input_text}
                 </div>
               </div>
               <div>
-                <h4 className="text-sm font-semibold text-slate-400 mb-2">Formatted Text:</h4>
+                <h4 className="text-sm font-semibold text-slate-400 mb-2">Texto Formatado:</h4>
                 <div className="p-3 bg-slate-800/50 rounded-lg text-sm text-slate-300 whitespace-pre-wrap">
                   {selectedItem.output_text}
                 </div>
@@ -159,9 +159,9 @@ export function RecentFormatting({ items, loading }: RecentFormattingProps) {
                 onClick={() => handleCopy(selectedItem.output_text, {} as any)}
               >
                 <Copy className="w-4 h-4 mr-2" />
-                Copy Formatted
+                Copiar Formatado
               </Button>
-              <Button onClick={() => setSelectedItem(null)}>Close</Button>
+              <Button onClick={() => setSelectedItem(null)}>Fechar</Button>
             </DialogFooter>
           </DialogContent>
         )}

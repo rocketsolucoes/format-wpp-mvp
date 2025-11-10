@@ -24,8 +24,8 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
     : 0;
 
   const resetDate = user?.credits_reset_date
-    ? new Date(user.credits_reset_date).toLocaleDateString()
-    : 'Unknown';
+    ? new Date(user.credits_reset_date).toLocaleDateString('pt-BR')
+    : 'Desconhecido';
 
   if (loading) {
     return (
@@ -48,7 +48,7 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
       <Card className="hover:border-emerald-500/50 transition-colors">
         <CardContent className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">Total Formatting</span>
+            <span className="text-sm text-slate-400">Total de Formatações</span>
             <div className="p-2 bg-emerald-500/10 rounded-lg">
               <FileText className="w-5 h-5 text-emerald-400" />
             </div>
@@ -57,7 +57,7 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
             {stats?.total_formatting || 0}
           </div>
           <div className="flex items-center gap-1 text-xs text-slate-400">
-            <span>All time usage</span>
+            <span>Uso total</span>
           </div>
         </CardContent>
       </Card>
@@ -65,7 +65,7 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
       <Card className="hover:border-cyan-500/50 transition-colors">
         <CardContent className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">Credits Remaining</span>
+            <span className="text-sm text-slate-400">Créditos Restantes</span>
             <div className="p-2 bg-cyan-500/10 rounded-lg">
               <Coins className="w-5 h-5 text-cyan-400" />
             </div>
@@ -77,11 +77,11 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
             <>
               <Progress value={user?.credits_remaining || 0} max={100} className="h-1.5" />
               <div className="text-xs text-slate-400">
-                Resets on {resetDate}
+                Renova em {resetDate}
               </div>
             </>
           ) : (
-            <div className="text-xs text-emerald-400">Unlimited formatting</div>
+            <div className="text-xs text-emerald-400">Formatação ilimitada</div>
           )}
         </CardContent>
       </Card>
@@ -89,17 +89,17 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
       <Card className="hover:border-purple-500/50 transition-colors">
         <CardContent className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">Current Plan</span>
+            <span className="text-sm text-slate-400">Plano Atual</span>
             <div className="p-2 bg-purple-500/10 rounded-lg">
               <Crown className="w-5 h-5 text-purple-400" />
             </div>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-2xl font-bold text-white capitalize">
-              {user?.plan || 'Free'}
+              {user?.plan === 'pro' ? 'Pro' : user?.plan === 'free' ? 'Gratuito' : user?.plan || 'Gratuito'}
             </span>
             <Badge variant={user?.plan === 'free' ? 'default' : 'success'}>
-              {user?.plan === 'free' ? 'Limited' : 'Active'}
+              {user?.plan === 'free' ? 'Limitado' : 'Ativo'}
             </Badge>
           </div>
           {user?.plan === 'free' ? (
@@ -108,11 +108,11 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
               className="w-full text-xs py-1.5"
               onClick={() => window.location.href = '/pricing'}
             >
-              Upgrade Now
+              Fazer Upgrade
             </Button>
           ) : (
             <div className="text-xs text-slate-400">
-              {user?.plan === 'pro' ? '$9.99/month' : 'Custom pricing'}
+              {user?.plan === 'pro' ? 'R$ 49,90/mês' : 'Preço personalizado'}
             </div>
           )}
         </CardContent>
@@ -121,7 +121,7 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
       <Card className="hover:border-yellow-500/50 transition-colors">
         <CardContent className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">This Month</span>
+            <span className="text-sm text-slate-400">Este Mês</span>
             <div className={`p-2 rounded-lg ${
               monthTrend >= 0 ? 'bg-emerald-500/10' : 'bg-red-500/10'
             }`}>
@@ -139,7 +139,7 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
             monthTrend >= 0 ? 'text-emerald-400' : 'text-red-400'
           }`}>
             {monthTrend >= 0 ? '+' : ''}{monthTrend.toFixed(1)}%
-            <span className="text-slate-400">vs last month</span>
+            <span className="text-slate-400">vs mês passado</span>
           </div>
         </CardContent>
       </Card>
