@@ -21,9 +21,13 @@ export default function Pricing() {
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const { user } = useAuth();
 
-  const proPrice = billingPeriod === 'monthly' ? 19.90 : 15.90;
-  const proTotal = billingPeriod === 'monthly' ? proPrice : proPrice * 12;
-  const savings = billingPeriod === 'annual' ? 48 : 0;
+  const monthlyPrice = 19.90;
+  const annualMonthlyPrice = 16.58;
+  const annualTotalPrice = 199.00;
+
+  const proPrice = billingPeriod === 'monthly' ? monthlyPrice : annualMonthlyPrice;
+  const proTotal = billingPeriod === 'monthly' ? monthlyPrice : annualTotalPrice;
+  const savings = billingPeriod === 'annual' ? (monthlyPrice * 12 - annualTotalPrice) : 0;
 
   // Formata valor em BRL
   const formatBRL = (value: number) => {
