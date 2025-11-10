@@ -16,7 +16,7 @@ export async function createCheckoutSession(priceId: string): Promise<CheckoutSe
     const { data: { session } } = await supabase.auth.getSession();
 
     if (!session) {
-      throw new Error('User not authenticated');
+      throw new Error('Usuário não autenticado');
     }
 
     const response = await fetch(apiUrl, {
@@ -37,16 +37,16 @@ export async function createCheckoutSession(priceId: string): Promise<CheckoutSe
       console.error('Checkout session error response:', errorText);
       try {
         const error = JSON.parse(errorText);
-        throw new Error(error.error || error.message || 'Failed to create checkout session');
+        throw new Error(error.error || error.message || 'Falha ao criar sessão de pagamento');
       } catch (e) {
-        throw new Error(`Failed to create checkout session: ${response.status} ${response.statusText}`);
+        throw new Error(`Falha ao criar sessão de pagamento: ${response.status} ${response.statusText}`);
       }
     }
 
     const data = await response.json();
 
     if (!data.url) {
-      throw new Error('No checkout URL received');
+      throw new Error('URL de pagamento não recebida');
     }
 
     return data;

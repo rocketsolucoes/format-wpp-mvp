@@ -42,8 +42,8 @@ export default function CheckoutButton({
       const { url } = await createCheckoutSession(priceId);
       window.location.href = url;
     } catch (error) {
-      console.error('Error processing payment:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Error processing payment. Please try again.';
+      console.error('Erro ao processar pagamento:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Erro ao processar pagamento. Por favor, tente novamente.';
       alert(errorMessage);
       setLoading(false);
     }
@@ -56,7 +56,7 @@ export default function CheckoutButton({
         className={className}
         disabled
       >
-        Current Plan
+        Plano Atual
       </Button>
     );
   }
@@ -71,7 +71,7 @@ export default function CheckoutButton({
       {loading ? (
         <>
           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-          Processing...
+          Processando...
         </>
       ) : (
         children

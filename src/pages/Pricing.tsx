@@ -25,6 +25,16 @@ export default function Pricing() {
   const proTotal = billingPeriod === 'monthly' ? proPrice : proPrice * 12;
   const savings = billingPeriod === 'annual' ? 48 : 0;
 
+  // Formata valor em BRL
+  const formatBRL = (value: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+  };
+
   const monthlyPriceId = 'price_1SPu4QRsqRrcMrSPgJwd8a2j';
   const annualPriceId = 'price_1SPu4jRsqRrcMrSP2M2b5POX';
   const currentPriceId = billingPeriod === 'monthly' ? monthlyPriceId : annualPriceId;
@@ -72,7 +82,7 @@ export default function Pricing() {
       note: 'Garantia de reembolso de 7 dias',
       highlighted: true,
       icon: Zap,
-      savings: savings > 0 ? `Economize R$${savings}` : undefined,
+      savings: savings > 0 ? `Economize ${formatBRL(savings)}` : undefined,
     },
     {
       name: 'Enterprise',
@@ -231,7 +241,7 @@ export default function Pricing() {
                     {plan.price !== null ? (
                       <>
                         <div className="text-5xl font-bold">
-                          ${plan.price}
+                          {formatBRL(plan.price)}
                           <span className="text-xl text-slate-400 font-normal">/{plan.period.split(' ')[0]}</span>
                         </div>
                         {billingPeriod === 'annual' && plan.savings && (
