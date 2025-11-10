@@ -26,6 +26,7 @@ interface FormattingItem {
   output_text: string;
   created_at: string;
   style_id?: string;
+  is_favorite?: boolean;
 }
 
 interface ChartDataPoint {
@@ -141,7 +142,7 @@ const Dashboard: React.FC = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
-              <RecentFormatting items={recentItems} loading={loading} />
+              <RecentFormatting items={recentItems} loading={loading} onRefresh={fetchDashboardData} />
             </div>
             <div className="space-y-6">
               <UsageChart

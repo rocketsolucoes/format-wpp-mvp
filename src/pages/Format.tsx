@@ -22,6 +22,21 @@ export default function Format() {
   const [, setLocation] = useLocation();
 
   useEffect(() => {
+    const reformatText = localStorage.getItem('reformat_text');
+    const reformatStyle = localStorage.getItem('reformat_style');
+
+    if (reformatText) {
+      setInputText(reformatText);
+      localStorage.removeItem('reformat_text');
+    }
+
+    if (reformatStyle) {
+      setSelectedStyle(reformatStyle);
+      localStorage.removeItem('reformat_style');
+    }
+  }, []);
+
+  useEffect(() => {
     const timeoutId = setTimeout(() => {
       setPreviewText(outputText || inputText);
     }, 500);
