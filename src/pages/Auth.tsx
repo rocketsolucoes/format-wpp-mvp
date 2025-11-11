@@ -119,12 +119,16 @@ const Auth: React.FC = () => {
   const handleLoginSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    setLoginErrors({});
+
     if (!validateLoginForm()) return;
 
     try {
       await signIn(loginEmail, loginPassword);
+      setLoginEmail('');
+      setLoginPassword('');
       setLocation('/dashboard');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login error:', error);
     }
   };
@@ -135,12 +139,19 @@ const Auth: React.FC = () => {
   const handleSignupSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    setSignupErrors({});
+
     if (!validateSignupForm()) return;
 
     try {
       await signUp(signupEmail, signupPassword, signupFullName);
+      setSignupFullName('');
+      setSignupEmail('');
+      setSignupPassword('');
+      setSignupConfirmPassword('');
+      setAcceptTerms(false);
       setLocation('/dashboard');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Signup error:', error);
     }
   };
@@ -201,12 +212,15 @@ const Auth: React.FC = () => {
                   </Label>
                   <Input
                     id="login-email"
+                    name="email"
                     type="email"
+                    autoComplete="email"
                     placeholder="seu@email.com"
                     value={loginEmail}
                     onChange={(e) => setLoginEmail(e.target.value)}
                     error={loginErrors.email}
                     disabled={loading}
+                    required
                   />
                 </div>
 
@@ -216,12 +230,15 @@ const Auth: React.FC = () => {
                   </Label>
                   <Input
                     id="login-password"
+                    name="password"
                     type="password"
+                    autoComplete="current-password"
                     placeholder="••••••••"
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
                     error={loginErrors.password}
                     disabled={loading}
+                    required
                   />
                 </div>
 
@@ -250,12 +267,15 @@ const Auth: React.FC = () => {
                   </Label>
                   <Input
                     id="signup-name"
+                    name="name"
                     type="text"
+                    autoComplete="name"
                     placeholder="João Silva"
                     value={signupFullName}
                     onChange={(e) => setSignupFullName(e.target.value)}
                     error={signupErrors.fullName}
                     disabled={loading}
+                    required
                   />
                 </div>
 
@@ -265,12 +285,15 @@ const Auth: React.FC = () => {
                   </Label>
                   <Input
                     id="signup-email"
+                    name="email"
                     type="email"
+                    autoComplete="email"
                     placeholder="seu@email.com"
                     value={signupEmail}
                     onChange={(e) => setSignupEmail(e.target.value)}
                     error={signupErrors.email}
                     disabled={loading}
+                    required
                   />
                 </div>
 
@@ -280,12 +303,15 @@ const Auth: React.FC = () => {
                   </Label>
                   <Input
                     id="signup-password"
+                    name="password"
                     type="password"
+                    autoComplete="new-password"
                     placeholder="••••••••"
                     value={signupPassword}
                     onChange={(e) => setSignupPassword(e.target.value)}
                     error={signupErrors.password}
                     disabled={loading}
+                    required
                   />
                 </div>
 
@@ -295,12 +321,15 @@ const Auth: React.FC = () => {
                   </Label>
                   <Input
                     id="signup-confirm-password"
+                    name="confirm-password"
                     type="password"
+                    autoComplete="new-password"
                     placeholder="••••••••"
                     value={signupConfirmPassword}
                     onChange={(e) => setSignupConfirmPassword(e.target.value)}
                     error={signupErrors.confirmPassword}
                     disabled={loading}
+                    required
                   />
                 </div>
 

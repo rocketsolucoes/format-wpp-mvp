@@ -134,13 +134,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       if (signUpError) {
-        setError(signUpError.message);
-        toast.error(signUpError.message);
-        throw signUpError;
+        console.error('Sign up error:', signUpError);
+
+        let errorMessage = 'Erro ao criar conta';
+        if (signUpError.message.includes('already registered')) {
+          errorMessage = 'Este email já está cadastrado';
+        } else if (signUpError.message.includes('Password should be')) {
+          errorMessage = 'A senha deve ter pelo menos 6 caracteres';
+        } else if (signUpError.message) {
+          errorMessage = signUpError.message;
+        }
+
+        setError(errorMessage);
+        toast.error(errorMessage);
+        throw new Error(errorMessage);
       }
 
       if (data.user) {
-        // Cria o perfil do usuário na tabela profiles
         const { error: profileError } = await supabase.from('profiles').insert({
           id: data.user.id,
           email: data.user.email!,
@@ -154,12 +164,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
         if (profileError) {
           console.error('Error creating profile:', profileError);
+          const profileErrorMsg = 'Erro ao criar perfil de usuário';
+          setError(profileErrorMsg);
+          toast.error(profileErrorMsg);
+          throw new Error(profileErrorMsg);
         }
 
-        toast.success('Account created successfully! Please check your email.');
+        toast.success('Conta criada com sucesso!');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Signup error:', err);
+      setLoading(false);
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -179,18 +195,39 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       if (signInError) {
-        setError(signInError.message);
-        toast.error(signInError.message);
-        throw signInError;
+        console.error('Sign in error:', signInError);
+
+        let errorMessage = 'Erro ao fazer login';
+        if (signInError.message.includes('Invalid login credentials')) {
+          errorMessage = 'Email ou senha incorretos';
+        } else if (signInError.message.includes('Email not confirmed')) {
+          errorMessage = 'Por favor, confirme seu email antes de fazer login';
+        } else if (signInError.message.includes('Too many requests')) {
+          errorMessage = 'Muitas tentativas. Por favor, aguarde alguns minutos';
+        } else if (signInError.message) {
+          errorMessage = signInError.message;
+        }
+
+        setError(errorMessage);
+        toast.error(errorMessage);
+        throw new Error(errorMessage);
       }
 
       if (data.user) {
         const profile = await fetchUserProfile(data.user.id);
+        if (!profile) {
+          const profileError = 'Erro ao carregar perfil do usuário';
+          setError(profileError);
+          toast.error(profileError);
+          throw new Error(profileError);
+        }
         setUser(profile);
-        toast.success('Welcome back!');
+        toast.success('Bem-vindo de volta!');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Sign in error:', err);
+      setLoading(false);
+      throw err;
     } finally {
       setLoading(false);
     }
