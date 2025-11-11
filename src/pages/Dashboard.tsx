@@ -45,6 +45,7 @@ const Dashboard: React.FC = () => {
   const [, setLocation] = useLocation();
   const [stats, setStats] = useState<StatsData | null>(null);
   const [recentItems, setRecentItems] = useState<FormattingItem[]>([]);
+  const [totalHistoryCount, setTotalHistoryCount] = useState<number>(0);
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -59,14 +60,18 @@ const Dashboard: React.FC = () => {
     setError(null);
 
     try {
-      const [statsResult, historyResult, chartResult] = await Promise.all([
+      const [statsResult, historyResult, countResult, chartResult] = await Promise.all([
         supabase.rpc('get_user_stats', { p_user_id: user.id }),
         supabase
           .from('formatting_history')
           .select('*')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false })
-          .limit(5),
+          .limit(3),
+        supabase
+          .from('formatting_history')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', user.id),
         user.plan !== 'free'
           ? supabase.rpc('get_daily_usage', { p_user_id: user.id })
           : Promise.resolve({ data: [], error: null }),
@@ -74,10 +79,12 @@ const Dashboard: React.FC = () => {
 
       if (statsResult.error) throw statsResult.error;
       if (historyResult.error) throw historyResult.error;
+      if (countResult.error) throw countResult.error;
       if (chartResult.error) throw chartResult.error;
 
       setStats(Array.isArray(statsResult.data) ? statsResult.data[0] : statsResult.data);
       setRecentItems(historyResult.data || []);
+      setTotalHistoryCount(countResult.count || 0);
       setChartData(chartResult.data || []);
     } catch (err: any) {
       console.error('Error fetching dashboard data:', err);
@@ -223,7 +230,7 @@ const Dashboard: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <div className="lg:col-span-2">
-                <RecentFormatting items={recentItems} loading={loading} onRefresh={fetchDashboardData} />
+                <RecentFormatting items={recentItems} loading={loading} onRefresh={fetchDashboardData} totalCount={totalHistoryCount} />
               </div>
               <div className="space-y-6">
                 {user?.plan === 'free' && (

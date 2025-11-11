@@ -30,6 +30,7 @@ interface RecentFormattingProps {
   items: FormattingItem[];
   loading: boolean;
   onRefresh?: () => void;
+  totalCount?: number;
 }
 
 interface StyleBadgeConfig {
@@ -80,7 +81,7 @@ function StyleBadge({ styleId }: { styleId?: string }) {
   );
 }
 
-export function RecentFormatting({ items, loading, onRefresh }: RecentFormattingProps) {
+export function RecentFormatting({ items, loading, onRefresh, totalCount }: RecentFormattingProps) {
   const [, setLocation] = useLocation();
   const [selectedItem, setSelectedItem] = useState<FormattingItem | null>(null);
   const [favoriteLoading, setFavoriteLoading] = useState<string | null>(null);
@@ -200,8 +201,8 @@ export function RecentFormatting({ items, loading, onRefresh }: RecentFormatting
           </div>
         </CardHeader>
         <CardContent className="space-y-3">
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className="p-4 bg-slate-800/30 rounded-lg space-y-3">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="p-3 bg-slate-800/30 rounded-lg space-y-2">
               <div className="flex items-center gap-2">
                 <Skeleton className="h-6 w-24" />
               </div>
@@ -245,12 +246,12 @@ export function RecentFormatting({ items, loading, onRefresh }: RecentFormatting
             </div>
           ) : (
             <div className="space-y-3">
-              {localItems.map((item) => (
+              {localItems.slice(0, 3).map((item) => (
                 <div
                   key={item.id}
-                  className="p-4 bg-slate-800/30 rounded-lg hover:bg-slate-800/50 transition-all border border-slate-800 hover:border-slate-700 group"
+                  className="p-3 bg-slate-800/30 rounded-lg hover:bg-slate-800/50 transition-all border border-slate-800 hover:border-slate-700 group"
                 >
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     <div className="flex items-start justify-between gap-3">
                       <StyleBadge styleId={item.style_id} />
                       {item.is_favorite && (
@@ -326,6 +327,17 @@ export function RecentFormatting({ items, loading, onRefresh }: RecentFormatting
                   </div>
                 </div>
               ))}
+
+              {(totalCount && totalCount > 3) && (
+                <Link href="/history">
+                  <Button
+                    variant="outline"
+                    className="w-full mt-3 gap-2 text-sm"
+                  >
+                    Ver Todas no Histórico ({totalCount}) →
+                  </Button>
+                </Link>
+              )}
             </div>
           )}
         </CardContent>
