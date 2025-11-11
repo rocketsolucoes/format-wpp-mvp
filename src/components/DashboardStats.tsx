@@ -37,8 +37,17 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[...Array(3)].map((_, i) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="sm:col-span-2">
+          <Card>
+            <CardContent className="space-y-3">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-8 w-24" />
+              <Skeleton className="h-3 w-32" />
+            </CardContent>
+          </Card>
+        </div>
+        {[...Array(2)].map((_, i) => (
           <Card key={i}>
             <CardContent className="space-y-3">
               <Skeleton className="h-4 w-20" />
@@ -52,8 +61,10 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <EnhancedCreditsCard user={user} onUpgradeClick={handleUpgradeClick} />
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="sm:col-span-2">
+        <EnhancedCreditsCard user={user} onUpgradeClick={handleUpgradeClick} />
+      </div>
 
       <FavoriteStyleCard userId={user?.id} onTryOtherStyles={handleTryOtherStyles} />
 
