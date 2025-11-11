@@ -30,7 +30,13 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
 
   const avgPerWeek = stats ? Math.round(stats.this_month / 4) : 0;
 
+  const isFreePlan = user?.plan === 'free';
+
   if (loading) {
+    if (!isFreePlan) {
+      return null;
+    }
+
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card>
@@ -49,6 +55,10 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
         </Card>
       </div>
     );
+  }
+
+  if (!isFreePlan) {
+    return null;
   }
 
   return (
