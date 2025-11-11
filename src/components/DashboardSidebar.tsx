@@ -204,7 +204,7 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
               className="text-sm py-2 whitespace-nowrap"
               onClick={() => window.location.href = '/pricing'}
             >
-              Fazer Upgrade para o Pro
+              Upgrade para o Pro
             </Button>
           </div>
         </div>
