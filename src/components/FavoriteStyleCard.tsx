@@ -149,16 +149,16 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
 
   if (favoriteStyle === 'mixed') {
     return (
-      <Card className="hover:border-yellow-500/50 transition-colors border-yellow-500/30 bg-gradient-to-br from-yellow-500/5 to-orange-500/5">
-        <CardContent className="space-y-3">
+      <Card className="hover:border-yellow-500/50 transition-colors border-yellow-500/30 bg-gradient-to-br from-yellow-500/5 to-orange-500/5 h-full">
+        <CardContent className="space-y-3 h-full flex flex-col">
           <div className="flex items-center justify-between">
             <span className="text-sm text-slate-400">Estilo Favorito</span>
             <div className="p-2 bg-yellow-500/10 rounded-lg">
               <Star className="w-5 h-5 text-yellow-400" />
             </div>
           </div>
-          <div className="flex items-start gap-6">
-            <div className="flex flex-col items-center justify-center flex-shrink-0 w-32">
+          <div className="flex items-start gap-6 flex-1">
+            <div className="flex flex-col items-center justify-start flex-shrink-0 w-32 pt-2">
               <div className="text-7xl mb-3">🎭</div>
               <div className="text-center">
                 <div className="text-xl font-bold text-white">Uso Misto</div>
@@ -209,8 +209,8 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
   };
 
   return (
-    <Card className={`hover:border-yellow-500/50 transition-colors ${colorClasses[config.color as keyof typeof colorClasses]}`}>
-      <CardContent className="space-y-3">
+    <Card className={`hover:border-yellow-500/50 transition-colors ${colorClasses[config.color as keyof typeof colorClasses]} h-full`}>
+      <CardContent className="space-y-3 h-full flex flex-col">
         <div className="flex items-center justify-between">
           <span className="text-sm text-slate-400">Estilo Favorito</span>
           <div className={`p-2 rounded-lg ${iconColorClasses[config.color as keyof typeof iconColorClasses]}`}>
@@ -218,8 +218,8 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
           </div>
         </div>
 
-        <div className="flex items-start gap-6">
-          <div className="flex flex-col items-center justify-center flex-shrink-0 w-32">
+        <div className="flex items-start gap-6 flex-1">
+          <div className="flex flex-col items-center justify-start flex-shrink-0 w-32 pt-2">
             <Tooltip content={`${config.name} - ${config.subtitle}`} side="top">
               <div className="text-7xl cursor-help mb-3">{config.emoji}</div>
             </Tooltip>

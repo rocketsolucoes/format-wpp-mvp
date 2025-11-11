@@ -161,8 +161,8 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
 
   if (isPro) {
     return (
-      <Card className="hover:border-cyan-500/50 transition-colors border-cyan-500/30 bg-gradient-to-br from-cyan-500/5 to-emerald-500/5">
-        <CardContent className="space-y-4">
+      <Card className="hover:border-cyan-500/50 transition-colors border-cyan-500/30 bg-gradient-to-br from-cyan-500/5 to-emerald-500/5 h-full">
+        <CardContent className="space-y-4 h-full flex flex-col">
           <div className="flex items-center justify-between">
             <span className="text-sm text-slate-400">Créditos</span>
             <div className="p-2 bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 rounded-lg">
@@ -199,8 +199,8 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
   }
 
   return (
-    <Card className={`hover:border-cyan-500/50 transition-colors ${colors.border}`}>
-      <CardContent className="space-y-4">
+    <Card className={`hover:border-cyan-500/50 transition-colors ${colors.border} h-full`}>
+      <CardContent className="space-y-4 h-full flex flex-col">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-sm text-slate-400">Créditos</span>

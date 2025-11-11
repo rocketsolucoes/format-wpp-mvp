@@ -79,8 +79,8 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
         <FavoriteStyleCard userId={user?.id} onTryOtherStyles={handleTryOtherStyles} />
       </div>
 
-      <Card className="hover:border-blue-500/50 transition-colors lg:col-span-1">
-        <CardContent className="space-y-3">
+      <Card className="hover:border-blue-500/50 transition-colors lg:col-span-1 h-full">
+        <CardContent className="space-y-4 h-full flex flex-col">
           <div className="flex items-center justify-between">
             <span className="text-sm text-slate-400">Atividade Recente</span>
             <div className={`p-2 rounded-lg ${
@@ -90,7 +90,7 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-4 flex-1 flex flex-col justify-center">
             <div className="flex justify-between items-center">
               <span className="text-sm text-slate-400">Este mês</span>
               <span className="text-2xl font-bold text-white">
