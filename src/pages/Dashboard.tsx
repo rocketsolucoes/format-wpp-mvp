@@ -141,9 +141,14 @@ const Dashboard: React.FC = () => {
           )}
 
           <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-xl p-4">
-            <h2 className="text-base font-bold mb-3 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-              ✨ Escolha um Estilo
-            </h2>
+            <div className="text-center mb-3">
+              <h2 className="text-base font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                Pronto para Formatar?
+              </h2>
+              <p className="text-xs text-slate-400 mt-1">
+                Escolha seu estilo:
+              </p>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
               <StyleSelectionCard
