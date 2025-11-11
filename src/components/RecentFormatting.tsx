@@ -168,14 +168,18 @@ export function RecentFormatting({ items, loading, onRefresh }: RecentFormatting
 
       if (error) throw error;
 
-      toast.success(newFavoriteState ? 'Adicionado aos favoritos' : 'Removido dos favoritos');
+      if (newFavoriteState) {
+        toast.success('Adicionado aos favoritos ⭐', { icon: '⭐', duration: 2000 });
+      } else {
+        toast.success('Removido dos favoritos', { icon: '❌', duration: 2000 });
+      }
 
       if (onRefresh) {
         onRefresh();
       }
     } catch (error) {
       console.error('Error toggling favorite:', error);
-      toast.error('Erro ao atualizar favorito');
+      toast.error('Erro ao atualizar favorito', { icon: '⚠️', duration: 3000 });
 
       setLocalItems(prevItems =>
         prevItems.map(i =>

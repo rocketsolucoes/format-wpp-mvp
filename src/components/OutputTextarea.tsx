@@ -43,7 +43,7 @@ const OutputTextarea: React.FC<OutputTextareaProps> = ({ value, disabled = false
       setCopied(true);
 
       // Mostra notificação de sucesso
-      toast.success('Copiado para a área de transferência!');
+      toast.success('Texto copiado para área de transferência!', { icon: '📋', duration: 2000 });
 
       // Reseta o ícone após 2 segundos
       setTimeout(() => {

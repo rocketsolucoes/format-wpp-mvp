@@ -170,7 +170,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           throw new Error(profileErrorMsg);
         }
 
-        toast.success('Conta criada com sucesso!');
+        toast.success('Conta criada com sucesso! ✨', { icon: '✅', duration: 3000 });
       }
     } catch (err: any) {
       console.error('Signup error:', err);
@@ -222,7 +222,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           throw new Error(profileError);
         }
         setUser(profile);
-        toast.success('Bem-vindo de volta!');
+        const userName = profile.full_name?.split(' ')[0] || 'usuário';
+        toast.success(`Bem-vindo de volta, ${userName}!`, { icon: '✅', duration: 3000 });
       }
     } catch (err: any) {
       console.error('Sign in error:', err);
@@ -277,7 +278,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.clear();
       sessionStorage.clear();
 
-      toast.success('Signed out successfully');
+      toast.success('Até logo! Volte sempre.', { icon: '👋', duration: 2000 });
     } catch (err) {
       console.error('Sign out error:', err);
       setUser(null);

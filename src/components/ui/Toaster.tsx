@@ -13,13 +13,15 @@ interface Toast {
   id: string;
   message: string;
   type: ToastType;
+  duration?: number;
+  icon?: string;
 }
 
 /**
  * Interface do contexto do Toast
  */
 interface ToastContextType {
-  showToast: (message: string, type: ToastType) => void;
+  showToast: (message: string, type: ToastType, options?: { duration?: number; icon?: string }) => void;
 }
 
 /**
@@ -49,16 +51,16 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   /**
    * Função para exibir um novo toast
    */
-  const showToast = useCallback((message: string, type: ToastType) => {
+  const showToast = useCallback((message: string, type: ToastType, options?: { duration?: number; icon?: string }) => {
     const id = Math.random().toString(36).substring(7);
-    const newToast: Toast = { id, message, type };
+    const duration = options?.duration || 3000;
+    const newToast: Toast = { id, message, type, duration, icon: options?.icon };
 
     setToasts((prev) => [...prev, newToast]);
 
-    // Remove automaticamente após 3 segundos
     setTimeout(() => {
       setToasts((prev) => prev.filter((toast) => toast.id !== id));
-    }, 3000);
+    }, duration);
   }, []);
 
   /**
@@ -128,9 +130,15 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onClose }) => {
   return (
     <div
       className={`flex items-center gap-3 px-4 py-3 rounded-lg border backdrop-blur-sm shadow-lg animate-slide-in ${getStyles()}`}
+      role="status"
+      aria-live="polite"
     >
-      {/* Ícone */}
-      {getIcon()}
+      {/* Ícone customizado ou padrão */}
+      {toast.icon ? (
+        <span className="text-lg">{toast.icon}</span>
+      ) : (
+        getIcon()
+      )}
 
       {/* Mensagem */}
       <p className="flex-1 text-sm font-medium">{toast.message}</p>
@@ -139,6 +147,7 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onClose }) => {
       <button
         onClick={onClose}
         className="p-1 hover:bg-white/10 rounded transition-colors"
+        aria-label="Fechar notificação"
       >
         <X className="w-4 h-4" />
       </button>
@@ -156,14 +165,17 @@ export const Toaster: React.FC = () => {
 /**
  * Funções auxiliares para uso direto (sem hook)
  */
-let toastFunction: ((message: string, type: ToastType) => void) | null = null;
+let toastFunction: ((message: string, type: ToastType, options?: { duration?: number; icon?: string }) => void) | null = null;
 
-export const setToastFunction = (fn: (message: string, type: ToastType) => void) => {
+export const setToastFunction = (fn: (message: string, type: ToastType, options?: { duration?: number; icon?: string }) => void) => {
   toastFunction = fn;
 };
 
 export const toast = {
-  success: (message: string) => toastFunction?.(message, 'success'),
-  error: (message: string) => toastFunction?.(message, 'error'),
-  warning: (message: string) => toastFunction?.(message, 'warning'),
+  success: (message: string, options?: { duration?: number; icon?: string }) =>
+    toastFunction?.(message, 'success', options),
+  error: (message: string, options?: { duration?: number; icon?: string }) =>
+    toastFunction?.(message, 'error', options),
+  warning: (message: string, options?: { duration?: number; icon?: string }) =>
+    toastFunction?.(message, 'warning', options),
 };

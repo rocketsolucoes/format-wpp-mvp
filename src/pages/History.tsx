@@ -300,10 +300,14 @@ export default function History() {
 
       if (error) throw error;
 
-      toast.success(newFavoriteState ? 'Adicionado aos favoritos' : 'Removido dos favoritos');
+      if (newFavoriteState) {
+        toast.success('Adicionado aos favoritos ⭐', { icon: '⭐', duration: 2000 });
+      } else {
+        toast.success('Removido dos favoritos', { icon: '❌', duration: 2000 });
+      }
     } catch (error) {
       console.error('Error toggling favorite:', error);
-      toast.error('Erro ao atualizar favorito');
+      toast.error('Erro ao atualizar favorito', { icon: '⚠️', duration: 3000 });
 
       setRecords(prevRecords =>
         prevRecords.map(r =>

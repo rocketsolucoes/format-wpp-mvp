@@ -100,11 +100,11 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
       }
 
       if (result.credits_remaining === 0) {
-        toast.warning('Você usou todos os seus créditos!');
+        toast.warning('Você usou todos os seus créditos!', { icon: '⚠️', duration: 4000 });
       } else if (result.credits_remaining > 0 && result.credits_remaining <= 5) {
-        toast.warning(`Apenas ${result.credits_remaining} créditos restantes`);
+        toast.warning(`Apenas ${result.credits_remaining} créditos restantes`, { icon: '⚠️', duration: 3000 });
       } else {
-        toast.success(`Texto formatado com sucesso! ${result.credits_remaining >= 0 ? `${result.credits_remaining} créditos restantes` : ''}`);
+        toast.success('Texto formatado com sucesso! ✨', { icon: '✅', duration: 3000 });
       }
     } catch (error) {
       setProgress(0);
@@ -112,28 +112,28 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
       if (error instanceof FormatterError) {
         switch (error.code) {
           case 'AUTH_REQUIRED':
-            toast.error('Por favor, faça login novamente');
+            toast.error('Por favor, faça login novamente', { icon: '🔒', duration: 4000 });
             setLocation('/auth');
             break;
           case 'NO_CREDITS':
-            toast.error('Sem créditos restantes. Por favor, faça upgrade do seu plano.');
+            toast.error('Você esgotou seus créditos! Faça upgrade para continuar.', { icon: '🚫', duration: 5000 });
             if (onNoCredits) {
               onNoCredits();
             }
             break;
           case 'VALIDATION_ERROR':
-            toast.error(error.message);
+            toast.error(error.message, { icon: '⚠️', duration: 4000 });
             break;
           case 'NETWORK_ERROR':
-            toast.error('Erro de rede. Por favor, verifique sua conexão.');
+            toast.error('Erro de rede. Por favor, verifique sua conexão.', { icon: '📡', duration: 4000 });
             break;
           case 'SERVER_ERROR':
           default:
-            toast.error('Falha ao formatar texto. Por favor, tente novamente.');
+            toast.error('Ops! Algo deu errado. Tente novamente.', { icon: '⚠️', duration: 4000 });
             break;
         }
       } else {
-        toast.error('Ocorreu um erro inesperado');
+        toast.error('Ocorreu um erro inesperado', { icon: '⚠️', duration: 4000 });
       }
 
       console.error('Formatting error:', error);

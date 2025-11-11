@@ -192,7 +192,7 @@ export default function Settings() {
 
       setAvatarFile(null);
       setInitialBio(bio);
-      toast.success('Perfil atualizado com sucesso');
+      toast.success('Perfil atualizado com sucesso!', { icon: '✅', duration: 3000 });
     } catch (error) {
       console.error('Error updating profile:', error);
       toast.error('Falha ao atualizar perfil');
@@ -265,7 +265,7 @@ export default function Settings() {
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
-      toast.success('Senha atualizada com sucesso');
+      toast.success('Senha alterada com sucesso!', { icon: '🔒', duration: 3000 });
     } catch (error: any) {
       console.error('Error changing password:', error);
       toast.error(error.message || 'Falha ao atualizar senha');
