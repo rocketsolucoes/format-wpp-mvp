@@ -14,6 +14,7 @@ interface StyleSelectionCardProps {
   accentColor: 'emerald' | 'orange' | 'blue';
   isLastUsed?: boolean;
   onSelect: () => void;
+  compact?: boolean;
 }
 
 const colorClasses = {
@@ -50,6 +51,7 @@ export function StyleSelectionCard({
   accentColor,
   isLastUsed,
   onSelect,
+  compact = false,
 }: StyleSelectionCardProps) {
   const colors = colorClasses[accentColor];
 
@@ -60,6 +62,30 @@ export function StyleSelectionCard({
       onSelect();
     }
   };
+
+  if (compact) {
+    return (
+      <Card
+        className={`relative border ${colors.border} ${colors.bg} transition-all duration-200 hover:shadow-md ${colors.shadow} hover:scale-102 cursor-pointer group`}
+        onClick={handleSelect}
+      >
+        <CardContent className="p-3">
+          <div className="flex items-center gap-3">
+            <div className="text-2xl flex-shrink-0">{icon}</div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-sm font-semibold text-slate-200">{title}</h3>
+              <p className="text-xs text-slate-500">{subtitle}</p>
+            </div>
+            {isLastUsed && (
+              <Badge className={`${colors.badge} text-[10px] px-1.5 py-0.5 flex items-center gap-1 flex-shrink-0`}>
+                <Check className="w-2.5 h-2.5" />
+              </Badge>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card

@@ -141,16 +141,11 @@ const Dashboard: React.FC = () => {
           )}
 
           <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-xl p-4">
-            <div className="text-center mb-4">
-              <h2 className="text-lg font-bold mb-1 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                Pronto para Formatar?
-              </h2>
-              <p className="text-xs text-slate-400">
-                Escolha seu estilo:
-              </p>
-            </div>
+            <h2 className="text-base font-bold mb-3 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+              ✨ Escolha um Estilo
+            </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
               <StyleSelectionCard
                 styleId="casual"
                 icon="😊"
@@ -161,6 +156,7 @@ const Dashboard: React.FC = () => {
                 accentColor="emerald"
                 isLastUsed={lastUsedStyle === 'casual'}
                 onSelect={() => handleStyleSelect('casual', 'Casual')}
+                compact={true}
               />
               <StyleSelectionCard
                 styleId="sales"
@@ -172,6 +168,7 @@ const Dashboard: React.FC = () => {
                 accentColor="orange"
                 isLastUsed={lastUsedStyle === 'sales'}
                 onSelect={() => handleStyleSelect('sales', 'Sales')}
+                compact={true}
               />
               <StyleSelectionCard
                 styleId="announcement"
@@ -183,32 +180,23 @@ const Dashboard: React.FC = () => {
                 accentColor="blue"
                 isLastUsed={lastUsedStyle === 'announcement'}
                 onSelect={() => handleStyleSelect('announcement', 'Official')}
+                compact={true}
               />
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-3 text-xs">
+            <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
               <button
                 onClick={() => setComparisonModalOpen(true)}
-                className="text-slate-500 hover:text-emerald-400 transition-colors flex items-center gap-1"
+                className="text-slate-500 hover:text-emerald-400 transition-colors"
               >
-                <Search className="w-3 h-3" />
-                Comparar
+                Comparar estilos
               </button>
-              <span className="text-slate-700">•</span>
+              <span className="text-slate-700">|</span>
               <button
                 onClick={() => setExamplesModalOpen(true)}
-                className="text-slate-500 hover:text-emerald-400 transition-colors flex items-center gap-1"
+                className="text-slate-500 hover:text-emerald-400 transition-colors"
               >
-                <BookOpen className="w-3 h-3" />
-                Exemplos
-              </button>
-              <span className="text-slate-700">•</span>
-              <button
-                onClick={handleQuickFormat}
-                className="text-slate-500 hover:text-emerald-400 transition-colors flex items-center gap-1"
-              >
-                <Zap className="w-3 h-3" />
-                Rápida
+                Ver exemplos
               </button>
             </div>
           </div>
