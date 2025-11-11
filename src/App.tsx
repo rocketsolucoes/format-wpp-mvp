@@ -4,6 +4,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { useAuth } from './hooks/useAuth';
 import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
+import { ExtensionBadgeDetector } from './components/ExtensionBadgeDetector';
 import Home from './pages/Home';
 import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard';
@@ -47,6 +48,7 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-slate-950 text-white">
       {shouldShowHeader && <Header />}
+      <ExtensionBadgeDetector />
 
         <Switch>
           {/* Rota pública - Home */}
