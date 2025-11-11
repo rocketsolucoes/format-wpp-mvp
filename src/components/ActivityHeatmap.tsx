@@ -7,6 +7,7 @@ import { Grid3x3, TrendingUp, Calendar } from 'lucide-react';
 interface ActivityHeatmapProps {
   userId: string;
   isPro: boolean;
+  className?: string;
 }
 
 interface DayActivity {
@@ -18,7 +19,7 @@ interface DayActivity {
 
 const WEEKDAYS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
-export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
+export function ActivityHeatmap({ userId, isPro, className = '' }: ActivityHeatmapProps) {
   const [loading, setLoading] = useState(true);
   const [heatmapData, setHeatmapData] = useState<DayActivity[]>([]);
   const [maxCount, setMaxCount] = useState(0);
@@ -102,7 +103,7 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
 
   if (loading) {
     return (
-      <Card>
+      <Card className={className}>
         <CardHeader>
           <CardTitle>Mapa de Atividade</CardTitle>
           <CardDescription>Últimas 4 semanas</CardDescription>
@@ -119,7 +120,7 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
 
   if (activeDays < 10) {
     return (
-      <Card className="bg-blue-900/10 border-blue-500/20">
+      <Card className={`bg-blue-900/10 border-blue-500/20 ${className}`}>
         <CardContent className="p-6">
           <div className="text-center space-y-4">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/20">
@@ -151,7 +152,7 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
   }
 
   return (
-    <Card>
+    <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Grid3x3 className="w-5 h-5 text-cyan-400" />

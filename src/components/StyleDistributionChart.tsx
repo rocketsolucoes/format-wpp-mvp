@@ -8,6 +8,7 @@ import { Palette } from 'lucide-react';
 interface StyleDistributionProps {
   userId: string;
   isPro: boolean;
+  className?: string;
 }
 
 interface StyleData {
@@ -53,7 +54,7 @@ const CustomTooltip = ({ active, payload }: any) => {
   return null;
 };
 
-export function StyleDistributionChart({ userId, isPro }: StyleDistributionProps) {
+export function StyleDistributionChart({ userId, isPro, className = '' }: StyleDistributionProps) {
   const [loading, setLoading] = useState(true);
   const [styleData, setStyleData] = useState<StyleData[]>([]);
   const [totalFormats, setTotalFormats] = useState(0);
@@ -120,7 +121,7 @@ export function StyleDistributionChart({ userId, isPro }: StyleDistributionProps
 
   if (loading) {
     return (
-      <Card>
+      <Card className={className}>
         <CardHeader>
           <CardTitle>Distribuição por Estilo</CardTitle>
           <CardDescription>Últimos 30 dias</CardDescription>
@@ -134,7 +135,7 @@ export function StyleDistributionChart({ userId, isPro }: StyleDistributionProps
 
   if (styleData.length === 0) {
     return (
-      <Card>
+      <Card className={className}>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Palette className="w-5 h-5 text-purple-400" />
@@ -159,7 +160,7 @@ export function StyleDistributionChart({ userId, isPro }: StyleDistributionProps
   );
 
   return (
-    <Card>
+    <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Palette className="w-5 h-5 text-purple-400" />

@@ -20,6 +20,7 @@ interface UsageChartProps {
   loading: boolean;
   isPro: boolean;
   userId?: string;
+  className?: string;
 }
 
 interface WeeklyData {
@@ -72,7 +73,7 @@ const CustomDot = (props: any) => {
   );
 };
 
-export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
+export function UsageChart({ data, loading, isPro, userId, className = '' }: UsageChartProps) {
   const [, setLocation] = useLocation();
   const [weeklyData, setWeeklyData] = useState<WeeklyData[]>([]);
   const [loadingWeekly, setLoadingWeekly] = useState(true);
@@ -155,7 +156,7 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
   if (!isPro) {
     if (loadingWeekly) {
       return (
-        <Card>
+        <Card className={className}>
           <CardHeader>
             <CardTitle>📊 Análise de Uso</CardTitle>
             <CardDescription>Últimos 7 dias</CardDescription>
@@ -178,7 +179,7 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
     ];
 
     return (
-      <Card className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 border-slate-700/50">
+      <Card className={`relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 border-slate-700/50 ${className}`}>
         <CardContent className="p-6">
           <div className="space-y-6">
             <div className="relative">
@@ -242,7 +243,7 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
 
   if (loading) {
     return (
-      <Card>
+      <Card className={`overflow-hidden ${className}`}>
         <CardHeader>
           <CardTitle>Gráfico de Uso</CardTitle>
           <CardDescription>Últimos 30 dias</CardDescription>
@@ -254,26 +255,37 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
     );
   }
 
-  const formattedData = data.map(item => ({
+  const sortedData = [...data].sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+  );
+
+  const formattedData = sortedData.map(item => ({
     ...item,
     date: new Date(item.date).toLocaleDateString('pt-BR', { month: 'short', day: 'numeric' }),
     dateObj: new Date(item.date)
   }));
 
-  const maxCount = data.length > 0 ? Math.max(...data.map(item => item.format_count)) : 1;
-  const totalFormats = data.reduce((sum, item) => sum + item.format_count, 0);
-  const avgCount = data.length > 0 ? totalFormats / data.length : 0;
-  const peakDay = data.length > 0 ? data.reduce((max, item) => item.format_count > max.format_count ? item : max, data[0]) : null;
+  const maxCount = sortedData.length > 0 ? Math.max(...sortedData.map(item => item.format_count)) : 1;
+  const totalFormats = sortedData.reduce((sum, item) => sum + item.format_count, 0);
+  const avgCount = sortedData.length > 0 ? totalFormats / sortedData.length : 0;
+  const peakDay =
+    sortedData.length > 0
+      ? sortedData.reduce((max, item) => (item.format_count > max.format_count ? item : max), sortedData[0])
+      : null;
 
-  const prevPeriodStart = data.length > 0 ? Math.floor(data.length / 2) : 0;
-  const firstHalfSum = data.slice(0, prevPeriodStart).reduce((sum, item) => sum + item.format_count, 0);
-  const secondHalfSum = data.slice(prevPeriodStart).reduce((sum, item) => sum + item.format_count, 0);
+  const prevPeriodStart = sortedData.length > 0 ? Math.floor(sortedData.length / 2) : 0;
+  const firstHalfSum = sortedData
+    .slice(0, prevPeriodStart)
+    .reduce((sum, item) => sum + item.format_count, 0);
+  const secondHalfSum = sortedData
+    .slice(prevPeriodStart)
+    .reduce((sum, item) => sum + item.format_count, 0);
   const trendPercentage = firstHalfSum > 0 ? ((secondHalfSum - firstHalfSum) / firstHalfSum) * 100 : 0;
 
   const exportToCSV = () => {
     const csvContent = [
       ['Data', 'Formatações', 'Tokens'],
-      ...data.map(item => [
+      ...sortedData.map(item => [
         new Date(item.date).toLocaleDateString('pt-BR'),
         item.format_count,
         item.token_count
@@ -308,7 +320,7 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
   };
 
   return (
-    <Card className="overflow-hidden">
+    <Card className={`overflow-hidden ${className}`}>
       <CardHeader>
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -399,7 +411,7 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
             </Button>
           </div>
           <div className="text-xs text-slate-400">
-            Últimos {data.length} dias
+            Últimos {sortedData.length} dias
           </div>
         </div>
 
@@ -485,7 +497,7 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
             <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-3">
               <p className="text-slate-400 mb-1">Tokens processados</p>
               <p className="text-white font-semibold">
-                {data.reduce((sum, item) => sum + item.token_count, 0).toLocaleString()} no período
+                {sortedData.reduce((sum, item) => sum + item.token_count, 0).toLocaleString()} no período
               </p>
             </div>
           </div>

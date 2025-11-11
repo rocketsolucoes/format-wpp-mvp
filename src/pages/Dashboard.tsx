@@ -236,34 +236,52 @@ const Dashboard: React.FC = () => {
 
           <div className="space-y-6">
             {user?.plan !== 'free' && (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-[1.35fr_1fr] gap-6 items-stretch">
                 <UsageChart
                   data={chartData}
                   loading={loading}
                   isPro={true}
                   userId={user?.id}
+                  className="h-full"
                 />
-                <StyleDistributionChart userId={user?.id || ''} isPro={true} />
+                <div className="grid gap-6 lg:grid-rows-2 h-full">
+                  <StyleDistributionChart
+                    userId={user?.id || ''}
+                    isPro={true}
+                    className="h-full"
+                  />
+                  <ActivityHeatmap
+                    userId={user?.id || ''}
+                    isPro={true}
+                    className="h-full"
+                  />
+                </div>
               </div>
             )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2">
-                <RecentFormatting items={recentItems} loading={loading} onRefresh={fetchDashboardData} totalCount={totalHistoryCount} />
+            <div
+              className={`grid grid-cols-1 gap-6 ${
+                user?.plan === 'free' ? 'lg:grid-cols-3' : ''
+              }`}
+            >
+              <div className={user?.plan === 'free' ? 'lg:col-span-2' : ''}>
+                <RecentFormatting
+                  items={recentItems}
+                  loading={loading}
+                  onRefresh={fetchDashboardData}
+                  totalCount={totalHistoryCount}
+                />
               </div>
-              <div className="space-y-6">
-                {user?.plan === 'free' && (
+              {user?.plan === 'free' && (
+                <div className="space-y-6">
                   <UsageChart
                     data={chartData}
                     loading={loading}
                     isPro={false}
                     userId={user?.id}
                   />
-                )}
-                {user?.plan !== 'free' && (
-                  <ActivityHeatmap userId={user?.id || ''} isPro={true} />
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
