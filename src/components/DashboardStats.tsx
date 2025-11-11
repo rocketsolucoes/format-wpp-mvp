@@ -1,14 +1,10 @@
 import React from 'react';
-import { FileText, Crown, TrendingUp, TrendingDown } from 'lucide-react';
+import { Activity, TrendingUp, TrendingDown } from 'lucide-react';
 import { Card, CardContent } from './ui/Card';
-import { Badge } from './ui/Badge';
 import { Skeleton } from './ui/Skeleton';
-import { Button } from './ui/Button';
 import { EnhancedCreditsCard } from './EnhancedCreditsCard';
 import { FavoriteStyleCard } from './FavoriteStyleCard';
-import { TimeSavedCard } from './TimeSavedCard';
 import { useLocation } from 'wouter';
-import { PRICING, formatBRL } from '../constants/pricing';
 
 interface StatsData {
   total_formatting: number;
@@ -37,11 +33,13 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
     setLocation('/format');
   };
 
+  const avgPerWeek = stats ? Math.round(stats.this_month / 4) : 0;
+
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[...Array(6)].map((_, i) => (
-          <Card key={i} className={i === 1 ? 'md:col-span-2' : ''}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[...Array(3)].map((_, i) => (
+          <Card key={i}>
             <CardContent className="space-y-3">
               <Skeleton className="h-4 w-20" />
               <Skeleton className="h-8 w-24" />
@@ -54,97 +52,49 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <EnhancedCreditsCard user={user} onUpgradeClick={handleUpgradeClick} />
 
       <FavoriteStyleCard userId={user?.id} onTryOtherStyles={handleTryOtherStyles} />
 
-      <TimeSavedCard userId={user?.id} />
-
-      <Card className="hover:border-yellow-500/50 transition-colors">
-        <CardContent className="space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">Este Mês</span>
-            <div className={`p-2 rounded-lg ${
-              monthTrend >= 0 ? 'bg-emerald-500/10' : 'bg-red-500/10'
-            }`}>
-              {monthTrend >= 0 ? (
-                <TrendingUp className="w-5 h-5 text-emerald-400" />
-              ) : (
-                <TrendingDown className="w-5 h-5 text-red-400" />
-              )}
-            </div>
-          </div>
-          <div className="text-3xl font-bold text-white">
-            {stats?.this_month || 0}
-          </div>
-          <div className={`flex items-center gap-1 text-xs ${
-            monthTrend >= 0 ? 'text-emerald-400' : 'text-red-400'
-          }`}>
-            {monthTrend >= 0 ? '+' : ''}{monthTrend.toFixed(1)}%
-            <span className="text-slate-400">vs mês passado</span>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="hover:border-emerald-500/50 transition-colors">
-        <CardContent className="space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">Total de Formatações</span>
-            <div className="p-2 bg-emerald-500/10 rounded-lg">
-              <FileText className="w-5 h-5 text-emerald-400" />
-            </div>
-          </div>
-          <div className="text-3xl font-bold text-white">
-            {stats?.total_formatting || 0}
-          </div>
-          <div className="flex items-center gap-1 text-xs text-slate-400">
-            <span>Uso total</span>
-          </div>
-        </CardContent>
-      </Card>
-
       <Card className="hover:border-blue-500/50 transition-colors">
         <CardContent className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">Plano Atual</span>
-            <div className="p-2 bg-blue-500/10 rounded-lg">
-              <Crown className="w-5 h-5 text-blue-400" />
+            <span className="text-sm text-slate-400">Atividade Recente</span>
+            <div className={`p-2 rounded-lg ${
+              monthTrend >= 0 ? 'bg-blue-500/10' : 'bg-red-500/10'
+            }`}>
+              <Activity className="w-5 h-5 text-blue-400" />
             </div>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-2xl font-bold text-white capitalize">
-              {user?.plan === 'pro' ? 'Pro' : user?.plan === 'free' ? 'Gratuito' : user?.plan || 'Gratuito'}
-            </span>
-            <Badge variant={user?.plan === 'free' ? 'outline' : 'success'}>
-              {user?.plan === 'free' ? 'Limitado' : 'Ativo'}
-            </Badge>
           </div>
 
-          {user?.plan === 'free' ? (
-            <div className="text-xs text-slate-400 space-y-1 pt-1">
-              <div className="flex items-center gap-1.5">
-                <span className="text-emerald-400">✓</span>
-                <span>30 créditos/mês</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="text-emerald-400">✓</span>
-                <span>3 estilos de formatação</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="text-slate-600">✗</span>
-                <span>Análises avançadas</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="text-slate-600">✗</span>
-                <span>Histórico completo</span>
+          <div className="space-y-2">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-slate-400">Este mês</span>
+              <span className="text-2xl font-bold text-white">
+                {stats?.this_month || 0}
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-slate-400">Total</span>
+              <span className="text-lg font-semibold text-slate-300">
+                {stats?.total_formatting || 0}
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center pt-2 border-t border-slate-700">
+              <span className="text-xs text-slate-500">Média semanal</span>
+              <div className="flex items-center gap-1">
+                <span className="text-sm font-medium text-slate-300">{avgPerWeek}</span>
+                {monthTrend >= 0 ? (
+                  <TrendingUp className="w-3 h-3 text-emerald-400" />
+                ) : (
+                  <TrendingDown className="w-3 h-3 text-red-400" />
+                )}
               </div>
             </div>
-          ) : (
-            <div className="text-xs text-slate-400">
-              {user?.plan === 'pro' ? `${formatBRL(PRICING.PRO_MONTHLY_PRICE)}/mês` : 'Preço personalizado'}
-            </div>
-          )}
+          </div>
         </CardContent>
       </Card>
     </div>
