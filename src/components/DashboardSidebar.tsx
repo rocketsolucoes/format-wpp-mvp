@@ -201,7 +201,7 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
               variant="primary"
               fullWidth
               size="sm"
-              className="text-sm py-2"
+              className="text-sm py-2 whitespace-nowrap"
               onClick={() => window.location.href = '/pricing'}
             >
               Fazer Upgrade para o Pro
