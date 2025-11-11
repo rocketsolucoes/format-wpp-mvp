@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from './ui/Card';
 import { Skeleton } from './ui/Skeleton';
 import { supabase } from '../lib/supabase';
-import { Grid3x3, TrendingUp } from 'lucide-react';
+import { Grid3x3, TrendingUp, Calendar } from 'lucide-react';
 
 interface ActivityHeatmapProps {
   userId: string;
@@ -36,7 +36,7 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
 
     setLoading(true);
     try {
-      const daysToShow = 84;
+      const daysToShow = 28;
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - daysToShow);
 
@@ -105,10 +105,10 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
       <Card>
         <CardHeader>
           <CardTitle>Mapa de Atividade</CardTitle>
-          <CardDescription>Últimos 12 semanas</CardDescription>
+          <CardDescription>Últimas 4 semanas</CardDescription>
         </CardHeader>
         <CardContent>
-          <Skeleton className="h-32 w-full" />
+          <Skeleton className="h-24 w-full" />
         </CardContent>
       </Card>
     );
@@ -116,6 +116,39 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
 
   const weeks = Math.ceil(heatmapData.length / 7);
   const consistencyRate = totalDays > 0 ? (activeDays / totalDays) * 100 : 0;
+
+  if (activeDays < 10) {
+    return (
+      <Card className="bg-blue-900/10 border-blue-500/20">
+        <CardContent className="p-6">
+          <div className="text-center space-y-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/20">
+              <Calendar className="w-8 h-8 text-blue-400" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-2">Continue Formatando!</h3>
+              <p className="text-sm text-slate-400 max-w-xs mx-auto">
+                Seu mapa de atividade aparecerá aqui após 10 dias de uso.
+              </p>
+            </div>
+            <div className="pt-2">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <span className="text-2xl font-bold text-blue-400">{activeDays}</span>
+                <span className="text-slate-500">/</span>
+                <span className="text-lg text-slate-400">10 dias</span>
+              </div>
+              <div className="w-full max-w-xs mx-auto h-3 bg-slate-800/50 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full transition-all duration-500"
+                  style={{ width: `${(activeDays / 10) * 100}%` }}
+                />
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
@@ -125,7 +158,7 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
           Mapa de Atividade
         </CardTitle>
         <CardDescription>
-          Padrão de uso nos últimos {Math.floor(totalDays / 7)} semanas
+          Padrão de uso nas últimas 4 semanas
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
