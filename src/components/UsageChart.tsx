@@ -178,10 +178,10 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
     ];
 
     return (
-      <Card className="relative overflow-hidden">
-        <CardContent className="p-0">
-          <div className="relative">
-            <div className="blur-[8px] opacity-50 pointer-events-none p-6">
+      <Card className="relative overflow-hidden min-h-[600px]">
+        <CardContent className="p-0 h-full">
+          <div className="relative h-full min-h-[600px]">
+            <div className="absolute inset-0 blur-[8px] opacity-50 pointer-events-none p-6">
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={fakeData}>
@@ -216,65 +216,64 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
               </div>
             </div>
 
-            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center">
-              <div className="text-center px-6 py-8 max-w-md">
-                <div className="mb-4 inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
-                  <Lock className="w-8 h-8 text-purple-400" />
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-10">
+              <div className="text-center px-4 py-6 max-w-xs">
+                <div className="mb-4 inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
+                  <Lock className="w-7 h-7 text-purple-400" />
                 </div>
 
-                <h3 className="text-2xl font-bold text-white mb-2">
+                <h3 className="text-xl font-bold text-white mb-2">
                   Análises Avançadas
                 </h3>
-                <p className="text-slate-400 text-sm mb-6">
+                <p className="text-slate-400 text-xs mb-5">
                   Desbloqueie insights poderosos sobre seu uso
                 </p>
 
-                <div className="space-y-3 mb-6 text-left">
-                  <div className="flex items-start gap-3">
+                <div className="space-y-2.5 mb-5 text-left">
+                  <div className="flex items-start gap-2">
                     <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center mt-0.5">
-                      <BarChart3 className="w-3 h-3 text-emerald-400" />
+                      <BarChart3 className="w-2.5 h-2.5 text-emerald-400" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm text-white font-medium">Gráfico de uso diário</p>
-                      <p className="text-xs text-slate-400">Acompanhe sua produtividade</p>
+                      <p className="text-xs text-white font-medium leading-tight">Gráfico de uso diário</p>
+                      <p className="text-[10px] text-slate-400 leading-tight">Acompanhe sua produtividade</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-2">
                     <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-orange-500/20 to-red-500/20 flex items-center justify-center mt-0.5">
-                      <PieChartIcon className="w-3 h-3 text-orange-400" />
+                      <PieChartIcon className="w-2.5 h-2.5 text-orange-400" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm text-white font-medium">Distribuição por estilo</p>
-                      <p className="text-xs text-slate-400">Descubra seu estilo favorito</p>
+                      <p className="text-xs text-white font-medium leading-tight">Distribuição por estilo</p>
+                      <p className="text-[10px] text-slate-400 leading-tight">Descubra seu estilo favorito</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-2">
                     <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 flex items-center justify-center mt-0.5">
-                      <Grid3x3 className="w-3 h-3 text-blue-400" />
+                      <Grid3x3 className="w-2.5 h-2.5 text-blue-400" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm text-white font-medium">Mapa de atividade</p>
-                      <p className="text-xs text-slate-400">12 semanas de histórico visual</p>
+                      <p className="text-xs text-white font-medium leading-tight">Mapa de atividade</p>
+                      <p className="text-[10px] text-slate-400 leading-tight">12 semanas de histórico visual</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-2">
                     <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mt-0.5">
-                      <TrendingUp className="w-3 h-3 text-purple-400" />
+                      <TrendingUp className="w-2.5 h-2.5 text-purple-400" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm text-white font-medium">Insights inteligentes</p>
-                      <p className="text-xs text-slate-400">Recomendações personalizadas</p>
+                      <p className="text-xs text-white font-medium leading-tight">Insights inteligentes</p>
+                      <p className="text-[10px] text-slate-400 leading-tight">Recomendações personalizadas</p>
                     </div>
                   </div>
                 </div>
 
                 <Button
                   onClick={() => setLocation('/pricing')}
-                  className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0 shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all"
-                  size="lg"
+                  className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0 shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all text-sm py-2"
                 >
                   Upgrade para Pro
                 </Button>
