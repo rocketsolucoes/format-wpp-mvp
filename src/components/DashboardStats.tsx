@@ -3,7 +3,6 @@ import { Activity, TrendingUp, TrendingDown } from 'lucide-react';
 import { Card, CardContent } from './ui/Card';
 import { Skeleton } from './ui/Skeleton';
 import { EnhancedCreditsCard } from './EnhancedCreditsCard';
-import { FavoriteStyleCard } from './FavoriteStyleCard';
 import { useLocation } from 'wouter';
 
 interface StatsData {
@@ -29,57 +28,34 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
     setLocation('/pricing');
   };
 
-  const handleTryOtherStyles = () => {
-    setLocation('/format');
-  };
-
   const avgPerWeek = stats ? Math.round(stats.this_month / 4) : 0;
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-1">
-          <Card>
-            <CardContent className="space-y-3">
-              <Skeleton className="h-4 w-20" />
-              <Skeleton className="h-8 w-24" />
-              <Skeleton className="h-3 w-32" />
-            </CardContent>
-          </Card>
-        </div>
-        <div className="lg:col-span-2">
-          <Card>
-            <CardContent className="space-y-3">
-              <Skeleton className="h-4 w-20" />
-              <Skeleton className="h-8 w-24" />
-              <Skeleton className="h-3 w-32" />
-            </CardContent>
-          </Card>
-        </div>
-        <div className="lg:col-span-1">
-          <Card>
-            <CardContent className="space-y-3">
-              <Skeleton className="h-4 w-20" />
-              <Skeleton className="h-8 w-24" />
-              <Skeleton className="h-3 w-32" />
-            </CardContent>
-          </Card>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card>
+          <CardContent className="space-y-3">
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-8 w-24" />
+            <Skeleton className="h-3 w-32" />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="space-y-3">
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-8 w-24" />
+            <Skeleton className="h-3 w-32" />
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div className="lg:col-span-1">
-        <EnhancedCreditsCard user={user} onUpgradeClick={handleUpgradeClick} />
-      </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <EnhancedCreditsCard user={user} onUpgradeClick={handleUpgradeClick} />
 
-      <div className="lg:col-span-2">
-        <FavoriteStyleCard userId={user?.id} onTryOtherStyles={handleTryOtherStyles} />
-      </div>
-
-      <Card className="hover:border-blue-500/50 transition-colors lg:col-span-1 h-full">
+      <Card className="hover:border-blue-500/50 transition-colors h-full">
         <CardContent className="space-y-4 h-full flex flex-col">
           <div className="flex items-center justify-between">
             <span className="text-sm text-slate-400">Atividade Recente</span>
