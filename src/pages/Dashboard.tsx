@@ -14,6 +14,7 @@ import { Alert, AlertDescription } from '../components/ui/Alert';
 import { StyleSelectionCard } from '../components/StyleSelectionCard';
 import { StyleComparisonModal } from '../components/StyleComparisonModal';
 import { StyleExamplesModal } from '../components/StyleExamplesModal';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../components/ui/Dialog';
 
 interface StatsData {
   total_formatting: number;
@@ -52,6 +53,7 @@ const Dashboard: React.FC = () => {
   const [comparisonModalOpen, setComparisonModalOpen] = useState(false);
   const [examplesModalOpen, setExamplesModalOpen] = useState(false);
   const [lastUsedStyle, setLastUsedStyle] = useState<string | null>(null);
+  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
 
   const fetchDashboardData = async () => {
     if (!user) return;
@@ -101,9 +103,18 @@ const Dashboard: React.FC = () => {
   }, [user]);
 
   const handleStyleSelect = (styleId: string, styleName: string) => {
+    const proStyles = ['sales', 'announcement'];
+    if (user?.plan === 'free' && proStyles.includes(styleId)) {
+      setUpgradeModalOpen(true);
+      return;
+    }
     localStorage.setItem('selectedStyle', styleId);
     localStorage.setItem('lastUsedStyle', styleId);
     setLocation('/format');
+  };
+
+  const handleProStyleClick = () => {
+    setUpgradeModalOpen(true);
   };
 
   const handleQuickFormat = () => {
@@ -169,6 +180,8 @@ const Dashboard: React.FC = () => {
                 isLastUsed={lastUsedStyle === 'casual'}
                 onSelect={() => handleStyleSelect('casual', 'Casual')}
                 compact={true}
+                isPro={false}
+                userPlan={user?.plan || 'free'}
               />
               <StyleSelectionCard
                 styleId="sales"
@@ -181,6 +194,9 @@ const Dashboard: React.FC = () => {
                 isLastUsed={lastUsedStyle === 'sales'}
                 onSelect={() => handleStyleSelect('sales', 'Sales')}
                 compact={true}
+                isPro={true}
+                userPlan={user?.plan || 'free'}
+                onProClick={handleProStyleClick}
               />
               <StyleSelectionCard
                 styleId="announcement"
@@ -193,6 +209,9 @@ const Dashboard: React.FC = () => {
                 isLastUsed={lastUsedStyle === 'announcement'}
                 onSelect={() => handleStyleSelect('announcement', 'Official')}
                 compact={true}
+                isPro={true}
+                userPlan={user?.plan || 'free'}
+                onProClick={handleProStyleClick}
               />
             </div>
 
@@ -258,6 +277,31 @@ const Dashboard: React.FC = () => {
           open={examplesModalOpen}
           onOpenChange={setExamplesModalOpen}
         />
+
+        <Dialog open={upgradeModalOpen} onOpenChange={setUpgradeModalOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Desbloqueie Estilos Profissionais</DialogTitle>
+              <DialogDescription>
+                Os estilos Sales e Official são exclusivos do plano Pro. Faça upgrade para ter acesso a todos os estilos de formatação e créditos ilimitados.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setUpgradeModalOpen(false)}>
+                Cancelar
+              </Button>
+              <Button
+                onClick={() => {
+                  setUpgradeModalOpen(false);
+                  setLocation('/pricing');
+                }}
+                className="bg-gradient-to-r from-emerald-500 to-cyan-500"
+              >
+                Ver Planos
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
     </DashboardLayout>
   );
 };

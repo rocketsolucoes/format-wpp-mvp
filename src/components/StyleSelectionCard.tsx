@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent } from './ui/Card';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
-import { Check } from 'lucide-react';
+import { Check, Lock } from 'lucide-react';
 
 interface StyleSelectionCardProps {
   styleId: string;
@@ -15,6 +15,9 @@ interface StyleSelectionCardProps {
   isLastUsed?: boolean;
   onSelect: () => void;
   compact?: boolean;
+  isPro?: boolean;
+  userPlan?: 'free' | 'pro' | 'enterprise';
+  onProClick?: () => void;
 }
 
 const colorClasses = {
@@ -52,10 +55,20 @@ export function StyleSelectionCard({
   isLastUsed,
   onSelect,
   compact = false,
+  isPro = false,
+  userPlan = 'free',
+  onProClick,
 }: StyleSelectionCardProps) {
   const colors = colorClasses[accentColor];
+  const isLocked = isPro && userPlan === 'free';
 
   const handleSelect = () => {
+    if (isLocked) {
+      if (onProClick) {
+        onProClick();
+      }
+      return;
+    }
     localStorage.setItem('selectedStyle', styleId);
     localStorage.setItem('lastUsedStyle', styleId);
     if (onSelect) {
@@ -66,17 +79,31 @@ export function StyleSelectionCard({
   if (compact) {
     return (
       <Card
-        className={`relative border ${colors.border} ${colors.bg} transition-all duration-200 hover:shadow-md ${colors.shadow} hover:scale-102 cursor-pointer group`}
+        className={`relative border ${colors.border} ${colors.bg} transition-all duration-200 ${isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:shadow-md hover:scale-102 cursor-pointer'} ${colors.shadow} group`}
         onClick={handleSelect}
       >
         <CardContent className="p-3">
           <div className="flex items-center gap-3">
-            <div className="text-2xl flex-shrink-0">{icon}</div>
+            <div className="text-2xl flex-shrink-0 relative">
+              {isLocked && (
+                <div className="absolute inset-0 flex items-center justify-center bg-slate-900/70 rounded">
+                  <Lock className="w-4 h-4 text-slate-400" />
+                </div>
+              )}
+              {icon}
+            </div>
             <div className="flex-1 min-w-0">
-              <h3 className="text-sm font-semibold text-slate-200">{title}</h3>
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-slate-200">{title}</h3>
+                {isPro && (
+                  <Badge className="bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-400 border-emerald-500/30 text-[10px] px-1.5 py-0">
+                    PRO
+                  </Badge>
+                )}
+              </div>
               <p className="text-xs text-slate-500">{subtitle}</p>
             </div>
-            {isLastUsed && (
+            {isLastUsed && !isLocked && (
               <Badge className={`${colors.badge} text-[10px] px-1.5 py-0.5 flex items-center gap-1 flex-shrink-0`}>
                 <Check className="w-2.5 h-2.5" />
               </Badge>
@@ -89,11 +116,11 @@ export function StyleSelectionCard({
 
   return (
     <Card
-      className={`relative border ${colors.border} ${colors.bg} transition-all duration-200 hover:shadow-md ${colors.shadow} hover:scale-102 cursor-pointer group`}
+      className={`relative border ${colors.border} ${colors.bg} transition-all duration-200 ${isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:shadow-md hover:scale-102 cursor-pointer'} ${colors.shadow} group`}
       onClick={handleSelect}
     >
       <CardContent className="p-4 text-center space-y-2">
-        {isLastUsed && (
+        {isLastUsed && !isLocked && (
           <div className="absolute top-2 right-2">
             <Badge className={`${colors.badge} text-[10px] px-1.5 py-0.5 flex items-center gap-1`}>
               <Check className="w-2.5 h-2.5" />
@@ -102,7 +129,22 @@ export function StyleSelectionCard({
           </div>
         )}
 
-        <div className="text-3xl">{icon}</div>
+        {isPro && (
+          <div className="absolute top-2 right-2">
+            <Badge className="bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-400 border-emerald-500/30 text-[10px] px-1.5 py-0.5">
+              PRO
+            </Badge>
+          </div>
+        )}
+
+        <div className="text-3xl relative">
+          {isLocked && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Lock className="w-6 h-6 text-slate-400" />
+            </div>
+          )}
+          {icon}
+        </div>
 
         <div>
           <h3 className="text-base font-bold text-slate-200">{title}</h3>
@@ -116,7 +158,14 @@ export function StyleSelectionCard({
             handleSelect();
           }}
         >
-          Usar {title}
+          {isLocked ? (
+            <>
+              <Lock className="w-3 h-3 mr-1" />
+              Upgrade para Pro
+            </>
+          ) : (
+            `Usar ${title}`
+          )}
         </Button>
       </CardContent>
     </Card>

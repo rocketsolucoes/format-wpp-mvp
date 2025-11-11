@@ -104,7 +104,7 @@ Deno.serve(async (req: Request) => {
 
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
-      .select("credits_remaining, plan")
+      .select("credits_remaining, plan, subscription_tier")
       .eq("id", user.id)
       .maybeSingle();
 
@@ -123,6 +123,23 @@ Deno.serve(async (req: Request) => {
         JSON.stringify({ error: "User profile not found" }),
         {
           status: 114,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    const userPlan = profile.subscription_tier || profile.plan;
+    const proStyles = ["sales", "announcement"];
+
+    if (userPlan === "free" && styleId && proStyles.includes(styleId)) {
+      console.log(`Free user ${user.id} attempted to use Pro style: ${styleId}`);
+      return new Response(
+        JSON.stringify({
+          error: "This style is exclusive to Pro plan. Please upgrade to access Sales and Official styles.",
+          code: "PRO_STYLE_REQUIRED"
+        }),
+        {
+          status: 403,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         }
       );

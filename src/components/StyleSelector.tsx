@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { Smile, Flame, Megaphone, Check } from 'lucide-react';
+import { Smile, Flame, Megaphone, Check, Lock } from 'lucide-react';
 import { Card, CardContent } from './ui/Card';
+import { Badge } from './ui/Badge';
 
 interface Style {
   id: string;
@@ -26,7 +27,7 @@ const styles: Style[] = [
     description: 'Copy de alta conversão com urgência',
     icon: Flame,
     color: 'orange',
-    isPro: false,
+    isPro: true,
   },
   {
     id: 'announcement',
@@ -34,13 +35,15 @@ const styles: Style[] = [
     description: 'Avisos claros e autoritários',
     icon: Megaphone,
     color: 'red',
-    isPro: false,
+    isPro: true,
   },
 ];
 
 interface StyleSelectorProps {
   selectedStyle: string;
   onStyleChange: (styleId: string) => void;
+  userPlan: 'free' | 'pro' | 'enterprise';
+  onProStyleClick?: () => void;
 }
 
 const colorClasses = {
@@ -85,7 +88,7 @@ Destaca preços e benefícios com negrito e emojis.`,
 Organiza informações claramente com formatação estruturada.`,
 };
 
-export function StyleSelector({ selectedStyle, onStyleChange }: StyleSelectorProps) {
+export function StyleSelector({ selectedStyle, onStyleChange, userPlan, onProStyleClick }: StyleSelectorProps) {
   const [focusedIndex, setFocusedIndex] = React.useState(0);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -97,6 +100,12 @@ export function StyleSelector({ selectedStyle, onStyleChange }: StyleSelectorPro
   }, [selectedStyle]);
 
   const handleStyleClick = (style: Style, index: number) => {
+    if (style.isPro && userPlan === 'free') {
+      if (onProStyleClick) {
+        onProStyleClick();
+      }
+      return;
+    }
     onStyleChange(style.id);
     setFocusedIndex(index);
   };
@@ -133,6 +142,7 @@ export function StyleSelector({ selectedStyle, onStyleChange }: StyleSelectorPro
         const colors = colorClasses[style.color as keyof typeof colorClasses];
         const Icon = style.icon;
         const tooltip = tooltips[style.id];
+        const isLocked = style.isPro && userPlan === 'free';
 
         return (
           <Card
@@ -146,27 +156,39 @@ export function StyleSelector({ selectedStyle, onStyleChange }: StyleSelectorPro
             onClick={() => handleStyleClick(style, index)}
             onKeyDown={(e) => handleKeyDown(e, index)}
             className={`
-              relative cursor-pointer transition-all duration-200
+              relative transition-all duration-200
+              ${isLocked ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}
               ${isActive
                 ? `border-2 ${colors.border} shadow-lg ${colors.shadow}`
                 : 'border-slate-700 hover:border-slate-600 active:border-slate-500'
               }
-              hover:scale-[1.01] hover:shadow-md hover:-translate-y-0.5
-              active:scale-[0.99]
+              ${!isLocked && 'hover:scale-[1.01] hover:shadow-md hover:-translate-y-0.5 active:scale-[0.99]'}
               focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-950
               touch-manipulation
             `}
           >
             <CardContent className="p-3 sm:p-4">
               <div className="flex items-center gap-2.5 sm:gap-3">
-                <div className={`p-2.5 sm:p-3 rounded-lg ${colors.bg} flex-shrink-0`}>
+                <div className={`p-2.5 sm:p-3 rounded-lg ${colors.bg} flex-shrink-0 relative`}>
+                  {isLocked && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-slate-900/80 rounded-lg">
+                      <Lock className="w-4 h-4 text-slate-400" />
+                    </div>
+                  )}
                   <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${colors.icon}`} />
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-white text-xs sm:text-sm leading-tight mb-0.5">
-                    {style.name}
-                  </h3>
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <h3 className="font-semibold text-white text-xs sm:text-sm leading-tight">
+                      {style.name}
+                    </h3>
+                    {style.isPro && (
+                      <Badge className="bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-400 border-emerald-500/30 text-[10px] px-1.5 py-0">
+                        PRO
+                      </Badge>
+                    )}
+                  </div>
                   <p className="text-[11px] sm:text-xs text-slate-400 leading-snug">
                     {style.description}
                   </p>

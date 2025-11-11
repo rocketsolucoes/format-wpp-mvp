@@ -78,6 +78,13 @@ export default function Format() {
       return;
     }
 
+    const proStyles = ['sales', 'announcement'];
+    if (user.plan === 'free' && proStyles.includes(selectedStyle)) {
+      toast.error('Este estilo é exclusivo do plano Pro');
+      setUpgradeModalOpen(true);
+      return;
+    }
+
     setIsFormatting(true);
 
     console.log('Format.tsx - selectedStyle:', selectedStyle);
@@ -194,6 +201,8 @@ export default function Format() {
           <StyleSelector
             selectedStyle={selectedStyle}
             onStyleChange={setSelectedStyle}
+            userPlan={user?.plan || 'free'}
+            onProStyleClick={() => setUpgradeModalOpen(true)}
           />
         </div>
 
@@ -205,6 +214,8 @@ export default function Format() {
                 <StyleSelector
                   selectedStyle={selectedStyle}
                   onStyleChange={setSelectedStyle}
+                  userPlan={user?.plan || 'free'}
+                  onProStyleClick={() => setUpgradeModalOpen(true)}
                 />
               </div>
             </div>
