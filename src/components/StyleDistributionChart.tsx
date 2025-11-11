@@ -170,15 +170,15 @@ export function StyleDistributionChart({ userId, isPro }: StyleDistributionProps
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="h-64">
+        <div className="h-44">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={styleData}
                 cx="50%"
                 cy="50%"
-                innerRadius={60}
-                outerRadius={90}
+                innerRadius={45}
+                outerRadius={70}
                 paddingAngle={5}
                 dataKey="value"
                 animationDuration={800}

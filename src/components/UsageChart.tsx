@@ -443,7 +443,7 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
           </div>
         </div>
 
-        <div className="h-72 w-full">
+        <div className="h-40 w-full">
           <ResponsiveContainer width="100%" height="100%">
             {viewMode === 'area' ? (
               <AreaChart data={formattedData}>

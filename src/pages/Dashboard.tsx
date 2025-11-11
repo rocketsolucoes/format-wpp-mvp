@@ -210,12 +210,15 @@ const Dashboard: React.FC = () => {
 
           <div className="space-y-6">
             {user?.plan !== 'free' && (
-              <UsageChart
-                data={chartData}
-                loading={loading}
-                isPro={true}
-                userId={user?.id}
-              />
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <UsageChart
+                  data={chartData}
+                  loading={loading}
+                  isPro={true}
+                  userId={user?.id}
+                />
+                <StyleDistributionChart userId={user?.id || ''} isPro={true} />
+              </div>
             )}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -232,10 +235,7 @@ const Dashboard: React.FC = () => {
                   />
                 )}
                 {user?.plan !== 'free' && (
-                  <>
-                    <StyleDistributionChart userId={user?.id || ''} isPro={true} />
-                    <ActivityHeatmap userId={user?.id || ''} isPro={true} />
-                  </>
+                  <ActivityHeatmap userId={user?.id || ''} isPro={true} />
                 )}
               </div>
             </div>
