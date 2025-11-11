@@ -11,10 +11,11 @@
 export const PRICING = {
   /**
    * Pro Plan Pricing
+   * Annual plan offers exactly 20% discount off monthly price
    */
   PRO_MONTHLY_PRICE: 19.90,
-  PRO_ANNUAL_MONTHLY_PRICE: 16.58,
-  PRO_ANNUAL_TOTAL_PRICE: 199.00,
+  PRO_ANNUAL_MONTHLY_PRICE: 15.92,
+  PRO_ANNUAL_TOTAL_PRICE: 191.04,
 
   /**
    * Free Plan

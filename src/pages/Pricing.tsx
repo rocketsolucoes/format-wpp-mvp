@@ -188,11 +188,9 @@ export default function Pricing() {
           <Tabs value={billingPeriod} onValueChange={(value) => setBillingPeriod(value as BillingPeriod)} className="inline-flex">
             <TabsList>
               <TabsTrigger value="monthly">Mensal</TabsTrigger>
-              <TabsTrigger value="annual">
+              <TabsTrigger value="annual" className="gap-2">
                 Anual
-                {billingPeriod === 'annual' && (
-                  <Badge variant="success" className="ml-2">Economize 20%</Badge>
-                )}
+                <Badge variant="success" className="ml-1 text-xs">Economize 20%</Badge>
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -238,6 +236,11 @@ export default function Pricing() {
                           {formatBRL(plan.price)}
                           <span className="text-xl text-slate-400 font-normal">/{plan.period.split(' ')[0]}</span>
                         </div>
+                        {billingPeriod === 'annual' && plan.name === 'Pro' && (
+                          <p className="text-sm text-slate-400 mt-2">
+                            {formatBRL(proTotal)} cobrado anualmente
+                          </p>
+                        )}
                         {billingPeriod === 'annual' && plan.savings && (
                           <Badge variant="success" className="mt-2">{plan.savings}</Badge>
                         )}
