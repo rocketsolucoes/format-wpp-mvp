@@ -296,29 +296,31 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
           </CollapsibleContent>
         </Collapsible>
 
-        <div className="pt-3 border-t border-slate-800 space-y-3">
-          <div className="space-y-1.5 text-xs">
-            <div className="flex items-start gap-2 text-slate-400">
-              <Sparkles className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
-              <span>Formatação ilimitada</span>
+        {percentage < 30 && (
+          <div className="pt-3 border-t border-slate-800 space-y-3">
+            <div className="space-y-1.5 text-xs">
+              <div className="flex items-start gap-2 text-slate-400">
+                <Sparkles className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+                <span>Formatação ilimitada</span>
+              </div>
+              <div className="flex items-start gap-2 text-slate-400">
+                <BarChart2 className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+                <span>Análises avançadas</span>
+              </div>
+              <div className="flex items-start gap-2 text-slate-400">
+                <Star className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+                <span>Salvar favoritos</span>
+              </div>
             </div>
-            <div className="flex items-start gap-2 text-slate-400">
-              <BarChart2 className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
-              <span>Análises avançadas</span>
-            </div>
-            <div className="flex items-start gap-2 text-slate-400">
-              <Star className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
-              <span>Salvar favoritos</span>
-            </div>
-          </div>
 
-          <Button
-            onClick={onUpgradeClick}
-            className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white border-0 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all hover:scale-105"
-          >
-            Fazer Upgrade para Pro
-          </Button>
-        </div>
+            <Button
+              onClick={onUpgradeClick}
+              className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white border-0 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all hover:scale-105"
+            >
+              Fazer Upgrade para Pro
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

@@ -146,9 +146,20 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-white truncate">
-                  {user.full_name || 'Usuário'}
-                </p>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-semibold text-white truncate">
+                    {user.full_name || 'Usuário'}
+                  </p>
+                  {user.plan === 'pro' || user.plan === 'enterprise' ? (
+                    <Badge className="bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-400 border-emerald-500/30 text-[10px] px-1.5 py-0 whitespace-nowrap">
+                      Ilimitado
+                    </Badge>
+                  ) : (
+                    <Badge variant="outline" className="border-slate-600 text-slate-400 text-[10px] px-1.5 py-0 whitespace-nowrap">
+                      Gratuito
+                    </Badge>
+                  )}
+                </div>
                 <p className="text-xs text-slate-400 truncate">
                   {user.email}
                 </p>

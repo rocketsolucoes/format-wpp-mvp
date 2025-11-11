@@ -112,22 +112,34 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
               <Crown className="w-5 h-5 text-blue-400" />
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between">
             <span className="text-2xl font-bold text-white capitalize">
               {user?.plan === 'pro' ? 'Pro' : user?.plan === 'free' ? 'Gratuito' : user?.plan || 'Gratuito'}
             </span>
-            <Badge variant={user?.plan === 'free' ? 'default' : 'success'}>
+            <Badge variant={user?.plan === 'free' ? 'outline' : 'success'}>
               {user?.plan === 'free' ? 'Limitado' : 'Ativo'}
             </Badge>
           </div>
+
           {user?.plan === 'free' ? (
-            <Button
-              variant="outline"
-              className="w-full text-xs py-1.5"
-              onClick={handleUpgradeClick}
-            >
-              Fazer Upgrade
-            </Button>
+            <div className="text-xs text-slate-400 space-y-1 pt-1">
+              <div className="flex items-center gap-1.5">
+                <span className="text-emerald-400">✓</span>
+                <span>30 créditos/mês</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-emerald-400">✓</span>
+                <span>3 estilos de formatação</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-slate-600">✗</span>
+                <span>Análises avançadas</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-slate-600">✗</span>
+                <span>Histórico completo</span>
+              </div>
+            </div>
           ) : (
             <div className="text-xs text-slate-400">
               {user?.plan === 'pro' ? `${formatBRL(PRICING.PRO_MONTHLY_PRICE)}/mês` : 'Preço personalizado'}
