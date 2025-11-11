@@ -38,11 +38,12 @@ export default function Pricing() {
       description: 'Perfeito para experimentar a plataforma',
       features: [
         { text: '30 créditos por mês', included: true },
+        { text: 'Estilo Casual', included: true },
         { text: 'Formatação básica por IA', included: true },
-        { text: 'Últimas 10 formatações', included: true },
-        { text: '3 estilos de formatação', included: true },
+        { text: 'Histórico completo', included: true },
+        { text: 'Estilos Pro (Sales e Official)', included: false },
         { text: 'Análises avançadas', included: false },
-        { text: 'Histórico completo', included: false },
+        { text: 'Salvar favoritos', included: false },
         { text: 'Suporte prioritário', included: false },
       ],
       cta: 'Começar Grátis',
@@ -59,10 +60,10 @@ export default function Pricing() {
       description: 'Melhor para profissionais e usuários avançados',
       features: [
         { text: 'Formatação ilimitada', included: true },
-        { text: 'Formatação avançada por IA', included: true },
+        { text: 'Todos os 3 estilos (Casual, Sales, Official)', included: true },
         { text: 'Histórico completo', included: true },
         { text: 'Análises avançadas com gráficos', included: true },
-        { text: 'Mapa de atividade (12 semanas)', included: true },
+        { text: 'Mapa de atividade (4 semanas)', included: true },
         { text: 'Distribuição por estilo', included: true },
         { text: 'Insights e recomendações', included: true },
         { text: 'Salvar favoritos ilimitados', included: true },
@@ -100,11 +101,12 @@ export default function Pricing() {
   ];
 
   const comparisonFeatures = [
-    { name: 'Formatações por mês', free: '30', pro: 'Ilimitado', enterprise: 'Ilimitado' },
-    { name: 'Retenção de histórico', free: 'Últimas 10', pro: 'Para sempre', enterprise: 'Para sempre' },
-    { name: 'Estilos de formatação', free: '3', pro: '3', enterprise: '3' },
+    { name: 'Formatações por mês', free: '30 créditos', pro: 'Ilimitado', enterprise: 'Ilimitado' },
+    { name: 'Retenção de histórico', free: 'Para sempre', pro: 'Para sempre', enterprise: 'Para sempre' },
+    { name: 'Estilos de formatação', free: '1 (Casual)', pro: '3 (Todos)', enterprise: '3 (Todos)' },
+    { name: 'Estilos Pro (Sales, Official)', free: false, pro: true, enterprise: true },
     { name: 'Análises avançadas', free: false, pro: true, enterprise: true },
-    { name: 'Mapa de atividade', free: false, pro: true, enterprise: true },
+    { name: 'Mapa de atividade (4 semanas)', free: false, pro: true, enterprise: true },
     { name: 'Distribuição por estilo', free: false, pro: true, enterprise: true },
     { name: 'Salvar favoritos', free: false, pro: true, enterprise: true },
     { name: 'Tempo de resposta do suporte', free: '48h', pro: '4h', enterprise: '1h' },
@@ -117,8 +119,8 @@ export default function Pricing() {
 
   const faqs = [
     {
-      question: 'Como funciona o período de teste?',
-      answer: 'Todos os novos usuários começam com uma conta gratuita que inclui 30 créditos por mês. Você pode fazer upgrade para o Pro a qualquer momento para desbloquear acesso ilimitado. As assinaturas Pro vêm com garantia de reembolso de 7 dias, então você pode experimentar sem riscos.',
+      question: 'Como funciona o plano gratuito?',
+      answer: 'Todos os novos usuários começam com uma conta gratuita que inclui 30 créditos por mês (renovados automaticamente todo mês). Você tem acesso ao estilo Casual e seu histórico completo é preservado. Pode fazer upgrade para o Pro a qualquer momento para desbloquear formatação ilimitada, todos os 3 estilos e análises avançadas. As assinaturas Pro vêm com garantia de reembolso de 7 dias.',
     },
     {
       question: 'Posso cancelar a qualquer momento?',
@@ -126,7 +128,7 @@ export default function Pricing() {
     },
     {
       question: 'Os créditos expiram?',
-      answer: 'Os créditos do plano gratuito são renovados mensalmente e não acumulam. Usuários Pro têm operações de formatação ilimitadas, então não há créditos para se preocupar. Seu histórico de uso é sempre preservado independentemente do seu plano.',
+      answer: 'Os créditos do plano gratuito são renovados mensalmente (30 créditos a cada mês) e não acumulam. Se você não usar todos os seus créditos em um mês, eles não são transferidos para o próximo. Usuários Pro têm formatação ilimitada, então não há créditos para se preocupar. Seu histórico completo é sempre preservado independentemente do seu plano.',
     },
     {
       question: 'Quais métodos de pagamento vocês aceitam?',
@@ -404,7 +406,7 @@ export default function Pricing() {
             {faqs.map((faq, index) => (
               <Card
                 key={index}
-                className="border-slate-800 cursor-pointer hover:border-slate-700 transition-colors"
+                className="border-slate-800 cursor-pointer hover:border-emerald-700/50 transition-colors"
                 onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
               >
                 <CardHeader>
