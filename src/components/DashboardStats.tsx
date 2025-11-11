@@ -37,14 +37,7 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-        <Card>
-          <CardContent className="space-y-3">
-            <Skeleton className="h-4 w-20" />
-            <Skeleton className="h-8 w-24" />
-            <Skeleton className="h-3 w-32" />
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-10 gap-6">
         <div className="lg:col-span-3">
           <Card>
             <CardContent className="space-y-3">
@@ -54,26 +47,39 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
             </CardContent>
           </Card>
         </div>
-        <Card>
-          <CardContent className="space-y-3">
-            <Skeleton className="h-4 w-20" />
-            <Skeleton className="h-8 w-24" />
-            <Skeleton className="h-3 w-32" />
-          </CardContent>
-        </Card>
+        <div className="lg:col-span-6">
+          <Card>
+            <CardContent className="space-y-3">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-8 w-24" />
+              <Skeleton className="h-3 w-32" />
+            </CardContent>
+          </Card>
+        </div>
+        <div className="lg:col-span-1">
+          <Card>
+            <CardContent className="space-y-3">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-8 w-24" />
+              <Skeleton className="h-3 w-32" />
+            </CardContent>
+          </Card>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-      <EnhancedCreditsCard user={user} onUpgradeClick={handleUpgradeClick} />
-
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-10 gap-6">
       <div className="lg:col-span-3">
+        <EnhancedCreditsCard user={user} onUpgradeClick={handleUpgradeClick} />
+      </div>
+
+      <div className="lg:col-span-6">
         <FavoriteStyleCard userId={user?.id} onTryOtherStyles={handleTryOtherStyles} />
       </div>
 
-      <Card className="hover:border-blue-500/50 transition-colors">
+      <Card className="hover:border-blue-500/50 transition-colors lg:col-span-1">
         <CardContent className="space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-sm text-slate-400">Atividade Recente</span>

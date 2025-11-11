@@ -135,11 +135,11 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
               <Star className="w-5 h-5 text-yellow-400" />
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <Sparkles className="w-12 h-12 text-yellow-400 flex-shrink-0" />
+          <div className="flex items-center gap-6">
+            <Sparkles className="w-16 h-16 text-yellow-400 flex-shrink-0" />
             <div className="flex-1">
-              <div className="text-lg font-bold text-white">Sem favorito</div>
-              <p className="text-xs text-slate-400">Comece a formatar para descobrir seu estilo preferido</p>
+              <div className="text-xl font-bold text-white">Sem favorito</div>
+              <p className="text-sm text-slate-400 mt-1">Comece a formatar para descobrir seu estilo preferido</p>
             </div>
           </div>
         </CardContent>
@@ -157,29 +157,30 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
               <Star className="w-5 h-5 text-yellow-400" />
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="text-5xl flex-shrink-0">🎭</div>
-            <div className="flex-1 space-y-2">
+          <div className="flex items-start gap-6">
+            <div className="text-6xl flex-shrink-0">🎭</div>
+            <div className="flex-1 space-y-3">
               <div>
-                <div className="text-lg font-bold text-white">Uso Misto</div>
-                <p className="text-xs text-slate-400">Você usa vários estilos igualmente</p>
-                <span className="text-sm font-semibold text-slate-300">
+                <div className="text-xl font-bold text-white">Uso Misto</div>
+                <p className="text-sm text-slate-400">Você usa vários estilos igualmente</p>
+                <span className="text-base font-semibold text-slate-300 mt-1 inline-block">
                   {totalCount} {totalCount === 1 ? 'formato' : 'formatos'}
                 </span>
               </div>
 
-              <div className="space-y-1.5">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 {styleStats.map((stat) => {
                   const style = styleConfig[stat.style_id as keyof typeof styleConfig];
                   if (!style) return null;
 
                   return (
-                    <div key={stat.style_id} className="space-y-0.5">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-slate-400">{style.emoji} {style.name}</span>
-                        <span className="text-slate-500">{stat.count}</span>
+                    <div key={stat.style_id} className="space-y-1">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-slate-300 font-medium">{style.emoji} {style.name}</span>
+                        <span className="text-slate-400">{stat.count}</span>
                       </div>
-                      <Progress value={stat.percentage} max={100} className="h-1" />
+                      <Progress value={stat.percentage} max={100} className="h-1.5" />
+                      <div className="text-xs text-slate-500">{stat.percentage.toFixed(0)}%</div>
                     </div>
                   );
                 })}
@@ -216,35 +217,38 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-start gap-6">
           <Tooltip content={`${config.name} - ${config.subtitle}`} side="top">
-            <div className="text-5xl cursor-help flex-shrink-0">{config.emoji}</div>
+            <div className="text-6xl cursor-help flex-shrink-0">{config.emoji}</div>
           </Tooltip>
 
-          <div className="flex-1 space-y-2">
+          <div className="flex-1 space-y-3">
             <div>
-              <div className="text-lg font-bold text-white">{config.name}</div>
-              <p className="text-xs text-slate-400">{config.subtitle}</p>
-              <span className="text-sm font-semibold text-slate-300">
-                {favoriteStats?.count} {favoriteStats?.count === 1 ? 'vez' : 'vezes'}
-              </span>
-              <span className="text-xs text-slate-500 ml-1">
-                ({favoriteStats?.percentage.toFixed(0)}%)
-              </span>
+              <div className="text-xl font-bold text-white">{config.name}</div>
+              <p className="text-sm text-slate-400">{config.subtitle}</p>
+              <div className="mt-1">
+                <span className="text-base font-semibold text-slate-300">
+                  {favoriteStats?.count} {favoriteStats?.count === 1 ? 'vez' : 'vezes'}
+                </span>
+                <span className="text-sm text-slate-500 ml-2">
+                  ({favoriteStats?.percentage.toFixed(0)}%)
+                </span>
+              </div>
             </div>
 
-            <div className="space-y-1.5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {styleStats.map((stat) => {
                 const style = styleConfig[stat.style_id as keyof typeof styleConfig];
                 if (!style) return null;
 
                 return (
-                  <div key={stat.style_id} className="space-y-0.5">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-slate-400">{style.emoji} {style.name}</span>
-                      <span className="text-slate-500">{stat.count}</span>
+                  <div key={stat.style_id} className="space-y-1">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-slate-300 font-medium">{style.emoji} {style.name}</span>
+                      <span className="text-slate-400">{stat.count}</span>
                     </div>
-                    <Progress value={stat.percentage} max={100} className="h-1" />
+                    <Progress value={stat.percentage} max={100} className="h-1.5" />
+                    <div className="text-xs text-slate-500">{stat.percentage.toFixed(0)}%</div>
                   </div>
                 );
               })}
