@@ -28,6 +28,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '.
 import { useAuth } from '../hooks/useAuth';
 import { supabase } from '../lib/supabase';
 import { toast } from '../components/ui/Toaster';
+import { PRICING, formatBRL } from '../constants/pricing';
 
 export default function Settings() {
   const [, setLocation] = useLocation();
@@ -885,7 +886,7 @@ export default function Settings() {
                     <div className="mb-6 space-y-2">
                       <div className="flex justify-between">
                         <span className="text-slate-400">Preço</span>
-                        <span className="font-semibold">R$ 19,90/month</span>
+                        <span className="font-semibold">{formatBRL(PRICING.PRO_MONTHLY_PRICE)}/mês</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-400">Status</span>

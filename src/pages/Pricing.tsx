@@ -11,6 +11,7 @@ import { Label } from '../components/ui/Label';
 import CheckoutButton from '../components/CheckoutButton';
 import { useAuth } from '../hooks/useAuth';
 import { DashboardLayout } from '../layouts/DashboardLayout';
+import { PRICING, formatBRL as formatCurrency, calculateAnnualSavings } from '../constants/pricing';
 
 type BillingPeriod = 'monthly' | 'annual';
 
@@ -21,27 +22,12 @@ export default function Pricing() {
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const { user } = useAuth();
 
-  const monthlyPrice = 19.90;
-  const annualMonthlyPrice = 16.58;
-  const annualTotalPrice = 199.00;
+  const proPrice = billingPeriod === 'monthly' ? PRICING.PRO_MONTHLY_PRICE : PRICING.PRO_ANNUAL_MONTHLY_PRICE;
+  const proTotal = billingPeriod === 'monthly' ? PRICING.PRO_MONTHLY_PRICE : PRICING.PRO_ANNUAL_TOTAL_PRICE;
+  const savings = billingPeriod === 'annual' ? calculateAnnualSavings() : 0;
 
-  const proPrice = billingPeriod === 'monthly' ? monthlyPrice : annualMonthlyPrice;
-  const proTotal = billingPeriod === 'monthly' ? monthlyPrice : annualTotalPrice;
-  const savings = billingPeriod === 'annual' ? (monthlyPrice * 12 - annualTotalPrice) : 0;
-
-  // Formata valor em BRL
-  const formatBRL = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(value);
-  };
-
-  const monthlyPriceId = 'price_1SPu4QRsqRrcMrSPgJwd8a2j';
-  const annualPriceId = 'price_1SPu4jRsqRrcMrSP2M2b5POX';
-  const currentPriceId = billingPeriod === 'monthly' ? monthlyPriceId : annualPriceId;
+  const formatBRL = formatCurrency;
+  const currentPriceId = billingPeriod === 'monthly' ? PRICING.STRIPE_PRICE_ID_MONTHLY : PRICING.STRIPE_PRICE_ID_ANNUAL;
 
   const plans = [
     {

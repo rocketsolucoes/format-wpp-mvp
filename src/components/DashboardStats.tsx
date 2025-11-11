@@ -8,6 +8,7 @@ import { EnhancedCreditsCard } from './EnhancedCreditsCard';
 import { FavoriteStyleCard } from './FavoriteStyleCard';
 import { TimeSavedCard } from './TimeSavedCard';
 import { useLocation } from 'wouter';
+import { PRICING, formatBRL } from '../constants/pricing';
 
 interface StatsData {
   total_formatting: number;
@@ -129,7 +130,7 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
             </Button>
           ) : (
             <div className="text-xs text-slate-400">
-              {user?.plan === 'pro' ? 'R$ 49,90/mês' : 'Preço personalizado'}
+              {user?.plan === 'pro' ? `${formatBRL(PRICING.PRO_MONTHLY_PRICE)}/mês` : 'Preço personalizado'}
             </div>
           )}
         </CardContent>
