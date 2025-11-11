@@ -69,19 +69,19 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
   const resetDate = user?.created_at ? formatResetDate(user.created_at) : 'Desconhecido';
 
   const getColorByPercentage = (pct: number) => {
-    if (pct >= 70) return {
-      bar: 'bg-emerald-500',
-      text: 'text-emerald-400',
-      bg: 'bg-emerald-500/10',
-      border: 'border-emerald-500/30',
-      icon: 'text-emerald-400'
+    if (pct >= 50) return {
+      bar: 'bg-green-500',
+      text: 'text-green-400',
+      bg: 'bg-green-500/10',
+      border: 'border-green-500/30',
+      icon: 'text-green-400'
     };
-    if (pct >= 30) return {
-      bar: 'bg-yellow-500',
-      text: 'text-yellow-400',
-      bg: 'bg-yellow-500/10',
-      border: 'border-yellow-500/30',
-      icon: 'text-yellow-400'
+    if (pct >= 20) return {
+      bar: 'bg-amber-500',
+      text: 'text-amber-400',
+      bg: 'bg-amber-500/10',
+      border: 'border-amber-500/30',
+      icon: 'text-amber-400'
     };
     return {
       bar: 'bg-red-500',
@@ -90,6 +90,12 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
       border: 'border-red-500/30',
       icon: 'text-red-400'
     };
+  };
+
+  const getCreditMessage = (pct: number, remaining: number) => {
+    if (pct >= 50) return `Você tem ${remaining} créditos disponíveis`;
+    if (pct >= 20) return `Você tem ${remaining} créditos restantes`;
+    return `Atenção! Apenas ${remaining} ${remaining === 1 ? 'crédito restante' : 'créditos restantes'}`;
   };
 
   const colors = getColorByPercentage(percentage);
@@ -196,7 +202,14 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
     <Card className={`md:col-span-2 hover:border-cyan-500/50 transition-colors ${colors.border}`}>
       <CardContent className="space-y-4">
         <div className="flex items-center justify-between">
-          <span className="text-sm text-slate-400">Créditos Restantes</span>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-slate-400">Créditos</span>
+            <Tooltip content="Você ganha 30 créditos novos todo mês. Cada formatação consome 1 crédito. Faça upgrade para créditos ilimitados!">
+              <div className="w-4 h-4 rounded-full bg-slate-700/50 flex items-center justify-center cursor-help hover:bg-slate-700 transition-colors">
+                <span className="text-xs text-slate-400">?</span>
+              </div>
+            </Tooltip>
+          </div>
           <div className={`p-2 ${colors.bg} rounded-lg`}>
             <Coins className={`w-5 h-5 ${colors.icon}`} />
           </div>
@@ -204,31 +217,28 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className={`text-4xl font-bold ${colors.text}`}>
-                {creditsRemaining}
-              </span>
-              <span className="text-lg text-slate-500">
-                de {totalCredits}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              {percentage < 30 && (
-                <Tooltip content="Créditos baixos!" side="left">
-                  <AlertTriangle className="w-5 h-5 text-red-400" />
-                </Tooltip>
-              )}
-              <span className={`text-sm font-semibold ${colors.text}`}>
-                {percentage.toFixed(0)}%
-              </span>
-            </div>
+            <span className="text-sm text-slate-400">
+              {getCreditMessage(percentage, creditsRemaining)}
+            </span>
+            <span className="text-sm font-semibold text-slate-300">
+              {creditsRemaining}/{totalCredits}
+            </span>
           </div>
 
-          <div className="relative h-2.5 bg-slate-800 rounded-full overflow-hidden">
+          <div className="relative h-2 bg-slate-800 rounded-full overflow-hidden">
             <div
-              className={`h-full ${colors.bar} transition-all duration-500 ease-out rounded-full`}
+              className={`h-full ${colors.bar} transition-all duration-300 ease-out rounded-full`}
               style={{ width: `${percentage}%` }}
             />
+          </div>
+
+          <div className="flex items-center justify-between">
+            {percentage < 20 && (
+              <div className="flex items-center gap-1.5 text-xs text-red-400">
+                <AlertTriangle className="w-3.5 h-3.5" />
+                <span>Créditos baixos</span>
+              </div>
+            )}
           </div>
         </div>
 

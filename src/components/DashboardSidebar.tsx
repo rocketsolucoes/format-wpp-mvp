@@ -176,8 +176,8 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
               <div className="flex items-center justify-between text-xs">
                 <span className="text-slate-400">Créditos</span>
                 <span className={`font-semibold ${
-                  (user?.credits_remaining || 0) > 10 ? 'text-emerald-400' :
-                  (user?.credits_remaining || 0) > 5 ? 'text-yellow-400' :
+                  (user?.credits_remaining || 0) >= 15 ? 'text-green-400' :
+                  (user?.credits_remaining || 0) >= 6 ? 'text-amber-400' :
                   'text-red-400'
                 }`}>
                   {user?.credits_remaining || 0} / 30

@@ -90,17 +90,21 @@ const Header: React.FC = () => {
                         </div>
                       </div>
                     ) : (
-                      <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full group relative">
-                        <Coins className="w-4 h-4 text-emerald-400" />
+                      <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-slate-700/50 border border-slate-600/50 rounded-full group relative">
+                        <Coins className={`w-4 h-4 ${
+                          user.credits_remaining >= 15 ? 'text-green-400' :
+                          user.credits_remaining >= 6 ? 'text-amber-400' :
+                          'text-red-400'
+                        }`} />
                         <span className={`text-sm font-semibold ${
-                          user.credits_remaining > 10 ? 'text-emerald-400' :
-                          user.credits_remaining > 5 ? 'text-yellow-400' :
+                          user.credits_remaining >= 15 ? 'text-green-400' :
+                          user.credits_remaining >= 6 ? 'text-amber-400' :
                           'text-red-400'
                         }`}>
                           {user.credits_remaining}
                         </span>
-                        <div className="absolute bottom-full right-0 mb-2 w-48 px-3 py-2 bg-slate-900 border border-slate-800 rounded-lg text-xs text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                          {user.credits_remaining} créditos restantes. Renovados mensalmente.
+                        <div className="absolute bottom-full right-0 mb-2 w-64 px-3 py-2 bg-slate-900 border border-slate-800 rounded-lg text-xs text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                          {user.credits_remaining} créditos disponíveis de 30. Renovados mensalmente.
                         </div>
                       </div>
                     )}
@@ -137,11 +141,15 @@ const Header: React.FC = () => {
                         </span>
                       </div>
                     ) : (
-                      <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full w-fit">
-                        <Coins className="w-4 h-4 text-emerald-400" />
+                      <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-700/50 border border-slate-600/50 rounded-full w-fit">
+                        <Coins className={`w-4 h-4 ${
+                          user.credits_remaining >= 15 ? 'text-green-400' :
+                          user.credits_remaining >= 6 ? 'text-amber-400' :
+                          'text-red-400'
+                        }`} />
                         <span className={`text-sm font-semibold ${
-                          user.credits_remaining > 10 ? 'text-emerald-400' :
-                          user.credits_remaining > 5 ? 'text-yellow-400' :
+                          user.credits_remaining >= 15 ? 'text-green-400' :
+                          user.credits_remaining >= 6 ? 'text-amber-400' :
                           'text-red-400'
                         }`}>
                           {user.credits_remaining} créditos
