@@ -18,6 +18,7 @@ export default function Format() {
   const [selectedStyle, setSelectedStyle] = useState<string>('casual');
   const [previewText, setPreviewText] = useState('');
   const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
+  const [upgradeReason, setUpgradeReason] = useState<'credits' | 'pro-style'>('credits');
   const [whatsappFallbackOpen, setWhatsappFallbackOpen] = useState(false);
   const { user, refreshUser } = useAuth();
   const [, setLocation] = useLocation();
@@ -74,13 +75,14 @@ export default function Format() {
     }
 
     if (user.plan === 'free' && user.credits_remaining <= 0) {
+      setUpgradeReason('credits');
       setUpgradeModalOpen(true);
       return;
     }
 
     const proStyles = ['sales', 'announcement'];
     if (user.plan === 'free' && proStyles.includes(selectedStyle)) {
-      toast.error('Este estilo é exclusivo do plano Pro');
+      setUpgradeReason('pro-style');
       setUpgradeModalOpen(true);
       return;
     }
@@ -202,7 +204,10 @@ export default function Format() {
             selectedStyle={selectedStyle}
             onStyleChange={setSelectedStyle}
             userPlan={user?.plan || 'free'}
-            onProStyleClick={() => setUpgradeModalOpen(true)}
+            onProStyleClick={() => {
+              setUpgradeReason('pro-style');
+              setUpgradeModalOpen(true);
+            }}
           />
         </div>
 
@@ -215,7 +220,10 @@ export default function Format() {
                   selectedStyle={selectedStyle}
                   onStyleChange={setSelectedStyle}
                   userPlan={user?.plan || 'free'}
-                  onProStyleClick={() => setUpgradeModalOpen(true)}
+                  onProStyleClick={() => {
+                    setUpgradeReason('pro-style');
+                    setUpgradeModalOpen(true);
+                  }}
                 />
               </div>
             </div>
@@ -346,9 +354,15 @@ export default function Format() {
       <Dialog open={upgradeModalOpen} onOpenChange={setUpgradeModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Faça Upgrade para o Pro e Tenha Formatação Ilimitada</DialogTitle>
+            <DialogTitle>
+              {upgradeReason === 'pro-style'
+                ? 'Desbloqueie os Estilos Profissionais'
+                : 'Faça Upgrade para o Pro e Tenha Formatação Ilimitada'}
+            </DialogTitle>
             <DialogDescription>
-              Você esgotou seus créditos gratuitos. Faça upgrade para o Pro e tenha formatação ilimitada de mensagens por IA.
+              {upgradeReason === 'pro-style'
+                ? 'Os estilos Sales e Official são exclusivos do plano Pro. Faça upgrade para ter acesso a todos os estilos de formatação profissionais e créditos ilimitados.'
+                : 'Você esgotou seus créditos gratuitos. Faça upgrade para o Pro e tenha formatação ilimitada de mensagens por IA.'}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -362,7 +376,7 @@ export default function Format() {
               }}
               className="bg-gradient-to-r from-emerald-500 to-cyan-500"
             >
-              Ver Planos
+              Ver Planos Pro
             </Button>
           </DialogFooter>
         </DialogContent>
