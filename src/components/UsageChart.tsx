@@ -230,21 +230,6 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
                 Desbloquear Análises
               </Button>
             </div>
-
-            <div className="grid grid-cols-3 gap-2 text-center">
-              <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700/50">
-                <BarChart3 className="w-4 h-4 text-emerald-400 mx-auto mb-1" />
-                <p className="text-xs text-slate-400">Gráficos</p>
-              </div>
-              <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700/50">
-                <Grid3x3 className="w-4 h-4 text-blue-400 mx-auto mb-1" />
-                <p className="text-xs text-slate-400">Heatmap</p>
-              </div>
-              <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700/50">
-                <TrendingUp className="w-4 h-4 text-purple-400 mx-auto mb-1" />
-                <p className="text-xs text-slate-400">Insights</p>
-              </div>
-            </div>
           </div>
         </CardContent>
       </Card>
