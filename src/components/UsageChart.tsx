@@ -4,7 +4,7 @@ import { Skeleton } from './ui/Skeleton';
 import { Badge } from './ui/Badge';
 import { Button } from './ui/Button';
 import { Separator } from './ui/Separator';
-import { BarChart3, TrendingUp, FileDown, Target, Calendar, Download, Filter, Activity, Award, Flame, PieChart as PieChartIcon, Grid3x3 } from 'lucide-react';
+import { BarChart3, TrendingUp, FileDown, Target, Calendar, Download, Filter, Activity, Award, Flame, PieChart as PieChartIcon, Grid3x3, Lock } from 'lucide-react';
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Dot, PieChart, Pie, Cell } from 'recharts';
 import { supabase } from '../lib/supabase';
 import { useLocation } from 'wouter';
@@ -153,14 +153,11 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
   };
 
   if (!isPro) {
-    const hasData = weeklyData.some((d) => d.count > 0);
-    const totalFormats = weeklyData.reduce((sum, d) => sum + d.count, 0);
-
     if (loadingWeekly) {
       return (
         <Card>
           <CardHeader>
-            <CardTitle>📊 Gráfico de Uso</CardTitle>
+            <CardTitle>📊 Análise de Uso</CardTitle>
             <CardDescription>Últimos 7 dias</CardDescription>
           </CardHeader>
           <CardContent>
@@ -170,106 +167,119 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
       );
     }
 
+    const fakeData = [
+      { day: 'Seg', count: 2 },
+      { day: 'Ter', count: 3 },
+      { day: 'Qua', count: 1 },
+      { day: 'Qui', count: 4 },
+      { day: 'Sex', count: 2 },
+      { day: 'Sáb', count: 3 },
+      { day: 'Dom', count: 5 },
+    ];
+
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            📊 Gráfico de Uso
-          </CardTitle>
-          <CardDescription>
-            Acompanhe sua atividade diária de formatação
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {hasData ? (
-            <>
-              <div className="h-48">
+      <Card className="relative overflow-hidden">
+        <CardContent className="p-0">
+          <div className="relative">
+            <div className="blur-[8px] opacity-50 pointer-events-none p-6">
+              <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={weeklyData}>
+                  <AreaChart data={fakeData}>
+                    <defs>
+                      <linearGradient id="fakeGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.05}/>
+                      </linearGradient>
+                    </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
-                    <XAxis
-                      dataKey="day"
-                      stroke="#64748b"
-                      fontSize={12}
-                      tickLine={false}
-                    />
-                    <YAxis
-                      stroke="#64748b"
-                      fontSize={12}
-                      tickLine={false}
-                      allowDecimals={false}
-                    />
-                    <Tooltip content={<CustomTooltip />} />
-                    <Line
+                    <XAxis dataKey="day" stroke="#64748b" fontSize={12} />
+                    <YAxis stroke="#64748b" fontSize={12} />
+                    <Area
                       type="monotone"
                       dataKey="count"
                       stroke="#10b981"
-                      strokeWidth={2}
-                      dot={<CustomDot />}
-                      activeDot={{ r: 6 }}
+                      strokeWidth={3}
+                      fill="url(#fakeGradient)"
                     />
-                  </LineChart>
+                  </AreaChart>
                 </ResponsiveContainer>
               </div>
-
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-400">Esta semana:</span>
-                <span className="text-white font-semibold">
-                  {totalFormats} {totalFormats === 1 ? 'formatação' : 'formatações'}
-                </span>
-              </div>
-            </>
-          ) : (
-            <div className="flex flex-col items-center justify-center py-8 text-center">
-              <div className="text-5xl mb-3 opacity-50">📊</div>
-              <p className="text-slate-400 text-sm">
-                Nenhuma atividade esta semana
-              </p>
-              <p className="text-slate-500 text-xs mt-1">
-                Comece a formatar para ver seu gráfico de uso!
-              </p>
-            </div>
-          )}
-
-          <Separator className="my-4" />
-
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <div className="p-1.5 bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 rounded-lg">
-                <BarChart3 className="w-4 h-4 text-cyan-400" />
-              </div>
-              <span className="text-sm font-semibold text-white">Upgrade para Pro:</span>
-            </div>
-
-            <div className="space-y-2 pl-8">
-              <div className="flex items-start gap-2 text-xs text-slate-400">
-                <TrendingUp className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-emerald-400" />
-                <span>Análises detalhadas com tendências</span>
-              </div>
-              <div className="flex items-start gap-2 text-xs text-slate-400">
-                <BarChart3 className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-emerald-400" />
-                <span>Gráficos de comparação por estilo</span>
-              </div>
-              <div className="flex items-start gap-2 text-xs text-slate-400">
-                <Calendar className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-emerald-400" />
-                <span>Relatórios mensais e anuais</span>
-              </div>
-              <div className="flex items-start gap-2 text-xs text-slate-400">
-                <FileDown className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-emerald-400" />
-                <span>Exportar dados para CSV</span>
-              </div>
-              <div className="flex items-start gap-2 text-xs text-slate-400">
-                <Target className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-emerald-400" />
-                <span>Insights e recomendações de uso</span>
+              <div className="mt-4 grid grid-cols-2 gap-3">
+                <div className="bg-slate-800/50 rounded-lg p-3">
+                  <p className="text-xs text-slate-400">Total</p>
+                  <p className="text-2xl font-bold text-white">20</p>
+                </div>
+                <div className="bg-slate-800/50 rounded-lg p-3">
+                  <p className="text-xs text-slate-400">Média/dia</p>
+                  <p className="text-2xl font-bold text-white">2.9</p>
+                </div>
               </div>
             </div>
 
-            <Button
-              onClick={() => setLocation('/pricing')}
-              className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white border-0 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all mt-3"
-            >
-              Fazer Upgrade para Pro
-            </Button>
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center">
+              <div className="text-center px-6 py-8 max-w-md">
+                <div className="mb-4 inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
+                  <Lock className="w-8 h-8 text-purple-400" />
+                </div>
+
+                <h3 className="text-2xl font-bold text-white mb-2">
+                  Análises Avançadas
+                </h3>
+                <p className="text-slate-400 text-sm mb-6">
+                  Desbloqueie insights poderosos sobre seu uso
+                </p>
+
+                <div className="space-y-3 mb-6 text-left">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center mt-0.5">
+                      <BarChart3 className="w-3 h-3 text-emerald-400" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm text-white font-medium">Gráfico de uso diário</p>
+                      <p className="text-xs text-slate-400">Acompanhe sua produtividade</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-orange-500/20 to-red-500/20 flex items-center justify-center mt-0.5">
+                      <PieChartIcon className="w-3 h-3 text-orange-400" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm text-white font-medium">Distribuição por estilo</p>
+                      <p className="text-xs text-slate-400">Descubra seu estilo favorito</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 flex items-center justify-center mt-0.5">
+                      <Grid3x3 className="w-3 h-3 text-blue-400" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm text-white font-medium">Mapa de atividade</p>
+                      <p className="text-xs text-slate-400">12 semanas de histórico visual</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mt-0.5">
+                      <TrendingUp className="w-3 h-3 text-purple-400" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm text-white font-medium">Insights inteligentes</p>
+                      <p className="text-xs text-slate-400">Recomendações personalizadas</p>
+                    </div>
+                  </div>
+                </div>
+
+                <Button
+                  onClick={() => setLocation('/pricing')}
+                  className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0 shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all"
+                  size="lg"
+                >
+                  Upgrade para Pro
+                </Button>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
