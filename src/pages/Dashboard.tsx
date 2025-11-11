@@ -243,27 +243,36 @@ const Dashboard: React.FC = () => {
                   isPro={true}
                   userId={user?.id}
                 />
-                <StyleDistributionChart userId={user?.id || ''} isPro={true} />
+                <div className="flex flex-col gap-6">
+                  <StyleDistributionChart userId={user?.id || ''} isPro={true} />
+                  <ActivityHeatmap userId={user?.id || ''} isPro={true} />
+                </div>
               </div>
             )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2">
-                <RecentFormatting items={recentItems} loading={loading} onRefresh={fetchDashboardData} totalCount={totalHistoryCount} />
+            <div
+              className={`grid grid-cols-1 gap-6 ${
+                user?.plan === 'free' ? 'lg:grid-cols-3' : ''
+              }`}
+            >
+              <div className={user?.plan === 'free' ? 'lg:col-span-2' : ''}>
+                <RecentFormatting
+                  items={recentItems}
+                  loading={loading}
+                  onRefresh={fetchDashboardData}
+                  totalCount={totalHistoryCount}
+                />
               </div>
-              <div className="space-y-6">
-                {user?.plan === 'free' && (
+              {user?.plan === 'free' && (
+                <div className="space-y-6">
                   <UsageChart
                     data={chartData}
                     loading={loading}
                     isPro={false}
                     userId={user?.id}
                   />
-                )}
-                {user?.plan !== 'free' && (
-                  <ActivityHeatmap userId={user?.id || ''} isPro={true} />
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
