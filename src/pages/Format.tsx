@@ -9,6 +9,7 @@ import { Button } from '../components/ui/Button';
 import { StyleSelector } from '../components/StyleSelector';
 import { WhatsAppPreview } from '../components/WhatsAppPreview';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter } from '../components/ui/Dialog';
+import { getPendingText, clearPendingText } from '../utils/textPersistence';
 
 export default function Format() {
   const [inputText, setInputText] = useState('');
@@ -22,11 +23,16 @@ export default function Format() {
   const [, setLocation] = useLocation();
 
   useEffect(() => {
+    const pendingText = getPendingText();
     const reformatText = localStorage.getItem('reformat_text');
     const reformatStyle = localStorage.getItem('reformat_style');
     const selectedStyleFromDashboard = localStorage.getItem('selectedStyle');
 
-    if (reformatText) {
+    if (pendingText) {
+      setInputText(pendingText);
+      clearPendingText();
+      toast.success('Seu texto foi restaurado! ✨ Clique em Formatar para continuar.');
+    } else if (reformatText) {
       setInputText(reformatText);
       localStorage.removeItem('reformat_text');
     }

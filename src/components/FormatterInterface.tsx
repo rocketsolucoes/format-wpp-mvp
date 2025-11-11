@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from './ui/Alert';
 import { formatText, FormatterError } from '../services/formatter';
 import { useAuth } from '../hooks/useAuth';
 import { useLocation } from 'wouter';
+import { savePendingText } from '../utils/textPersistence';
 
 interface FormatterInterfaceProps {
   onNoCredits?: () => void;
@@ -68,7 +69,9 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
     }
 
     if (!user) {
-      toast.error('Por favor, faça login para formatar texto');
+      if (savePendingText(inputText)) {
+        toast.info('Redirecionando para login...');
+      }
       setLocation('/auth');
       return;
     }

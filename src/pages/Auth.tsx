@@ -8,6 +8,7 @@ import Label from '../components/ui/Label';
 import Button from '../components/ui/Button';
 import Checkbox from '../components/ui/Checkbox';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../components/ui/Dialog';
+import { hasPendingText } from '../utils/textPersistence';
 
 /**
  * Auth Page Component
@@ -127,6 +128,12 @@ const Auth: React.FC = () => {
       await signIn(loginEmail, loginPassword);
       setLoginEmail('');
       setLoginPassword('');
+
+      if (hasPendingText()) {
+        setLocation('/format');
+        return;
+      }
+
       setLocation('/dashboard');
     } catch (error: any) {
       console.error('Login error:', error);
@@ -150,6 +157,12 @@ const Auth: React.FC = () => {
       setSignupPassword('');
       setSignupConfirmPassword('');
       setAcceptTerms(false);
+
+      if (hasPendingText()) {
+        setLocation('/format');
+        return;
+      }
+
       setLocation('/dashboard');
     } catch (error: any) {
       console.error('Signup error:', error);
