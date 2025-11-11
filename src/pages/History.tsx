@@ -273,7 +273,7 @@ export default function History() {
     localStorage.setItem('reformat_text', record.input_text);
     localStorage.setItem('reformat_style', record.style_id || 'casual');
     setLocation('/format');
-    toast.info('Texto carregado para reformatação');
+    toast.success('Texto carregado para reformatação');
   };
 
   const handleToggleFavorite = async (record: FormattingRecord) => {

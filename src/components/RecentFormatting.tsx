@@ -143,7 +143,7 @@ export function RecentFormatting({ items, loading, onRefresh }: RecentFormatting
     localStorage.setItem('reformat_text', item.input_text);
     localStorage.setItem('reformat_style', item.style_id || 'casual');
     setLocation('/format');
-    toast.info('Texto carregado para reformatação');
+    toast.success('Texto carregado para reformatação');
   };
 
   const handleToggleFavorite = async (item: FormattingItem, e: React.MouseEvent) => {

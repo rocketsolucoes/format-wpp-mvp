@@ -59,7 +59,7 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
     }
     setIsFormatting(false);
     setProgress(0);
-    toast.info('Formatação cancelada');
+    toast.warning('Formatação cancelada');
   };
 
   const handleFormat = async () => {
@@ -70,7 +70,7 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
 
     if (!user) {
       if (savePendingText(inputText)) {
-        toast.info('Redirecionando para login...');
+        toast.success('Redirecionando para login...');
       }
       setLocation('/auth');
       return;
