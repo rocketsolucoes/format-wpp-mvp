@@ -135,15 +135,17 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
               <Star className="w-5 h-5 text-yellow-400" />
             </div>
           </div>
-          <div className="text-4xl my-2">
-            <Sparkles className="w-12 h-12 mx-auto text-yellow-400" />
+          <div className="text-center space-y-1">
+            <Sparkles className="w-10 h-10 mx-auto text-yellow-400" />
+            <div>
+              <div className="text-xl font-bold text-white">Sem favorito</div>
+              <p className="text-xs text-slate-400">Comece a formatar</p>
+            </div>
           </div>
-          <div className="text-lg font-semibold text-slate-300">
-            Nenhum favorito ainda
+          <div className="text-center pt-1">
+            <span className="text-2xl font-bold text-white">0</span>
+            <span className="text-xs text-slate-500 block">formatos</span>
           </div>
-          <p className="text-xs text-slate-400">
-            Formate sua primeira mensagem para descobrir seu estilo preferido
-          </p>
         </CardContent>
       </Card>
     );
@@ -159,21 +161,19 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
               <Star className="w-5 h-5 text-yellow-400" />
             </div>
           </div>
-          <div className="text-5xl my-2">🎭</div>
-          <div>
-            <div className="text-lg font-bold text-white">Uso Misto</div>
-            <p className="text-xs text-slate-400">Você usa vários estilos igualmente</p>
+          <div className="text-center space-y-1">
+            <div className="text-4xl">🎭</div>
+            <div>
+              <div className="text-xl font-bold text-white">Uso Misto</div>
+              <p className="text-xs text-slate-400">Vários estilos</p>
+            </div>
           </div>
-          <div className="text-xs text-slate-500">
-            {totalCount} {totalCount === 1 ? 'formato' : 'formatos'}
+          <div className="text-center pt-1">
+            <span className="text-2xl font-bold text-white">{totalCount}</span>
+            <span className="text-xs text-slate-500 block">
+              {totalCount === 1 ? 'formato' : 'formatos'}
+            </span>
           </div>
-          <button
-            onClick={onTryOtherStyles}
-            className="flex items-center justify-center gap-1 text-xs text-yellow-400 hover:text-yellow-300 transition-colors mx-auto"
-          >
-            Ver todos os estilos
-            <ArrowRight className="w-3 h-3" />
-          </button>
         </CardContent>
       </Card>
     );
@@ -204,49 +204,24 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
           </div>
         </div>
 
-        <div className="text-center space-y-2">
+        <div className="text-center space-y-1">
           <Tooltip content={`${config.name} - ${config.subtitle}`} side="top">
-            <div className="text-5xl cursor-help">{config.emoji}</div>
+            <div className="text-4xl cursor-help">{config.emoji}</div>
           </Tooltip>
           <div>
-            <div className="text-lg font-bold text-white">{config.name}</div>
+            <div className="text-xl font-bold text-white">{config.name}</div>
             <p className="text-xs text-slate-400">{config.subtitle}</p>
           </div>
         </div>
 
-        <div className="text-center">
-          <span className="text-sm font-semibold text-slate-300">
-            {favoriteStats?.count} {favoriteStats?.count === 1 ? 'vez' : 'vezes'}
+        <div className="text-center pt-1">
+          <span className="text-2xl font-bold text-white">
+            {favoriteStats?.count}
           </span>
-          <span className="text-xs text-slate-500 ml-1">
-            ({favoriteStats?.percentage.toFixed(0)}%)
+          <span className="text-xs text-slate-500 block">
+            {favoriteStats?.count === 1 ? 'vez' : 'vezes'} ({favoriteStats?.percentage.toFixed(0)}%)
           </span>
         </div>
-
-        <div className="space-y-1.5">
-          {styleStats.map((stat) => {
-            const style = styleConfig[stat.style_id as keyof typeof styleConfig];
-            if (!style) return null;
-
-            return (
-              <div key={stat.style_id} className="space-y-1">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400">{style.emoji} {style.name}</span>
-                  <span className="text-slate-500">{stat.count}</span>
-                </div>
-                <Progress value={stat.percentage} max={100} className="h-1" />
-              </div>
-            );
-          })}
-        </div>
-
-        <button
-          onClick={onTryOtherStyles}
-          className="flex items-center justify-center gap-1 text-xs text-yellow-400 hover:text-yellow-300 transition-colors mx-auto pt-1"
-        >
-          Experimentar outros estilos
-          <ArrowRight className="w-3 h-3" />
-        </button>
       </CardContent>
     </Card>
   );
