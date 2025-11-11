@@ -37,8 +37,8 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-10 gap-6">
-        <div className="lg:col-span-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="lg:col-span-1">
           <Card>
             <CardContent className="space-y-3">
               <Skeleton className="h-4 w-20" />
@@ -47,7 +47,7 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
             </CardContent>
           </Card>
         </div>
-        <div className="lg:col-span-6">
+        <div className="lg:col-span-2">
           <Card>
             <CardContent className="space-y-3">
               <Skeleton className="h-4 w-20" />
@@ -70,12 +70,12 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-10 gap-6">
-      <div className="lg:col-span-3">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="lg:col-span-1">
         <EnhancedCreditsCard user={user} onUpgradeClick={handleUpgradeClick} />
       </div>
 
-      <div className="lg:col-span-6">
+      <div className="lg:col-span-2">
         <FavoriteStyleCard userId={user?.id} onTryOtherStyles={handleTryOtherStyles} />
       </div>
 
