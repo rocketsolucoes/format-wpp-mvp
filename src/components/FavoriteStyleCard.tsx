@@ -158,33 +158,34 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
             </div>
           </div>
           <div className="flex items-start gap-6">
-            <div className="text-6xl flex-shrink-0">🎭</div>
-            <div className="flex-1 space-y-3">
-              <div>
+            <div className="flex flex-col items-center justify-center flex-shrink-0 w-32">
+              <div className="text-7xl mb-3">🎭</div>
+              <div className="text-center">
                 <div className="text-xl font-bold text-white">Uso Misto</div>
-                <p className="text-sm text-slate-400">Você usa vários estilos igualmente</p>
-                <span className="text-base font-semibold text-slate-300 mt-1 inline-block">
-                  {totalCount} {totalCount === 1 ? 'formato' : 'formatos'}
-                </span>
+                <p className="text-sm text-slate-400">Vários estilos</p>
+                <div className="mt-2">
+                  <span className="text-base font-semibold text-slate-300">
+                    {totalCount} {totalCount === 1 ? 'formato' : 'formatos'}
+                  </span>
+                </div>
               </div>
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {styleStats.map((stat) => {
-                  const style = styleConfig[stat.style_id as keyof typeof styleConfig];
-                  if (!style) return null;
+            <div className="flex-1 space-y-2.5">
+              {styleStats.map((stat) => {
+                const style = styleConfig[stat.style_id as keyof typeof styleConfig];
+                if (!style) return null;
 
-                  return (
-                    <div key={stat.style_id} className="space-y-1">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-slate-300 font-medium">{style.emoji} {style.name}</span>
-                        <span className="text-slate-400">{stat.count}</span>
-                      </div>
-                      <Progress value={stat.percentage} max={100} className="h-1.5" />
-                      <div className="text-xs text-slate-500">{stat.percentage.toFixed(0)}%</div>
+                return (
+                  <div key={stat.style_id} className="space-y-1">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-slate-300 font-medium">{style.emoji} {style.name}</span>
+                      <span className="text-slate-400">{stat.count} <span className="text-slate-500">({stat.percentage.toFixed(0)}%)</span></span>
                     </div>
-                  );
-                })}
-              </div>
+                    <Progress value={stat.percentage} max={100} className="h-1.5" />
+                  </div>
+                );
+              })}
             </div>
           </div>
         </CardContent>
@@ -218,41 +219,39 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
         </div>
 
         <div className="flex items-start gap-6">
-          <Tooltip content={`${config.name} - ${config.subtitle}`} side="top">
-            <div className="text-6xl cursor-help flex-shrink-0">{config.emoji}</div>
-          </Tooltip>
-
-          <div className="flex-1 space-y-3">
-            <div>
+          <div className="flex flex-col items-center justify-center flex-shrink-0 w-32">
+            <Tooltip content={`${config.name} - ${config.subtitle}`} side="top">
+              <div className="text-7xl cursor-help mb-3">{config.emoji}</div>
+            </Tooltip>
+            <div className="text-center">
               <div className="text-xl font-bold text-white">{config.name}</div>
               <p className="text-sm text-slate-400">{config.subtitle}</p>
-              <div className="mt-1">
+              <div className="mt-2">
                 <span className="text-base font-semibold text-slate-300">
                   {favoriteStats?.count} {favoriteStats?.count === 1 ? 'vez' : 'vezes'}
                 </span>
-                <span className="text-sm text-slate-500 ml-2">
-                  ({favoriteStats?.percentage.toFixed(0)}%)
-                </span>
+                <div className="text-sm text-slate-500">
+                  {favoriteStats?.percentage.toFixed(0)}%
+                </div>
               </div>
             </div>
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              {styleStats.map((stat) => {
-                const style = styleConfig[stat.style_id as keyof typeof styleConfig];
-                if (!style) return null;
+          <div className="flex-1 space-y-2.5">
+            {styleStats.map((stat) => {
+              const style = styleConfig[stat.style_id as keyof typeof styleConfig];
+              if (!style) return null;
 
-                return (
-                  <div key={stat.style_id} className="space-y-1">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-slate-300 font-medium">{style.emoji} {style.name}</span>
-                      <span className="text-slate-400">{stat.count}</span>
-                    </div>
-                    <Progress value={stat.percentage} max={100} className="h-1.5" />
-                    <div className="text-xs text-slate-500">{stat.percentage.toFixed(0)}%</div>
+              return (
+                <div key={stat.style_id} className="space-y-1">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-slate-300 font-medium">{style.emoji} {style.name}</span>
+                    <span className="text-slate-400">{stat.count} <span className="text-slate-500">({stat.percentage.toFixed(0)}%)</span></span>
                   </div>
-                );
-              })}
-            </div>
+                  <Progress value={stat.percentage} max={100} className="h-1.5" />
+                </div>
+              );
+            })}
           </div>
         </div>
       </CardContent>
