@@ -178,105 +178,71 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
     ];
 
     return (
-      <Card className="relative overflow-hidden min-h-[600px]">
-        <CardContent className="p-0 h-full">
-          <div className="relative h-full min-h-[600px]">
-            <div className="absolute inset-0 blur-[8px] opacity-50 pointer-events-none p-6">
-              <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={fakeData}>
-                    <defs>
-                      <linearGradient id="fakeGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                        <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.05}/>
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
-                    <XAxis dataKey="day" stroke="#64748b" fontSize={12} />
-                    <YAxis stroke="#64748b" fontSize={12} />
-                    <Area
-                      type="monotone"
-                      dataKey="count"
-                      stroke="#10b981"
-                      strokeWidth={3}
-                      fill="url(#fakeGradient)"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="mt-4 grid grid-cols-2 gap-3">
-                <div className="bg-slate-800/50 rounded-lg p-3">
-                  <p className="text-xs text-slate-400">Total</p>
-                  <p className="text-2xl font-bold text-white">20</p>
+      <Card className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 border-slate-700/50">
+        <CardContent className="p-6">
+          <div className="space-y-6">
+            <div className="relative">
+              <div className="absolute -top-2 -right-2 w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-full blur-2xl"></div>
+              <div className="absolute -bottom-2 -left-2 w-20 h-20 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-2xl"></div>
+
+              <div className="relative backdrop-blur-sm bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-lg border border-emerald-500/30">
+                    <Lock className="w-5 h-5 text-emerald-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-white">Análises Avançadas</h3>
+                    <p className="text-xs text-slate-400">Recursos exclusivos Pro</p>
+                  </div>
                 </div>
-                <div className="bg-slate-800/50 rounded-lg p-3">
-                  <p className="text-xs text-slate-400">Média/dia</p>
-                  <p className="text-2xl font-bold text-white">2.9</p>
+
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 p-2.5 bg-slate-800/50 rounded-lg border border-slate-700/50 hover:border-emerald-500/30 transition-colors">
+                    <BarChart3 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                    <span className="text-sm text-slate-200">Gráfico de uso diário</span>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-2.5 bg-slate-800/50 rounded-lg border border-slate-700/50 hover:border-orange-500/30 transition-colors">
+                    <PieChartIcon className="w-4 h-4 text-orange-400 flex-shrink-0" />
+                    <span className="text-sm text-slate-200">Distribuição por estilo</span>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-2.5 bg-slate-800/50 rounded-lg border border-slate-700/50 hover:border-blue-500/30 transition-colors">
+                    <Grid3x3 className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                    <span className="text-sm text-slate-200">Mapa de atividade</span>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-2.5 bg-slate-800/50 rounded-lg border border-slate-700/50 hover:border-purple-500/30 transition-colors">
+                    <TrendingUp className="w-4 h-4 text-purple-400 flex-shrink-0" />
+                    <span className="text-sm text-slate-200">Insights inteligentes</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-10">
-              <div className="text-center px-4 py-6 max-w-xs">
-                <div className="mb-4 inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
-                  <Lock className="w-7 h-7 text-purple-400" />
-                </div>
+            <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 p-[2px]">
+              <Button
+                onClick={() => setLocation('/pricing')}
+                className="w-full bg-slate-900 hover:bg-slate-800 text-white border-0 rounded-xl font-semibold transition-all"
+                size="lg"
+              >
+                <Lock className="w-4 h-4 mr-2" />
+                Desbloquear Análises
+              </Button>
+            </div>
 
-                <h3 className="text-xl font-bold text-white mb-2">
-                  Análises Avançadas
-                </h3>
-                <p className="text-slate-400 text-xs mb-5">
-                  Desbloqueie insights poderosos sobre seu uso
-                </p>
-
-                <div className="space-y-2.5 mb-5 text-left">
-                  <div className="flex items-start gap-2">
-                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center mt-0.5">
-                      <BarChart3 className="w-2.5 h-2.5 text-emerald-400" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-xs text-white font-medium leading-tight">Gráfico de uso diário</p>
-                      <p className="text-[10px] text-slate-400 leading-tight">Acompanhe sua produtividade</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2">
-                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-orange-500/20 to-red-500/20 flex items-center justify-center mt-0.5">
-                      <PieChartIcon className="w-2.5 h-2.5 text-orange-400" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-xs text-white font-medium leading-tight">Distribuição por estilo</p>
-                      <p className="text-[10px] text-slate-400 leading-tight">Descubra seu estilo favorito</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2">
-                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 flex items-center justify-center mt-0.5">
-                      <Grid3x3 className="w-2.5 h-2.5 text-blue-400" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-xs text-white font-medium leading-tight">Mapa de atividade</p>
-                      <p className="text-[10px] text-slate-400 leading-tight">12 semanas de histórico visual</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2">
-                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mt-0.5">
-                      <TrendingUp className="w-2.5 h-2.5 text-purple-400" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-xs text-white font-medium leading-tight">Insights inteligentes</p>
-                      <p className="text-[10px] text-slate-400 leading-tight">Recomendações personalizadas</p>
-                    </div>
-                  </div>
-                </div>
-
-                <Button
-                  onClick={() => setLocation('/pricing')}
-                  className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0 shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all text-sm py-2"
-                >
-                  Upgrade para Pro
-                </Button>
+            <div className="grid grid-cols-3 gap-2 text-center">
+              <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700/50">
+                <BarChart3 className="w-4 h-4 text-emerald-400 mx-auto mb-1" />
+                <p className="text-xs text-slate-400">Gráficos</p>
+              </div>
+              <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700/50">
+                <Grid3x3 className="w-4 h-4 text-blue-400 mx-auto mb-1" />
+                <p className="text-xs text-slate-400">Heatmap</p>
+              </div>
+              <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700/50">
+                <TrendingUp className="w-4 h-4 text-purple-400 mx-auto mb-1" />
+                <p className="text-xs text-slate-400">Insights</p>
               </div>
             </div>
           </div>
