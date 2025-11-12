@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from './ui/Card';
 import { Skeleton } from './ui/Skeleton';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { supabase } from '../lib/supabase';
 import { Palette } from 'lucide-react';
 
@@ -33,24 +32,6 @@ const STYLE_ICONS = {
   casual: '😊',
   sales: '🔥',
   announcement: '📢',
-};
-
-const CustomTooltip = ({ active, payload }: any) => {
-  if (active && payload && payload.length) {
-    const data = payload[0];
-    return (
-      <div className="bg-slate-900/95 backdrop-blur-sm border border-slate-700 rounded-lg px-4 py-3 shadow-xl">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-lg">{data.payload.icon}</span>
-          <p className="text-sm font-semibold text-white">{data.name}</p>
-        </div>
-        <p className="text-xs text-slate-400">
-          {data.value} formatações ({((data.value / data.payload.total) * 100).toFixed(1)}%)
-        </p>
-      </div>
-    );
-  }
-  return null;
 };
 
 export function StyleDistributionChart({ userId, isPro }: StyleDistributionProps) {
@@ -102,7 +83,6 @@ export function StyleDistributionChart({ userId, isPro }: StyleDistributionProps
           value: count,
           color: STYLE_COLORS[styleId as keyof typeof STYLE_COLORS],
           icon: STYLE_ICONS[styleId as keyof typeof STYLE_ICONS],
-          total,
         }))
         .filter((item) => item.value > 0);
 
@@ -125,8 +105,23 @@ export function StyleDistributionChart({ userId, isPro }: StyleDistributionProps
           <CardTitle>Distribuição por Estilo</CardTitle>
           <CardDescription>Últimos 30 dias</CardDescription>
         </CardHeader>
-        <CardContent>
-          <Skeleton className="h-64 w-full" />
+        <CardContent className="flex flex-col h-full gap-4">
+          <div className="flex flex-col gap-3 flex-1">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div key={index} className="flex flex-col gap-2">
+                <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-2">
+                    <Skeleton className="h-6 w-6 rounded-full" />
+                    <Skeleton className="h-4 w-20" />
+                  </div>
+                  <Skeleton className="h-4 w-12" />
+                </div>
+                <div className="h-2 rounded-full bg-slate-800/60 overflow-hidden">
+                  <Skeleton className="h-full w-2/3" />
+                </div>
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
     );
@@ -142,8 +137,8 @@ export function StyleDistributionChart({ userId, isPro }: StyleDistributionProps
           </CardTitle>
           <CardDescription>Últimos 30 dias</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-col items-center justify-center py-8 text-center">
+        <CardContent className="flex flex-col h-full gap-4">
+          <div className="flex flex-col flex-1 items-center justify-center text-center gap-3">
             <div className="text-5xl mb-3 opacity-50">📊</div>
             <p className="text-slate-400 text-sm">
               Nenhuma formatação nos últimos 30 dias
@@ -169,48 +164,37 @@ export function StyleDistributionChart({ userId, isPro }: StyleDistributionProps
           Análise dos últimos 30 dias
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="h-44">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={styleData}
-                cx="50%"
-                cy="50%"
-                innerRadius={45}
-                outerRadius={70}
-                paddingAngle={5}
-                dataKey="value"
-                animationDuration={800}
-              >
-                {styleData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip content={<CustomTooltip />} />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="space-y-2">
+      <CardContent className="flex flex-col h-full gap-4">
+        <div className="flex flex-col gap-3 flex-1">
           {styleData.map((style) => {
             const percentage = (style.value / totalFormats) * 100;
             return (
-              <div key={style.name} className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">{style.icon}</span>
-                  <span className="text-slate-400">{style.name}</span>
+              <div key={style.name} className="flex flex-col gap-2">
+                <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">{style.icon}</span>
+                    <span className="text-slate-400">{style.name}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-white font-semibold">{style.value}</span>
+                    <span className="text-slate-500 text-xs">({percentage.toFixed(0)}%)</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-white font-semibold">{style.value}</span>
-                  <span className="text-slate-500 text-xs">({percentage.toFixed(0)}%)</span>
+                <div className="h-2 rounded-full bg-slate-800/60 overflow-hidden">
+                  <div
+                    className="h-full rounded-full"
+                    style={{
+                      width: `${percentage}%`,
+                      backgroundColor: style.color,
+                    }}
+                  />
                 </div>
               </div>
             );
           })}
         </div>
 
-        <div className="bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/20 rounded-lg p-3 mt-4">
+        <div className="bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/20 rounded-lg p-3 mt-auto">
           <p className="text-xs text-slate-400 mb-1">Estilo favorito</p>
           <div className="flex items-center gap-2">
             <span className="text-2xl">{mostUsedStyle.icon}</span>
