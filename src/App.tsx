@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch, useLocation } from 'wouter';
 import { AuthProvider } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { useAuth } from './hooks/useAuth';
 import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -22,51 +23,26 @@ const protectedRoutes = ['/dashboard', '/format', '/history', '/settings', '/suc
 
 /**
  * Main App Component
- *
- * Estrutura principal da aplicação com roteamento e autenticação.
- *
- * Rotas:
- * - / : Home (pública)
- * - /auth : Autenticação (pública)
- * - /pricing : Página de preços (pública)
- * - /dashboard : Dashboard do usuário (protegida)
- * - /format : Página de formatação (protegida)
- * - /history : Histórico de formatações (protegida)
- * - /settings : Configurações (protegida)
- * - /admin/prompts : Gerenciamento de prompts (protegida - admin only)
  */
 function AppContent() {
   const [location] = useLocation();
   const { user } = useAuth();
   const isProtectedRoute = protectedRoutes.includes(location);
 
-  // Não mostrar Header se:
-  // 1. É uma rota protegida (usa DashboardLayout)
-  // 2. É a página de pricing e o usuário está logado (usa DashboardLayout)
   const shouldShowHeader = !isProtectedRoute && !(location === '/pricing' && user);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       {shouldShowHeader && <Header />}
       <ExtensionBadgeDetector />
 
         <Switch>
-          {/* Rota pública - Home */}
           <Route path="/" component={Home} />
-
-          {/* Rota pública - Autenticação */}
           <Route path="/auth" component={Auth} />
-
-          {/* Rota pública - Preços */}
           <Route path="/pricing" component={Pricing} />
-
-          {/* Rota pública - Payment Cancel */}
           <Route path="/cancel" component={Cancel} />
-
-          {/* Rota de teste - Stripe */}
           <Route path="/test-stripe" component={TestStripe} />
-
-          {/* Rotas protegidas */}
+          
           <Route path="/dashboard">
             <ProtectedRoute>
               <Dashboard />
@@ -97,7 +73,6 @@ function AppContent() {
             </ProtectedRoute>
           </Route>
 
-          {/* Rota admin - Gerenciamento de prompts */}
           <Route path="/admin/prompts">
             <ProtectedRoute>
               <AdminRoute>
@@ -106,13 +81,12 @@ function AppContent() {
             </ProtectedRoute>
           </Route>
 
-          {/* 404 - Rota não encontrada */}
           <Route>
             <div className="min-h-screen flex items-center justify-center">
               <div className="text-center">
-                <h1 className="text-6xl font-bold text-slate-700 mb-4">404</h1>
-                <p className="text-slate-400 mb-6">Página não encontrada</p>
-                <a href="/" className="text-emerald-400 hover:text-emerald-300 transition-colors">
+                <h1 className="text-6xl font-bold text-muted-foreground mb-4">404</h1>
+                <p className="text-muted-foreground mb-6">Página não encontrada</p>
+                <a href="/" className="text-primary hover:text-primary/80 transition-colors">
                   Voltar para o início
                 </a>
               </div>
@@ -125,9 +99,11 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

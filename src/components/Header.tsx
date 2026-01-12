@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link, useLocation } from 'wouter';
-import { Sparkles, User, History, Settings, LogOut, Coins, Zap } from 'lucide-react';
+import { Sparkles, User, History, Settings, LogOut, Coins, Zap, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { useTheme } from '../contexts/ThemeContext';
 import Avatar from './ui/Avatar';
 import Button from './ui/Button';
 import {
@@ -15,24 +16,12 @@ import {
 
 /**
  * Header Component
- *
- * Cabeçalho da aplicação com navegação e menu de usuário.
- *
- * Features:
- * - Logo com link para home
- * - Botão "Sign In" para usuários não autenticados
- * - Menu dropdown com avatar para usuários autenticados
- * - Badge de créditos
- * - Links de navegação
- * - Botão de logout
  */
 const Header: React.FC = () => {
   const { user, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [location, setLocation] = useLocation();
 
-  /**
-   * Handle Logout
-   */
   const handleSignOut = async () => {
     try {
       await signOut();
@@ -42,7 +31,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-lg border-b border-slate-800">
+    <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-lg border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -57,12 +46,21 @@ const Header: React.FC = () => {
             </a>
           </Link>
 
-          {/* Auth Section */}
-          <div className="flex items-center gap-4">
+          {/* Actions Section */}
+          <div className="flex items-center gap-2 sm:gap-4">
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+              title={theme === 'dark' ? 'Mudar para modo claro' : 'Mudar para modo escuro'}
+            >
+              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
+
             {!user ? (
               <>
                 <Link href="/pricing">
-                  <a className="text-slate-300 hover:text-emerald-400 transition-colors text-sm font-medium">
+                  <a className="hidden sm:block text-muted-foreground hover:text-primary transition-colors text-sm font-medium">
                     Preços
                   </a>
                 </Link>
@@ -74,42 +72,33 @@ const Header: React.FC = () => {
                 </Button>
               </>
             ) : (
-              /* Menu dropdown para usuários autenticados */
               <DropdownMenu>
                 <DropdownMenuTrigger>
                   <div className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer">
-                    {/* Badge de créditos */}
                     {user.plan === 'pro' || user.plan === 'enterprise' ? (
-                      <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-full group relative">
-                        <Zap className="w-4 h-4 text-emerald-400" />
-                        <span className="text-sm font-semibold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                      <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 border border-primary/20 rounded-full group relative">
+                        <Zap className="w-4 h-4 text-primary" />
+                        <span className="text-sm font-semibold text-primary">
                           Ilimitado
                         </span>
-                        <div className="absolute bottom-full right-0 mb-2 w-40 px-3 py-2 bg-slate-900 border border-slate-800 rounded-lg text-xs text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                          Plano Pro com formatação ilimitada
-                        </div>
                       </div>
                     ) : (
-                      <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-slate-700/50 border border-slate-600/50 rounded-full group relative">
+                      <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-muted border border-border rounded-full group relative">
                         <Coins className={`w-4 h-4 ${
-                          user.credits_remaining >= 15 ? 'text-green-400' :
-                          user.credits_remaining >= 6 ? 'text-amber-400' :
-                          'text-red-400'
+                          user.credits_remaining >= 15 ? 'text-green-500' :
+                          user.credits_remaining >= 6 ? 'text-amber-500' :
+                          'text-red-500'
                         }`} />
                         <span className={`text-sm font-semibold ${
-                          user.credits_remaining >= 15 ? 'text-green-400' :
-                          user.credits_remaining >= 6 ? 'text-amber-400' :
-                          'text-red-400'
+                          user.credits_remaining >= 15 ? 'text-green-500' :
+                          user.credits_remaining >= 6 ? 'text-amber-500' :
+                          'text-red-500'
                         }`}>
                           {user.credits_remaining}
                         </span>
-                        <div className="absolute bottom-full right-0 mb-2 w-64 px-3 py-2 bg-slate-900 border border-slate-800 rounded-lg text-xs text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                          {user.credits_remaining} créditos disponíveis de 30. Renovados mensalmente.
-                        </div>
                       </div>
                     )}
 
-                    {/* Avatar */}
                     <Avatar
                       src={user.avatar_url}
                       fallback={user.full_name || user.email}
@@ -119,48 +108,19 @@ const Header: React.FC = () => {
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent align="right">
-                  {/* Informações do usuário */}
                   <DropdownMenuLabel>
                     <div className="flex flex-col">
-                      <span className="text-slate-100 font-semibold text-sm normal-case">
+                      <span className="font-semibold text-sm normal-case">
                         {user.full_name || 'Usuário'}
                       </span>
-                      <span className="text-slate-500 text-xs normal-case">
+                      <span className="text-muted-foreground text-xs normal-case">
                         {user.email}
                       </span>
                     </div>
                   </DropdownMenuLabel>
 
-                  {/* Badge de créditos (mobile) */}
-                  <div className="md:hidden px-4 py-2">
-                    {user.plan === 'pro' || user.plan === 'enterprise' ? (
-                      <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-full w-fit">
-                        <Zap className="w-4 h-4 text-emerald-400" />
-                        <span className="text-sm font-semibold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                          Ilimitado
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-700/50 border border-slate-600/50 rounded-full w-fit">
-                        <Coins className={`w-4 h-4 ${
-                          user.credits_remaining >= 15 ? 'text-green-400' :
-                          user.credits_remaining >= 6 ? 'text-amber-400' :
-                          'text-red-400'
-                        }`} />
-                        <span className={`text-sm font-semibold ${
-                          user.credits_remaining >= 15 ? 'text-green-400' :
-                          user.credits_remaining >= 6 ? 'text-amber-400' :
-                          'text-red-400'
-                        }`}>
-                          {user.credits_remaining} créditos
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
                   <DropdownMenuSeparator />
 
-                  {/* Links de navegação */}
                   <DropdownMenuItem onClick={() => setLocation('/dashboard')}>
                     <div className="flex items-center gap-2">
                       <User className="w-4 h-4" />
@@ -184,9 +144,8 @@ const Header: React.FC = () => {
 
                   <DropdownMenuSeparator />
 
-                  {/* Botão de logout */}
                   <DropdownMenuItem onClick={handleSignOut}>
-                    <div className="flex items-center gap-2 text-red-400">
+                    <div className="flex items-center gap-2 text-destructive">
                       <LogOut className="w-4 h-4" />
                       Sair
                     </div>
