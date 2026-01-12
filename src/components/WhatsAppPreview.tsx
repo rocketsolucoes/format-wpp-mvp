@@ -21,7 +21,6 @@ export function WhatsAppPreview({ text, isLoading = false }: WhatsAppPreviewProp
     const lines = input.split('\n');
     const renderedLines = lines.map((line, lineIndex) => {
       const parts: React.ReactNode[] = [];
-      let currentText = line;
       let keyCounter = 0;
 
       const formatPatterns = [
@@ -54,7 +53,7 @@ export function WhatsAppPreview({ text, isLoading = false }: WhatsAppPreviewProp
           render: (content: string, key: number) => (
             <code
               key={key}
-              className="bg-[#0c4a3d] px-1.5 py-0.5 rounded text-sm font-mono"
+              className="bg-black/10 dark:bg-[#0c4a3d] px-1.5 py-0.5 rounded text-sm font-mono"
             >
               {content}
             </code>
@@ -113,22 +112,20 @@ export function WhatsAppPreview({ text, isLoading = false }: WhatsAppPreviewProp
   });
 
   return (
-    <Card className="border-slate-700 overflow-hidden">
+    <Card className="border-border bg-card overflow-hidden transition-colors duration-300">
       <CardContent className="p-3 sm:p-4">
         <div className="mx-auto" style={{ maxWidth: '420px' }}>
           <div
-            className="relative bg-gradient-to-b from-slate-900 to-slate-800 rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl overflow-hidden"
+            className="relative bg-slate-100 dark:bg-slate-900 rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl overflow-hidden border-[12px] border-slate-200 dark:border-slate-900"
             style={{ aspectRatio: '9/16' }}
           >
-            <div className="absolute inset-0 border-[12px] border-slate-900 rounded-[2.5rem] pointer-events-none"></div>
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-5 bg-slate-200 dark:bg-slate-900 rounded-b-2xl z-10"></div>
 
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-5 bg-card rounded-b-2xl z-10"></div>
-
-            <div className="relative h-full flex flex-col bg-[#0a1014]">
-              <div className="bg-[#075e54] px-3 py-2.5 pt-6 flex items-center justify-between shadow-md">
+            <div className="relative h-full flex flex-col bg-[#efeae2] dark:bg-[#0a1014] transition-colors duration-300">
+              <div className="bg-[#075e54] dark:bg-[#202c33] px-3 py-2.5 pt-6 flex items-center justify-between shadow-md">
                 <div className="flex items-center gap-2 flex-1 min-w-0">
                   <ArrowLeft className="w-4 h-4 text-white flex-shrink-0" />
-                  <div className="w-7 h-7 rounded-full bg-slate-500 flex items-center justify-center text-xs flex-shrink-0">
+                  <div className="w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-500 flex items-center justify-center text-xs flex-shrink-0">
                     👤
                   </div>
                   <div className="flex-1 min-w-0">
@@ -146,15 +143,11 @@ export function WhatsAppPreview({ text, isLoading = false }: WhatsAppPreviewProp
               </div>
 
               <div
-                className="flex-1 overflow-y-auto p-4"
-                style={{
-                  backgroundImage:
-                    'repeating-linear-gradient(45deg, #0d1418 0px, #0d1418 10px, #0a1014 10px, #0a1014 20px)',
-                }}
+                className="flex-1 overflow-y-auto p-4 bg-[url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')] bg-repeat bg-[length:400px] opacity-90 dark:opacity-100"
               >
                 {isLoading ? (
                   <div className="flex justify-end">
-                    <div className="bg-[#005c4b] rounded-lg rounded-br-sm p-3 max-w-[80%] shadow-md">
+                    <div className="bg-[#dcf8c6] dark:bg-[#005c4b] rounded-lg rounded-br-sm p-3 max-w-[80%] shadow-md">
                       <Skeleton className="h-4 w-48 mb-2" />
                       <Skeleton className="h-4 w-32 mb-2" />
                       <Skeleton className="h-4 w-40" />
@@ -162,11 +155,11 @@ export function WhatsAppPreview({ text, isLoading = false }: WhatsAppPreviewProp
                   </div>
                 ) : text ? (
                   <div className="flex justify-end animate-in fade-in slide-in-from-bottom-2 duration-300">
-                    <div className="relative bg-[#005c4b] rounded-lg rounded-br-sm p-3 max-w-[85%] shadow-md">
-                      <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[8px] border-l-transparent border-t-[8px] border-t-[#005c4b] transform translate-x-[8px]"></div>
+                    <div className="relative bg-[#dcf8c6] dark:bg-[#005c4b] rounded-lg rounded-br-sm p-3 max-w-[85%] shadow-md">
+                      <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[8px] border-l-transparent border-t-[8px] border-t-[#dcf8c6] dark:border-t-[#005c4b] transform translate-x-[8px]"></div>
 
                       <div
-                        className="text-white text-sm mb-1 break-words"
+                        className="text-slate-800 dark:text-white text-sm mb-1 break-words"
                         style={{
                           fontFamily: 'system-ui, -apple-system, sans-serif',
                           lineHeight: '1.4',
@@ -178,14 +171,14 @@ export function WhatsAppPreview({ text, isLoading = false }: WhatsAppPreviewProp
                       {shouldTruncate && (
                         <button
                           onClick={() => setShowFullText(true)}
-                          className="text-emerald-200 text-xs underline hover:text-emerald-100 transition-colors"
+                          className="text-emerald-700 dark:text-emerald-200 text-xs underline hover:text-emerald-800 dark:hover:text-emerald-100 transition-colors"
                         >
                           Ver Completo
                         </button>
                       )}
 
                       <div className="flex items-center justify-end gap-1 mt-1">
-                        <span className="text-[#8bc1b3] text-xs">
+                        <span className="text-slate-500 dark:text-[#8bc1b3] text-[10px]">
                           {currentTime}
                         </span>
                         <div className="flex">
@@ -197,7 +190,7 @@ export function WhatsAppPreview({ text, isLoading = false }: WhatsAppPreviewProp
                   </div>
                 ) : (
                   <div className="flex items-center justify-center h-full">
-                    <div className="text-slate-500 text-xs text-center px-8">
+                    <div className="bg-white/80 dark:bg-black/20 backdrop-blur-sm rounded-full px-4 py-1.5 text-slate-500 dark:text-slate-400 text-[10px] text-center">
                       Sua mensagem formatada aparecerá aqui
                     </div>
                   </div>
@@ -207,7 +200,7 @@ export function WhatsAppPreview({ text, isLoading = false }: WhatsAppPreviewProp
           </div>
 
           <div className="flex justify-center mt-3">
-            <div className="w-32 h-1 bg-slate-700 rounded-full"></div>
+            <div className="w-32 h-1 bg-slate-300 dark:bg-slate-700 rounded-full"></div>
           </div>
         </div>
       </CardContent>
