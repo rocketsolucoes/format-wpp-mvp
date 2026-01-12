@@ -112,7 +112,7 @@ export function DashboardSidebar({
             {(!collapsed || isMobile) ? (
               <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-10" />
             ) : (
-              <img src="/favicon.png" alt="ZapStyle" className="h-12 w-12 rounded-lg object-cover" />
+              <img src="/favicon.png" alt="ZapStyle" className="h-12 w-12 rounded-xl object-contain" />
             )}
           </a>
         </Link>
