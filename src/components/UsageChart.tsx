@@ -75,7 +75,7 @@ const CustomDot = (props: any) => {
 export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
   const [, setLocation] = useLocation();
   const [weeklyData, setWeeklyData] = useState<WeeklyData[]>([]);
-  const [loadingWeekly, setLoadingWeekly] = useState(true);
+  const [loadingWeekly, setLoadingWeekly] = useState(false);
 
   useEffect(() => {
     if (!isPro && userId) {
@@ -86,7 +86,8 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
   const fetchWeeklyData = async () => {
     if (!userId) return;
 
-    setLoadingWeekly(true);
+    // Não mostra loading para evitar flash visual
+    // setLoadingWeekly(true);
     try {
       const now = new Date();
       const sevenDaysAgo = new Date(now);
@@ -152,21 +153,9 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
     }
   };
 
+  // Para usuários free, mostra diretamente o card de Análises Avançadas (sem loading)
+  // Isso evita o flash visual entre "Análise de Uso" e "Análises Avançadas"
   if (!isPro) {
-    if (loadingWeekly) {
-      return (
-        <Card>
-          <CardHeader>
-            <CardTitle>📊 Análise de Uso</CardTitle>
-            <CardDescription>Últimos 7 dias</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="h-48 w-full" />
-          </CardContent>
-        </Card>
-      );
-    }
-
     const fakeData = [
       { day: 'Seg', count: 2 },
       { day: 'Ter', count: 3 },
