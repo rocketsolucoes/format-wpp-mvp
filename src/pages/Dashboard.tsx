@@ -42,7 +42,7 @@ interface ChartDataPoint {
 }
 
 const Dashboard: React.FC = () => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [, setLocation] = useLocation();
   const [stats, setStats] = useState<StatsData | null>(null);
   const [recentItems, setRecentItems] = useState<FormattingItem[]>([]);
@@ -229,7 +229,8 @@ const Dashboard: React.FC = () => {
           <DashboardStats stats={stats} loading={loading} user={user} />
 
           <div className="space-y-6">
-            {user?.plan !== 'free' && (
+            {/* Só renderiza os gráficos após o auth carregar para evitar flash visual */}
+            {!authLoading && user?.plan !== 'free' && (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <UsageChart
                   data={chartData}
@@ -246,10 +247,10 @@ const Dashboard: React.FC = () => {
 
             <div
               className={`grid grid-cols-1 gap-6 ${
-                user?.plan === 'free' ? 'lg:grid-cols-3' : ''
+                !authLoading && user?.plan === 'free' ? 'lg:grid-cols-3' : ''
               }`}
             >
-              <div className={user?.plan === 'free' ? 'lg:col-span-2' : ''}>
+              <div className={!authLoading && user?.plan === 'free' ? 'lg:col-span-2' : ''}>
                 <RecentFormatting
                   items={recentItems}
                   loading={loading}
@@ -257,7 +258,7 @@ const Dashboard: React.FC = () => {
                   totalCount={totalHistoryCount}
                 />
               </div>
-              {user?.plan === 'free' && (
+              {!authLoading && user?.plan === 'free' && (
                 <div className="space-y-6">
                   <UsageChart
                     data={chartData}
