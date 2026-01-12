@@ -132,12 +132,11 @@ const PricingSection: React.FC = () => {
                   <div className={`p-2 rounded-lg ${plan.highlighted ? 'bg-primary/20' : 'bg-muted'}`}>
                     <Icon className={`w-5 h-5 ${plan.highlighted ? 'text-primary' : 'text-muted-foreground'}`} />
                   </div>
-                  <Badge 
-                    variant={plan.badge.variant}
-                    className={plan.highlighted ? 'bg-primary text-primary-foreground font-bold border-none' : ''}
-                  >
-                    {plan.badge.text}
-                  </Badge>
+                  {!plan.highlighted && plan.badge && (
+                    <Badge variant={plan.badge.variant}>
+                      {plan.badge.text}
+                    </Badge>
+                  )}
                 </div>
                 <CardTitle className="text-2xl">{plan.name}</CardTitle>
                 <CardDescription>{plan.description}</CardDescription>
