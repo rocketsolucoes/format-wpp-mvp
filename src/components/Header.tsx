@@ -37,7 +37,7 @@ const Header: React.FC = () => {
           {/* Logo */}
           <Link href="/">
             <a className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
-              <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-8" />
+              <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-10" />
             </a>
           </Link>
 
