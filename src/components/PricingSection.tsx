@@ -172,7 +172,15 @@ const PricingSection: React.FC = () => {
                 <Button
                   variant={plan.ctaVariant}
                   className="w-full h-12 font-bold"
-                  onClick={() => setLocation('/auth')}
+                  onClick={() => {
+                    if (plan.name === 'Gratuito') {
+                      setLocation('/auth?tab=signup');
+                    } else if (plan.name === 'Enterprise') {
+                      window.open('https://wa.me/5511999999999?text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20o%20plano%20Enterprise', '_blank');
+                    } else {
+                      setLocation('/auth');
+                    }
+                  }}
                 >
                   {plan.cta}
                 </Button>
