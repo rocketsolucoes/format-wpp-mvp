@@ -150,6 +150,15 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
     );
   }
 
+  // Organizar dados por dia da semana (0-6) e semana
+  const dataByWeekday: Record<number, DayActivity[]> = {
+    0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: []
+  };
+
+  heatmapData.forEach(day => {
+    dataByWeekday[day.weekday].push(day);
+  });
+
   return (
     <Card>
       <CardHeader>
@@ -163,25 +172,30 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-1">
-          <div className="flex gap-1">
-            <div className="w-8"></div>
-            {Array.from({ length: weeks }).map((_, weekIndex) => (
-              <div key={weekIndex} className="flex flex-col gap-1">
-                {[0, 1, 2, 3, 4, 5, 6].map((dayIndex) => {
-                  const dataIndex = weekIndex * 7 + dayIndex;
-                  const dayData = heatmapData[dataIndex];
+          {/* Renderizar cada dia da semana como uma linha horizontal */}
+          {[0, 1, 2, 3, 4, 5, 6].map((weekdayIndex) => (
+            <div key={weekdayIndex} className="flex items-center gap-1">
+              {/* Label do dia da semana */}
+              <div className="w-8 text-xs text-muted-foreground text-right pr-2">
+                {WEEKDAYS[weekdayIndex]}
+              </div>
+              
+              {/* Células de atividade para este dia da semana */}
+              <div className="flex gap-1">
+                {Array.from({ length: weeks }).map((_, weekIndex) => {
+                  const dayData = dataByWeekday[weekdayIndex][weekIndex];
 
                   if (!dayData) {
-                    return <div key={dayIndex} className="w-3 h-3" />;
+                    return <div key={weekIndex} className="w-3 h-3" />;
                   }
 
                   return (
                     <div
-                      key={dayIndex}
+                      key={weekIndex}
                       className={`w-3 h-3 rounded-sm ${getIntensityColor(dayData.count)} hover:ring-2 hover:ring-emerald-400 transition-all cursor-pointer group relative`}
                       title={`${new Date(dayData.date).toLocaleDateString('pt-BR')}: ${dayData.count} formatações`}
                     >
-                      <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 bg-card text-foreground text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+                      <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 bg-card border border-border text-foreground text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10 shadow-lg">
                         {new Date(dayData.date).toLocaleDateString('pt-BR')}
                         <br />
                         {dayData.count} {dayData.count === 1 ? 'formatação' : 'formatações'}
@@ -190,16 +204,8 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
                   );
                 })}
               </div>
-            ))}
-          </div>
-          <div className="flex gap-1 text-xs text-slate-500">
-            <div className="w-8"></div>
-            {WEEKDAYS.map((day, index) => (
-              <div key={index} className="w-3 text-center" style={{ writingMode: 'vertical-rl', fontSize: '8px' }}>
-                {day}
-              </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
 
         <div className="flex items-center justify-between text-xs">
