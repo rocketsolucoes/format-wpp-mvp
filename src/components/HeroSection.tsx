@@ -41,18 +41,6 @@ const HeroSection: React.FC = () => {
           <span>Sem cartão de crédito</span>
         </div>
       </div>
-
-      <div className="flex flex-wrap justify-center gap-8 text-muted-foreground text-sm border-t border-border pt-12">
-        <div className="flex items-center gap-2">
-          <span className="font-bold text-foreground">Negrito & Itálico</span> Automáticos
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="font-bold text-foreground">IA</span> de Estilização
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="font-bold text-foreground">30</span> Créditos Grátis/Mês
-        </div>
-      </div>
     </section>
   );
 };
