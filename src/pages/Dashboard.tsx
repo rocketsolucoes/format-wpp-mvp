@@ -48,7 +48,7 @@ const Dashboard: React.FC = () => {
   const [recentItems, setRecentItems] = useState<FormattingItem[]>([]);
   const [totalHistoryCount, setTotalHistoryCount] = useState<number>(0);
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [comparisonModalOpen, setComparisonModalOpen] = useState(false);
   const [examplesModalOpen, setExamplesModalOpen] = useState(false);
@@ -57,7 +57,6 @@ const Dashboard: React.FC = () => {
 
   const fetchDashboardData = async () => {
     if (!user) return;
-    if (loading) return; // Evita múltiplas chamadas simultâneas
 
     setLoading(true);
     setError(null);
