@@ -83,21 +83,20 @@ const PricingSection: React.FC = () => {
           Escolha o plano ideal para o seu momento. Deixe a IA cuidar da estilização das suas mensagens enquanto você foca no que importa.
         </p>
         
-        <Tabs value={billingPeriod} onValueChange={(value) => setBillingPeriod(value as BillingPeriod)} className="inline-flex">
-          <TabsList className="bg-muted border border-border">
-            <TabsTrigger value="monthly">Mensal</TabsTrigger>
-            <TabsTrigger value="annual" className="gap-2">
-              Anual
-              <Badge variant="success" className="ml-1.5 text-xs font-bold px-2 py-0.5">-20%</Badge>
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
-        
-        {billingPeriod === 'annual' && (
-          <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/30 rounded-full text-green-600 dark:text-green-400 text-sm font-semibold">
-            🎉 Você está economizando 20% com o plano anual!
-          </div>
-        )}
+        <div className="flex flex-col items-center gap-3">
+          <Tabs value={billingPeriod} onValueChange={(value) => setBillingPeriod(value as BillingPeriod)} className="inline-flex">
+            <TabsList className="bg-muted border border-border">
+              <TabsTrigger value="monthly">Mensal</TabsTrigger>
+              <TabsTrigger value="annual">Anual</TabsTrigger>
+            </TabsList>
+          </Tabs>
+          
+          {billingPeriod === 'annual' && (
+            <Badge variant="success" className="text-sm font-bold px-4 py-1.5 bg-green-500 text-white border-none shadow-md">
+              🎉 Economize 20% com o plano anual!
+            </Badge>
+          )}
+        </div>
         
         {/* Garantia destacada */}
         <div className="mt-8 flex items-center justify-center gap-2 text-sm text-muted-foreground">
@@ -133,7 +132,12 @@ const PricingSection: React.FC = () => {
                   <div className={`p-2 rounded-lg ${plan.highlighted ? 'bg-primary/20' : 'bg-muted'}`}>
                     <Icon className={`w-5 h-5 ${plan.highlighted ? 'text-primary' : 'text-muted-foreground'}`} />
                   </div>
-                  <Badge variant={plan.badge.variant}>{plan.badge.text}</Badge>
+                  <Badge 
+                    variant={plan.badge.variant}
+                    className={plan.highlighted ? 'bg-primary text-primary-foreground font-bold border-none' : ''}
+                  >
+                    {plan.badge.text}
+                  </Badge>
                 </div>
                 <CardTitle className="text-2xl">{plan.name}</CardTitle>
                 <CardDescription>{plan.description}</CardDescription>
