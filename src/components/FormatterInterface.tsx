@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Sparkles, X, Copy, Lock } from 'lucide-react';
 import InputTextarea from './InputTextarea';
-import OutputTextarea from './OutputTextarea';
+import { WhatsAppPreview } from './WhatsAppPreview';
 import { toast } from './ui/Toaster';
 import { Progress } from './ui/Progress';
 import { formatText, FormatterError } from '../services/formatter';
@@ -109,26 +109,32 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
         clearInterval(progressInterval);
         setProgress(100);
         
-        // Formatação básica simulada
-        const simulatedFormatted = inputText
-          .split('\n')
-          .map(line => {
-            if (line.trim().length > 0) {
-              // Adiciona negrito em palavras-chave comuns
-              return line
-                .replace(/\b(importante|atenção|urgente|lembrete|aviso)\b/gi, '*$1*')
-                .replace(/\b(horário|data|local|endereço|reunião)\b/gi, '*$1*')
-                .replace(/\b(obrigatório|necessário|essencial)\b/gi, '*$1*');
-            }
-            return line;
-          })
-          .join('\n');
+        // Formatação melhorada com negritos aplicados
+        const lines = inputText.split('\n');
+        const formattedLines = lines.map(line => {
+          if (line.trim().length === 0) return line;
+          
+          // Aplica negritos em palavras-chave e padrões comuns
+          let formatted = line
+            // Palavras de ação/urgência
+            .replace(/\b(importante|atenção|urgente|lembrete|aviso|obrigatório|necessário|essencial)\b/gi, '*$1*')
+            // Informações chave
+            .replace(/\b(horário|data|local|endereço|reunião|evento|prazo)\b/gi, '*$1*')
+            // Números com contexto (ex: "10h", "R$ 50", "30%")
+            .replace(/\b(\d+[h:]?\d*|R\$\s*\d+|\\d+%)\b/g, '*$1*')
+            // Primeira palavra de cada linha (títulos)
+            .replace(/^([^\s:]+)(:)/g, '*$1*$2');
+          
+          return formatted;
+        });
+        
+        const simulatedFormatted = formattedLines.join('\n');
         
         setOutputText(simulatedFormatted);
         setIsFormatting(false);
         setProgress(0);
         
-        toast.success('Texto formatado! 🎉 Clique em Copiar para usar.', { duration: 3000 });
+        toast.success('Texto formatado! 🎉 Veja o resultado abaixo.', { duration: 3000 });
       }, 1500);
 
       return;
@@ -226,10 +232,16 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
             </div>
 
             <div className="space-y-2">
-              <OutputTextarea
-                value={outputText}
-                disabled={isFormatting}
-              />
+              {/* Preview do WhatsApp quando tem texto formatado */}
+              {outputText ? (
+                <WhatsAppPreview text={outputText} isLoading={isFormatting} />
+              ) : (
+                <div className="bg-card border border-border rounded-lg shadow-lg min-h-[400px] flex items-center justify-center">
+                  <p className="text-muted-foreground text-sm">
+                    Seu texto formatado aparecerá aqui no estilo WhatsApp...
+                  </p>
+                </div>
+              )}
               
               {/* Botão de Copiar - aparece quando tem texto formatado */}
               {outputText && !isFormatting && (
@@ -293,9 +305,9 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
         </div>
       </section>
 
-      {/* Modal de Cadastro */}
+      {/* Modal de Cadastro - Centralizado */}
       <Dialog open={showSignupModal} onOpenChange={setShowSignupModal}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <div className="flex justify-center mb-4">
               <div className="p-4 bg-primary/10 rounded-full">
