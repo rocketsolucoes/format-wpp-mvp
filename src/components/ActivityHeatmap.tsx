@@ -174,71 +174,77 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
           Padrão de uso nas últimas 4 semanas
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-1">
-          {/* Renderizar cada dia da semana como uma linha horizontal */}
-          {[0, 1, 2, 3, 4, 5, 6].map((weekdayIndex) => (
-            <div key={weekdayIndex} className="flex items-center gap-1">
-              {/* Label do dia da semana */}
-              <div className="w-8 text-xs text-muted-foreground text-right pr-2">
-                {WEEKDAYS[weekdayIndex]}
-              </div>
-              
-              {/* Células de atividade para este dia da semana */}
+      <CardContent>
+        {/* Container flex para gráfico e taxa de consistência lado a lado */}
+        <div className="flex gap-6 items-start">
+          {/* Gráfico de atividade */}
+          <div className="flex-1 space-y-3">
+            <div className="space-y-1">
+              {/* Renderizar cada dia da semana como uma linha horizontal */}
+              {[0, 1, 2, 3, 4, 5, 6].map((weekdayIndex) => (
+                <div key={weekdayIndex} className="flex items-center gap-1">
+                  {/* Label do dia da semana */}
+                  <div className="w-8 text-xs text-muted-foreground text-right pr-2">
+                    {WEEKDAYS[weekdayIndex]}
+                  </div>
+                  
+                  {/* Células de atividade para este dia da semana */}
+                  <div className="flex gap-1">
+                    {Array.from({ length: weeks }).map((_, weekIndex) => {
+                      const dayData = dataByWeekday[weekdayIndex][weekIndex];
+
+                      if (!dayData) {
+                        return <div key={weekIndex} className="w-3 h-3" />;
+                      }
+
+                      return (
+                        <div
+                          key={weekIndex}
+                          className={`w-3 h-3 rounded-sm ${getIntensityColor(dayData.count)} hover:ring-2 hover:ring-emerald-400 transition-all cursor-pointer group relative`}
+                          title={`${dayData.date.split('-').reverse().join('/')}: ${dayData.count} formatações`}
+                        >
+                          <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 bg-card border border-border text-foreground text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10 shadow-lg">
+                            {(() => {
+                              const [year, month, day] = dayData.date.split('-');
+                              return `${day}/${month}/${year}`;
+                            })()}
+                            <br />
+                            {dayData.count} {dayData.count === 1 ? 'formatação' : 'formatações'}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Legenda */}
+            <div className="flex items-center gap-2 text-xs pt-2">
+              <span className="text-muted-foreground">Menos</span>
               <div className="flex gap-1">
-                {Array.from({ length: weeks }).map((_, weekIndex) => {
-                  const dayData = dataByWeekday[weekdayIndex][weekIndex];
-
-                  if (!dayData) {
-                    return <div key={weekIndex} className="w-3 h-3" />;
-                  }
-
-                  return (
-                    <div
-                      key={weekIndex}
-                      className={`w-3 h-3 rounded-sm ${getIntensityColor(dayData.count)} hover:ring-2 hover:ring-emerald-400 transition-all cursor-pointer group relative`}
-                      title={`${dayData.date.split('-').reverse().join('/')}: ${dayData.count} formatações`}
-                    >
-                      <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 bg-card border border-border text-foreground text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10 shadow-lg">
-                        {(() => {
-                          const [year, month, day] = dayData.date.split('-');
-                          return `${day}/${month}/${year}`;
-                        })()}
-                        <br />
-                        {dayData.count} {dayData.count === 1 ? 'formatação' : 'formatações'}
-                      </div>
-                    </div>
-                  );
-                })}
+                <div className="w-3 h-3 rounded-sm bg-muted/50" />
+                <div className="w-3 h-3 rounded-sm bg-emerald-500/20" />
+                <div className="w-3 h-3 rounded-sm bg-emerald-500/40" />
+                <div className="w-3 h-3 rounded-sm bg-emerald-500/60" />
+                <div className="w-3 h-3 rounded-sm bg-emerald-500/80" />
               </div>
+              <span className="text-muted-foreground">Mais</span>
             </div>
-          ))}
-        </div>
+          </div>
 
-        <div className="flex items-center justify-between text-xs">
-          <div className="flex items-center gap-2">
-            <span className="text-muted-foreground">Menos</span>
-            <div className="flex gap-1">
-              <div className="w-3 h-3 rounded-sm bg-muted/50" />
-              <div className="w-3 h-3 rounded-sm bg-emerald-500/20" />
-              <div className="w-3 h-3 rounded-sm bg-emerald-500/40" />
-              <div className="w-3 h-3 rounded-sm bg-emerald-500/60" />
-              <div className="w-3 h-3 rounded-sm bg-emerald-500/80" />
+          {/* Taxa de consistência - ao lado direito */}
+          <div className="bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border border-cyan-500/20 rounded-lg p-4 min-w-[180px] flex flex-col justify-center">
+            <div className="flex items-center gap-2 mb-3">
+              <TrendingUp className="w-4 h-4 text-cyan-400" />
+              <p className="text-xs text-muted-foreground">Taxa de consistência</p>
             </div>
-            <span className="text-muted-foreground">Mais</span>
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border border-cyan-500/20 rounded-lg p-3">
-          <div className="flex items-center gap-2 mb-2">
-            <TrendingUp className="w-4 h-4 text-cyan-400" />
-            <p className="text-xs text-muted-foreground">Taxa de consistência</p>
-          </div>
-          <div className="flex items-baseline gap-2">
-            <p className="text-2xl font-bold text-foreground">{consistencyRate.toFixed(0)}%</p>
-            <p className="text-xs text-cyan-400">
-              {activeDays} de {totalDays} dias ativos
-            </p>
+            <div className="space-y-1">
+              <p className="text-3xl font-bold text-foreground">{consistencyRate.toFixed(0)}%</p>
+              <p className="text-xs text-cyan-400">
+                {activeDays} de {totalDays} dias ativos
+              </p>
+            </div>
           </div>
         </div>
       </CardContent>
