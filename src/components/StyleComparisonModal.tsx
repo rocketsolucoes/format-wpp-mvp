@@ -51,7 +51,7 @@ export function StyleComparisonModal({ open, onOpenChange }: StyleComparisonModa
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-5xl mx-auto">
+      <DialogContent className="max-w-6xl mx-auto">
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="text-lg">Comparação de Estilos</DialogTitle>
