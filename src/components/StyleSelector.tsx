@@ -34,7 +34,7 @@ const styles: Style[] = [
     name: 'Anúncio Importante',
     description: 'Avisos claros e autoritários',
     icon: Megaphone,
-    color: 'red',
+    color: 'blue',
     isPro: true,
   },
 ];
@@ -59,11 +59,11 @@ const colorClasses = {
     border: 'border-orange-500',
     shadow: 'shadow-orange-500/50',
   },
-  red: {
-    icon: 'text-red-500',
-    bg: 'bg-red-500/10',
-    border: 'border-red-500',
-    shadow: 'shadow-red-500/50',
+  blue: {
+    icon: 'text-blue-500',
+    bg: 'bg-blue-500/10',
+    border: 'border-blue-500',
+    shadow: 'shadow-blue-500/50',
   },
 };
 
