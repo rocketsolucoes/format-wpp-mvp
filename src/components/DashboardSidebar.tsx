@@ -107,8 +107,7 @@ export function DashboardSidebar({
     <div className="flex flex-col h-full bg-card border-r border-border transition-colors duration-300">
       {/* Header da Sidebar */}
       <div className="p-4 border-b border-border flex items-center justify-between gap-2">
-        <Link href="/">
-          <a className={`hover:opacity-80 transition-opacity cursor-pointer ${(!collapsed || isMobile) ? 'flex items-center gap-2' : 'flex justify-center w-full'}">
+        <Link href="/">          <a className={`hover:opacity-80 transition-opacity cursor-pointer ${!collapsed || isMobile ? 'flex items-center gap-2' : 'flex justify-center w-full'}`}>
             {(!collapsed || isMobile) ? (
               <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-12" />
             ) : (
@@ -137,7 +136,7 @@ export function DashboardSidebar({
 
       {/* Perfil do Usuário */}
       {user && (
-        <div className={`p-3 border-b border-border ${(collapsed && !isMobile) ? 'flex justify-center' : ''}`}>
+        <div className={`p-3 border-b border-border ${collapsed && !isMobile ? 'flex justify-center' : ''}`}>
           {(collapsed && !isMobile) ? (
             <div className="relative group">
               <Avatar

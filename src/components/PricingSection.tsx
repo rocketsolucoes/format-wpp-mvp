@@ -39,7 +39,7 @@ const PricingSection: React.FC = () => {
     },
     {
       name: 'Pro',
-      badge: { text: 'Mais Popular', variant: 'default' as const },
+      badge: { text: 'Recomendado', variant: 'default' as const },
       price: proPrice,
       period: billingPeriod === 'monthly' ? 'mês' : 'mês (anual)',
       description: 'Melhor para profissionais e vendedores',
@@ -88,10 +88,16 @@ const PricingSection: React.FC = () => {
             <TabsTrigger value="monthly">Mensal</TabsTrigger>
             <TabsTrigger value="annual" className="gap-2">
               Anual
-              <Badge variant="success" className="ml-1 text-[10px]">Economize 20%</Badge>
+              <Badge variant="success" className="ml-1.5 text-xs font-bold px-2 py-0.5">-20%</Badge>
             </TabsTrigger>
           </TabsList>
         </Tabs>
+        
+        {billingPeriod === 'annual' && (
+          <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/30 rounded-full text-green-600 dark:text-green-400 text-sm font-semibold">
+            🎉 Você está economizando 20% com o plano anual!
+          </div>
+        )}
         
         {/* Garantia destacada */}
         <div className="mt-8 flex items-center justify-center gap-2 text-sm text-muted-foreground">
@@ -116,8 +122,8 @@ const PricingSection: React.FC = () => {
             >
               {plan.highlighted && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <Badge className="bg-primary text-primary-foreground border-none px-3 py-1">
-                    RECOMENDADO
+                  <Badge className="bg-primary text-primary-foreground border-none px-4 py-1.5 text-sm font-bold shadow-lg">
+                    ⭐ RECOMENDADO
                   </Badge>
                 </div>
               )}

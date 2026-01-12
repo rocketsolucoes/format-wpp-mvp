@@ -65,11 +65,15 @@ const Header: React.FC = () => {
 
             {!user ? (
               <>
-                <Link href="/pricing">
-                  <a className="hidden sm:block text-muted-foreground hover:text-primary transition-colors text-sm font-medium">
-                    Preços
-                  </a>
-                </Link>
+                <a href="/#features" className="hidden md:block text-muted-foreground hover:text-primary transition-colors text-sm font-medium">
+                  Funcionalidades
+                </a>
+                <a href="/#how-it-works" className="hidden md:block text-muted-foreground hover:text-primary transition-colors text-sm font-medium">
+                  Como Funciona
+                </a>
+                <a href="/pricing" className="hidden md:block text-muted-foreground hover:text-primary transition-colors text-sm font-medium">
+                  Planos
+                </a>
                 <Button
                   variant="primary"
                   onClick={() => setLocation('/auth')}

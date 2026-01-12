@@ -1,12 +1,12 @@
 import React from 'react';
 import { Sparkles, Users, CheckCircle } from 'lucide-react';
+import { useLocation } from 'wouter';
 
 const HeroSection: React.FC = () => {
-  const scrollToFormatter = () => {
-    const formatterSection = document.getElementById('formatter');
-    if (formatterSection) {
-      formatterSection.scrollIntoView({ behavior: 'smooth' });
-    }
+  const [, setLocation] = useLocation();
+  
+  const handleStartFree = () => {
+    setLocation('/auth?tab=signup');
   };
 
   return (
@@ -30,11 +30,11 @@ const HeroSection: React.FC = () => {
 
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
         <button
-          onClick={scrollToFormatter}
+          onClick={handleStartFree}
           className="w-full sm:w-auto px-10 py-5 bg-primary text-primary-foreground rounded-xl font-bold text-lg shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
         >
           <Sparkles className="w-5 h-5" />
-          Formatar Agora - É Grátis
+          Começar Grátis
         </button>
         <div className="flex items-center gap-2 text-muted-foreground text-sm">
           <CheckCircle className="w-4 h-4 text-primary" />

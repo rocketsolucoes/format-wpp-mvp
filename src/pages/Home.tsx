@@ -95,7 +95,7 @@ const Home: React.FC = () => {
       </div>
 
       {/* 9. Pricing */}
-      <div className="py-8">
+      <div id="pricing" className="py-8">
         <PricingSection />
       </div>
 

@@ -5,10 +5,16 @@ import { useLocation } from 'wouter';
 const CTASection: React.FC = () => {
   const [, setLocation] = useLocation();
 
-  const scrollToFormatter = () => {
-    const formatterSection = document.getElementById('formatter');
-    if (formatterSection) {
-      formatterSection.scrollIntoView({ behavior: 'smooth' });
+  const handleStartFree = () => {
+    setLocation('/auth?tab=signup');
+  };
+  
+  const scrollToPricing = () => {
+    const pricingSection = document.getElementById('pricing');
+    if (pricingSection) {
+      pricingSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      setLocation('/pricing');
     }
   };
 
@@ -30,15 +36,15 @@ const CTASection: React.FC = () => {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <button
-            onClick={scrollToFormatter}
+            onClick={handleStartFree}
             className="w-full sm:w-auto px-8 py-4 bg-primary text-primary-foreground rounded-xl font-bold text-lg shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
           >
-            Experimentar Grátis Agora
+            Começar Grátis
             <ArrowRight className="w-5 h-5" />
           </button>
 
           <button
-            onClick={() => setLocation('/pricing')}
+            onClick={scrollToPricing}
             className="w-full sm:w-auto px-8 py-4 bg-background border-2 border-border text-foreground rounded-xl font-bold text-lg hover:bg-muted transition-all duration-300 flex items-center justify-center gap-2"
           >
             Ver Planos

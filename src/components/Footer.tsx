@@ -42,8 +42,8 @@ const Footer: React.FC = () => {
             </p>
             <div className="flex items-center gap-2 text-muted-foreground">
               <Mail className="w-4 h-4" />
-              <a href="mailto:contato@formatapp.com" className="text-sm hover:text-primary transition-colors">
-                contato@formatapp.com
+              <a href="mailto:contato@zapstyle.app" className="text-sm hover:text-primary transition-colors">
+                contato@zapstyle.app
               </a>
             </div>
           </div>
