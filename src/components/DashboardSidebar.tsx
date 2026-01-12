@@ -95,7 +95,7 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
   };
 
   return (
-    <div className="flex flex-col h-full bg-card">
+    <div className="flex flex-col h-full bg-card border-r border-border transition-colors duration-300">
       <div className="p-3 border-b border-border flex items-center justify-between">
         <Link href="/">
           <a className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
@@ -276,28 +276,35 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
         )}
       </nav>
 
-      <div className="p-3 border-t border-border space-y-2">
-        {/* Theme Toggle no Sidebar */}
+      <div className="p-3 border-t border-border space-y-2 mt-auto">
+        {/* Theme Toggle no Sidebar - Garantindo que seja o ÚLTIMO elemento antes do Sair */}
         <button
-          onClick={toggleTheme}
-          className={`flex items-center gap-3 w-full px-3 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200 ${
+          onClick={(e) => {
+            e.preventDefault();
+            toggleTheme();
+          }}
+          className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg border border-border bg-muted/30 text-foreground hover:bg-muted transition-all duration-200 shadow-sm ${
             collapsed ? 'justify-center' : ''
           }`}
-          title={theme === 'dark' ? 'Modo Claro' : 'Modo Escuro'}
+          title={theme === 'dark' ? 'Mudar para Modo Claro' : 'Mudar para Modo Escuro'}
         >
-          {theme === 'dark' ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-indigo-500" />}
-          {!collapsed && <span className="text-sm font-medium">{theme === 'dark' ? 'Modo Claro' : 'Modo Escuro'}</span>}
+          {theme === 'dark' ? (
+            <Sun className="w-5 h-5 text-amber-500 fill-amber-500/20" />
+          ) : (
+            <Moon className="w-5 h-5 text-indigo-500 fill-indigo-500/20" />
+          )}
+          {!collapsed && <span className="text-sm font-bold">{theme === 'dark' ? 'Modo Claro' : 'Modo Escuro'}</span>}
         </button>
 
         <Button
           variant="ghost"
           fullWidth={!collapsed}
           onClick={handleSignOut}
-          className={`${collapsed ? 'w-full justify-center' : 'justify-start'} text-destructive hover:text-destructive hover:bg-destructive/10`}
+          className={`${collapsed ? 'w-full justify-center' : 'justify-start'} text-destructive hover:text-destructive hover:bg-destructive/10 h-11`}
           title={collapsed ? 'Sair' : undefined}
         >
           <LogOut className="w-4 h-4" />
-          {!collapsed && <span className="ml-2">Sair</span>}
+          {!collapsed && <span className="ml-2 font-medium">Sair</span>}
         </Button>
       </div>
     </div>
