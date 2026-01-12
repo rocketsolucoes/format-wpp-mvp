@@ -29,7 +29,7 @@ const FeaturesSection: React.FC = () => {
   return (
     <section className="container mx-auto px-4 py-16">
       <h2 className="text-3xl font-bold text-center mb-4 text-foreground">
-        Por que Usar o Magic Formatter?
+        Por que Usar o ZapStyle?
       </h2>
 
       <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">

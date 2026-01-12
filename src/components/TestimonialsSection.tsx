@@ -3,7 +3,7 @@ import { Star, Quote } from 'lucide-react';
 
 const testimonials = [
   {
-    quote: "Minhas vendas no WhatsApp aumentaram 40% depois que comecei a usar o Format App. As mensagens profissionais passam muito mais confiança.",
+    quote: "Minhas vendas no WhatsApp aumentaram 40% depois que comecei a usar o ZapStyle. As mensagens profissionais passam muito mais confiança.",
     name: "Ricardo Santos",
     role: "Corretor de Imóveis",
     avatar: "RS"

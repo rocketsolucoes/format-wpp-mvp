@@ -12,7 +12,7 @@ const faqs = [
   },
   {
     question: "O sistema cria o texto para mim?",
-    answer: "Não, o Format App é focado em estilizar e formatar o texto que você já tem. Ele aplica as melhores práticas de formatação do WhatsApp (negrito, itálico, listas) para tornar sua mensagem existente mais profissional."
+    answer: "Não, o ZapStyle é focado em estilizar e formatar o texto que você já tem. Ele aplica as melhores práticas de formatação do WhatsApp (negrito, itálico, listas) para tornar sua mensagem existente mais profissional."
   },
   {
     question: "Posso cancelar minha assinatura Pro quando quiser?",

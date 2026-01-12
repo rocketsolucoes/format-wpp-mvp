@@ -63,9 +63,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           >
             <Menu className="w-6 h-6" />
           </Button>
-          <span className="text-sm font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-            Magic Formatter
-          </span>
+          <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-6" />
           <div className="w-10" /> {/* Spacer for centering */}
         </div>
 

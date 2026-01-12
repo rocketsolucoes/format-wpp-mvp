@@ -109,13 +109,10 @@ export function DashboardSidebar({
       <div className="p-3 border-b border-border flex items-center justify-between">
         <Link href="/">
           <a className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
-            <div className="p-1.5 bg-primary rounded-lg flex-shrink-0">
-              <Sparkles className="w-4 h-4 text-primary-foreground" />
-            </div>
-            {(!collapsed || isMobile) && (
-              <span className="font-bold text-sm bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent whitespace-nowrap">
-                Magic Formatter
-              </span>
+            {(!collapsed || isMobile) ? (
+              <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-6" />
+            ) : (
+              <img src="/zapstyle_appicon.png" alt="ZapStyle" className="h-8 w-8 rounded-lg" />
             )}
           </a>
         </Link>

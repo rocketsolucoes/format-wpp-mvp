@@ -34,16 +34,11 @@ const Footer: React.FC = () => {
           <div className="md:col-span-1">
             <Link href="/">
               <a className="flex items-center gap-2 mb-4 hover:opacity-80 transition-opacity">
-                <div className="p-2 bg-primary rounded-lg">
-                  <Sparkles className="w-5 h-5 text-primary-foreground" />
-                </div>
-                <span className="font-bold text-lg bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                  Magic Formatter
-                </span>
+                <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-8" />
               </a>
             </Link>
             <p className="text-sm text-muted-foreground mb-4">
-              Transforme suas mensagens do WhatsApp com IA. Formatação profissional em segundos.
+              Estilize suas mensagens do WhatsApp com IA. Formatação profissional em segundos.
             </p>
             <div className="flex items-center gap-2 text-muted-foreground">
               <Mail className="w-4 h-4" />
@@ -118,7 +113,7 @@ const Footer: React.FC = () => {
         <div className="border-t border-border pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground text-center md:text-left">
-              © {currentYear} Format App. Todos os direitos reservados.
+              © {currentYear} ZapStyle. Todos os direitos reservados.
             </p>
             
             <div className="flex items-center gap-6">

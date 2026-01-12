@@ -37,12 +37,7 @@ const Header: React.FC = () => {
           {/* Logo */}
           <Link href="/">
             <a className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
-              <div className="p-2 bg-primary rounded-lg">
-                <Sparkles className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <span className="font-bold text-lg bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                Magic Formatter
-              </span>
+              <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-8" />
             </a>
           </Link>
 
