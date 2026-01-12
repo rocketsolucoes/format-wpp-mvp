@@ -256,11 +256,17 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
     new Date(a.date).getTime() - new Date(b.date).getTime()
   );
 
-  const formattedData = sortedData.map(item => ({
-    ...item,
-    date: new Date(item.date).toLocaleDateString('pt-BR', { month: 'short', day: 'numeric' }),
-    dateObj: new Date(item.date)
-  }));
+  const formattedData = sortedData.map(item => {
+    // Adicionar T00:00:00 para forçar interpretação como data local
+    const dateStr = item.date.split('T')[0];
+    const localDate = new Date(dateStr + 'T00:00:00');
+    
+    return {
+      ...item,
+      date: localDate.toLocaleDateString('pt-BR', { month: 'short', day: 'numeric' }),
+      dateObj: localDate
+    };
+  });
 
   const maxCount = data.length > 0 ? Math.max(...data.map(item => item.format_count)) : 1;
   const totalFormats = data.reduce((sum, item) => sum + item.format_count, 0);
@@ -404,7 +410,7 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
             </div>
             <p className="text-2xl font-bold text-foreground">{peakDay?.format_count || 0}</p>
             <p className="text-xs text-orange-400 truncate">
-              {peakDay ? new Date(peakDay.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }) : '-'}
+              {peakDay ? new Date(peakDay.date.split('T')[0] + 'T00:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }) : '-'}
             </p>
           </div>
 
@@ -530,7 +536,7 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
             <div className="bg-muted/50 border border-border rounded-lg p-3">
               <p className="text-muted-foreground mb-1">Melhor desempenho</p>
               <p className="text-foreground font-semibold">
-                {peakDay ? `${new Date(peakDay.date).toLocaleDateString('pt-BR', { weekday: 'long' })} (${peakDay.format_count} formatações)` : 'Sem dados'}
+                {peakDay ? `${new Date(peakDay.date.split('T')[0] + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long' })} (${peakDay.format_count} formatações)` : 'Sem dados'}
               </p>
             </div>
             <div className="bg-muted/50 border border-border rounded-lg p-3">
