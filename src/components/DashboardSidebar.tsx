@@ -106,13 +106,15 @@ export function DashboardSidebar({
   return (
     <div className="flex flex-col h-full bg-card border-r border-border transition-colors duration-300">
       {/* Header da Sidebar */}
-      <div className="p-3 border-b border-border flex items-center justify-between">
+      <div className="p-4 border-b border-border flex items-center justify-between gap-2">
         <Link href="/">
-          <a className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
+          <a className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer flex-1">
             {(!collapsed || isMobile) ? (
-              <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-10" />
+              <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-12" />
             ) : (
-              <img src="/favicon.png" alt="ZapStyle" className="h-12 w-12 rounded-xl object-contain" />
+              <div className="flex justify-center w-full">
+                <img src="/favicon.png" alt="ZapStyle" className="h-14 w-14 rounded-xl object-contain" />
+              </div>
             )}
           </a>
         </Link>
@@ -120,7 +122,7 @@ export function DashboardSidebar({
         {isMobile ? (
           <button
             onClick={onCloseMobile}
-            className="p-1.5 hover:bg-muted rounded-lg transition-colors text-muted-foreground hover:text-foreground"
+            className="p-1.5 hover:bg-muted rounded-lg transition-colors text-muted-foreground hover:text-foreground flex-shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
