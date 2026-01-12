@@ -57,6 +57,7 @@ const Dashboard: React.FC = () => {
 
   const fetchDashboardData = async () => {
     if (!user) return;
+    if (loading) return; // Evita múltiplas chamadas simultâneas
 
     setLoading(true);
     setError(null);
@@ -97,10 +98,13 @@ const Dashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchDashboardData();
+    // Só busca dados quando user está definido e não está carregando auth
+    if (user && !authLoading) {
+      fetchDashboardData();
+    }
     const savedStyle = localStorage.getItem('lastUsedStyle');
     setLastUsedStyle(savedStyle);
-  }, [user]);
+  }, [user?.id, authLoading]); // Usa user.id para evitar re-renders desnecessários
 
   const handleStyleSelect = (styleId: string, styleName: string) => {
     const proStyles = ['sales', 'announcement'];
@@ -231,7 +235,7 @@ const Dashboard: React.FC = () => {
           <div className="space-y-6">
             {/* Só renderiza os gráficos após o auth carregar para evitar flash visual */}
             {!authLoading && user?.plan !== 'free' && (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-in fade-in duration-500">
                 <UsageChart
                   data={chartData}
                   loading={loading}

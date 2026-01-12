@@ -236,7 +236,15 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
           <CardTitle>Análise de Uso Avançada</CardTitle>
           <CardDescription>Últimos 30 dias</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
+          {/* Cards de estatísticas */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+          </div>
+          {/* Gráfico principal */}
           <Skeleton className="h-64 w-full" />
         </CardContent>
       </Card>
