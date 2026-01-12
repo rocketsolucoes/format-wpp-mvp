@@ -169,56 +169,65 @@ export function StyleDistributionChart({ userId, isPro }: StyleDistributionProps
           Análise dos últimos 30 dias
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="h-44">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={styleData}
-                cx="50%"
-                cy="50%"
-                innerRadius={45}
-                outerRadius={70}
-                paddingAngle={5}
-                dataKey="value"
-                animationDuration={800}
-              >
-                {styleData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip content={<CustomTooltip />} />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+      <CardContent>
+        {/* Container flex para gráfico + lista à esquerda e estilo favorito à direita */}
+        <div className="flex gap-6 items-start">
+          {/* Gráfico e lista de estilos */}
+          <div className="flex-1 space-y-4">
+            {/* Gráfico de pizza */}
+            <div className="h-44">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={styleData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={45}
+                    outerRadius={70}
+                    paddingAngle={5}
+                    dataKey="value"
+                    animationDuration={800}
+                  >
+                    {styleData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip content={<CustomTooltip />} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
 
-        <div className="space-y-2">
-          {styleData.map((style) => {
-            const percentage = (style.value / totalFormats) * 100;
-            return (
-              <div key={style.name} className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">{style.icon}</span>
-                  <span className="text-muted-foreground">{style.name}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-foreground font-semibold">{style.value}</span>
-                  <span className="text-slate-500 text-xs">({percentage.toFixed(0)}%)</span>
-                </div>
+            {/* Lista de estilos */}
+            <div className="space-y-2">
+              {styleData.map((style) => {
+                const percentage = (style.value / totalFormats) * 100;
+                return (
+                  <div key={style.name} className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">{style.icon}</span>
+                      <span className="text-muted-foreground">{style.name}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-foreground font-semibold">{style.value}</span>
+                      <span className="text-slate-500 text-xs">({percentage.toFixed(0)}%)</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Estilo favorito - ao lado direito */}
+          <div className="bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/20 rounded-lg p-4 min-w-[180px] flex flex-col justify-center">
+            <p className="text-xs text-muted-foreground mb-2">Estilo favorito</p>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">{mostUsedStyle.icon}</span>
+              <div>
+                <p className="text-foreground font-semibold text-sm">{mostUsedStyle.name}</p>
+                <p className="text-purple-400 text-xs">
+                  {((mostUsedStyle.value / totalFormats) * 100).toFixed(0)}% do uso total
+                </p>
               </div>
-            );
-          })}
-        </div>
-
-        <div className="bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/20 rounded-lg p-3 mt-4">
-          <p className="text-xs text-muted-foreground mb-1">Estilo favorito</p>
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">{mostUsedStyle.icon}</span>
-            <div>
-              <p className="text-foreground font-semibold text-sm">{mostUsedStyle.name}</p>
-              <p className="text-purple-400 text-xs">
-                {((mostUsedStyle.value / totalFormats) * 100).toFixed(0)}% do uso total
-              </p>
             </div>
           </div>
         </div>
