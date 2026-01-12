@@ -1,24 +1,14 @@
 import React from 'react';
+import { WhatsAppPreview } from './WhatsAppPreview';
 
 /**
  * ExamplesSection Component
  *
- * Seção que demonstra o antes e depois da formatação.
- * Layout em grid com 2 cards lado a lado (responsivo).
- *
- * - Card "Before": Texto sem formatação (destaque vermelho)
- * - Card "After": Texto formatado (destaque verde)
+ * Seção que demonstra o antes e depois da formatação usando o preview real do WhatsApp.
  */
 const ExamplesSection: React.FC = () => {
-  /**
-   * Exemplo de texto antes da formatação
-   */
   const beforeText = `Oi pessoal, só queria lembrar todos sobre a reunião de amanhã às 10h. Por favor, tragam suas atualizações do projeto. Além disso, não esqueçam de revisar o documento de metas do Q4 que enviei na semana passada. Ansioso para ver todos lá!`;
 
-  /**
-   * Exemplo de texto após formatação
-   * Usa a sintaxe de formatação do WhatsApp
-   */
   const afterText = `*Oi pessoal!* 👋
 
 Apenas um lembrete amigável sobre a *reunião de amanhã*:
@@ -31,63 +21,53 @@ _Não esqueçam_ de revisar o documento de *metas Q4* que enviei na semana passa
 Ansioso para ver todos lá! 🚀`;
 
   return (
-    <section className="container mx-auto px-4 py-16 bg-slate-900/30">
+    <section className="container mx-auto px-4 py-24 bg-slate-950">
       {/* Título da seção */}
-      <h2 className="text-3xl font-bold text-center mb-4 text-slate-100">
-        Veja a Diferença
-      </h2>
+      <div className="text-center mb-16">
+        <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          Veja a Diferença Real
+        </h2>
+        <p className="text-slate-400 max-w-2xl mx-auto">
+          Compare como uma mensagem comum se transforma em uma comunicação profissional e organizada dentro do WhatsApp.
+        </p>
+      </div>
 
-      {/* Subtítulo */}
-      <p className="text-center text-slate-400 mb-12 max-w-2xl mx-auto">
-        Veja como mensagens comuns se transformam em comunicações profissionais e envolventes
-      </p>
-
-      {/* Grid de exemplos - responsivo */}
-      <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-        {/* Card BEFORE - Texto sem formatação */}
-        <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-lg overflow-hidden shadow-lg">
-          {/* Header com destaque vermelho */}
-          <div className="px-4 py-3 bg-red-500/10 border-b border-red-500/20">
-            <h3 className="text-sm font-semibold text-red-400 uppercase tracking-wide">
-              Antes
-            </h3>
+      {/* Grid de exemplos */}
+      <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto items-start">
+        {/* Lado Esquerdo: Antes */}
+        <div className="space-y-6">
+          <div className="flex items-center gap-3 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20 w-fit">
+            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            <h3 className="text-sm font-bold text-red-400 uppercase tracking-widest">Antes</h3>
           </div>
-
-          {/* Conteúdo do exemplo */}
-          <div className="p-6">
-            <p className="text-slate-400 text-sm leading-relaxed whitespace-pre-wrap font-mono">
-              {beforeText}
+          
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-xl">
+            <p className="text-slate-400 text-lg leading-relaxed italic">
+              "{beforeText}"
             </p>
-          </div>
-
-          {/* Footer com descrição */}
-          <div className="px-4 py-3 bg-slate-800/50 border-t border-slate-800">
-            <p className="text-xs text-slate-500">
-              Texto simples e sem formatação - difícil de ler e pouco profissional
-            </p>
+            <div className="mt-8 pt-6 border-t border-slate-800">
+              <p className="text-sm text-slate-500">
+                Texto simples, sem hierarquia visual e difícil de escanear.
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Card AFTER - Texto formatado */}
-        <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-lg overflow-hidden shadow-lg shadow-emerald-500/10">
-          {/* Header com destaque verde */}
-          <div className="px-4 py-3 bg-emerald-500/10 border-b border-emerald-500/20">
-            <h3 className="text-sm font-semibold text-emerald-400 uppercase tracking-wide">
-              Depois
-            </h3>
+        {/* Lado Direito: Depois (WhatsApp Preview) */}
+        <div className="space-y-6">
+          <div className="flex items-center gap-3 px-4 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 w-fit">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-widest">Depois</h3>
           </div>
 
-          {/* Conteúdo do exemplo */}
-          <div className="p-6">
-            <p className="text-slate-100 text-sm leading-relaxed whitespace-pre-wrap">
-              {afterText}
-            </p>
+          <div className="transform lg:scale-105 transition-transform duration-500">
+            <WhatsAppPreview text={afterText} />
           </div>
-
-          {/* Footer com descrição */}
-          <div className="px-4 py-3 bg-emerald-500/5 border-t border-emerald-500/20">
-            <p className="text-xs text-emerald-400">
-              Formatado, estruturado e profissional - pronto para impressionar!
+          
+          <div className="text-center lg:text-left">
+            <p className="text-emerald-400 font-medium flex items-center justify-center lg:justify-start gap-2">
+              <span className="text-xl">✨</span>
+              Formatado, estruturado e pronto para converter!
             </p>
           </div>
         </div>
