@@ -116,10 +116,10 @@ export function WhatsAppPreview({ text, isLoading = false }: WhatsAppPreviewProp
       <CardContent className="p-3 sm:p-4">
         <div className="mx-auto" style={{ maxWidth: '420px' }}>
           <div
-            className="relative bg-slate-100 dark:bg-slate-900 rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl overflow-hidden border-[12px] border-slate-200 dark:border-slate-900"
+            className="relative bg-slate-100 dark:bg-card rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl overflow-hidden border-[12px] border-slate-200 dark:border-slate-900"
             style={{ aspectRatio: '9/16' }}
           >
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-5 bg-slate-200 dark:bg-slate-900 rounded-b-2xl z-10"></div>
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-5 bg-slate-200 dark:bg-card rounded-b-2xl z-10"></div>
 
             <div className="relative h-full flex flex-col bg-[#efeae2] dark:bg-[#0a1014] transition-colors duration-300">
               <div className="bg-[#075e54] dark:bg-[#202c33] px-3 py-2.5 pt-6 flex items-center justify-between shadow-md">
@@ -190,7 +190,7 @@ export function WhatsAppPreview({ text, isLoading = false }: WhatsAppPreviewProp
                   </div>
                 ) : (
                   <div className="flex items-center justify-center h-full">
-                    <div className="bg-white/80 dark:bg-black/20 backdrop-blur-sm rounded-full px-4 py-1.5 text-slate-500 dark:text-slate-400 text-[10px] text-center">
+                    <div className="bg-white/80 dark:bg-black/20 backdrop-blur-sm rounded-full px-4 py-1.5 text-slate-500 dark:text-muted-foreground text-[10px] text-center">
                       Sua mensagem formatada aparecerá aqui
                     </div>
                   </div>

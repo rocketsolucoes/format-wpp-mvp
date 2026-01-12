@@ -249,7 +249,7 @@ export function RecentFormatting({ items, loading, onRefresh, totalCount }: Rece
               {localItems.slice(0, 3).map((item) => (
                 <div
                   key={item.id}
-                  className="p-3 bg-muted/30 rounded-lg hover:bg-muted/50 transition-all border border-border hover:border-slate-700 group"
+                  className="p-3 bg-muted/30 rounded-lg hover:bg-muted/50 transition-all border border-border hover:border-border group"
                 >
                   <div className="space-y-2">
                     <div className="flex items-start justify-between gap-3">

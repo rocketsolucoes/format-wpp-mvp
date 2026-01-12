@@ -12,7 +12,7 @@ export function Separator({ className = '', orientation = 'horizontal' }: Separa
         orientation === 'horizontal'
           ? 'h-px w-full'
           : 'w-px h-full'
-      } bg-slate-800 ${className}`}
+      } bg-muted ${className}`}
     />
   );
 }

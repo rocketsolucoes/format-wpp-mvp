@@ -30,7 +30,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           />
           <label
             htmlFor={checkboxId}
-            className="flex h-5 w-5 cursor-pointer items-center justify-center rounded border-2 border-slate-700 bg-slate-900/50 transition-all peer-checked:border-emerald-500 peer-checked:bg-gradient-to-br peer-checked:from-emerald-500 peer-checked:to-cyan-500 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+            className="flex h-5 w-5 cursor-pointer items-center justify-center rounded border-2 border-border bg-muted/50 transition-all peer-checked:border-emerald-500 peer-checked:bg-gradient-to-br peer-checked:from-emerald-500 peer-checked:to-cyan-500 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
           >
             <Check className="h-3 w-3 text-white opacity-0 transition-opacity peer-checked:opacity-100" />
           </label>
@@ -38,7 +38,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         {label && (
           <label
             htmlFor={checkboxId}
-            className="text-sm text-slate-300 cursor-pointer select-none"
+            className="text-sm text-foreground cursor-pointer select-none"
           >
             {label}
           </label>

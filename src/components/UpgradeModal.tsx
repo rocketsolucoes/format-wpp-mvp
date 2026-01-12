@@ -51,7 +51,7 @@ export function UpgradeModal({ open, onOpenChange, onUpgrade }: UpgradeModalProp
 
         <DialogBody>
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 rounded-lg bg-muted/50 border border-slate-700">
+            <div className="p-4 rounded-lg bg-muted/50 border border-border">
               <h3 className="font-semibold text-foreground mb-2">Free Plan</h3>
               <div className="text-2xl font-bold text-muted-foreground mb-3">$0</div>
               <ul className="space-y-2 text-sm">

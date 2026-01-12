@@ -101,7 +101,7 @@ export const DropdownMenuContent: React.FC<DropdownMenuContentProps> = ({
     <div
       className={`absolute top-full mt-2 ${
         align === 'right' ? 'right-0' : 'left-0'
-      } min-w-[200px] bg-slate-900 border border-slate-800 rounded-lg shadow-xl py-2 z-50 animate-slide-in ${className}`}
+      } min-w-[200px] bg-card border border-border rounded-lg shadow-xl py-2 z-50 animate-slide-in ${className}`}
     >
       {children}
     </div>
@@ -130,7 +130,7 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
   return (
     <button
       onClick={onClick}
-      className={`w-full px-4 py-2 text-left text-sm text-slate-300 hover:bg-slate-800 hover:text-foreground transition-colors ${className}`}
+      className={`w-full px-4 py-2 text-left text-sm text-foreground hover:bg-muted hover:text-foreground transition-colors ${className}`}
     >
       {children}
     </button>
@@ -152,7 +152,7 @@ interface DropdownMenuSeparatorProps {
 export const DropdownMenuSeparator: React.FC<DropdownMenuSeparatorProps> = ({
   className = '',
 }) => {
-  return <div className={`h-px bg-slate-800 my-2 ${className}`} />;
+  return <div className={`h-px bg-muted my-2 ${className}`} />;
 };
 
 /**

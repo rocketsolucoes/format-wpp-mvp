@@ -91,7 +91,7 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
               </span>
             </div>
 
-            <div className="flex justify-between items-center pt-2 border-t border-slate-700">
+            <div className="flex justify-between items-center pt-2 border-t border-border">
               <span className="text-xs text-slate-500">Média semanal</span>
               <div className="flex items-center gap-1">
                 <span className="text-sm font-medium text-muted-foreground">{avgPerWeek}</span>

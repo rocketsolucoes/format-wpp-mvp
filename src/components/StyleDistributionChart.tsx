@@ -39,7 +39,7 @@ const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0];
     return (
-      <div className="bg-card/95 backdrop-blur-sm border border-slate-700 rounded-lg px-4 py-3 shadow-xl">
+      <div className="bg-card/95 backdrop-blur-sm border border-border rounded-lg px-4 py-3 shadow-xl">
         <div className="flex items-center gap-2 mb-1">
           <span className="text-lg">{data.payload.icon}</span>
           <p className="text-sm font-semibold text-foreground">{data.name}</p>

@@ -19,7 +19,7 @@ export function Progress({ value, max = 100, className = '', indicatorClassName 
   };
 
   return (
-    <div className={`w-full h-2 bg-slate-800 rounded-full overflow-hidden ${className}`}>
+    <div className={`w-full h-2 bg-muted rounded-full overflow-hidden ${className}`}>
       <div
         className={`h-full transition-all duration-300 ease-out ${getColorClass()}`}
         style={{ width: `${percentage}%` }}

@@ -34,13 +34,13 @@ const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div className="bg-card border border-slate-700 rounded-lg px-3 py-2 shadow-lg">
+      <div className="bg-card border border-border rounded-lg px-3 py-2 shadow-lg">
         <p className="text-xs font-semibold text-foreground mb-1">{data.dayFull}</p>
         <p className="text-xs text-emerald-400">
           {data.count} {data.count === 1 ? 'formatação' : 'formatações'}
         </p>
         {data.styles && data.styles.length > 0 && (
-          <div className="mt-1 pt-1 border-t border-slate-700">
+          <div className="mt-1 pt-1 border-t border-border">
             {data.styles.map((style: any) => (
               <p key={style.style_id} className="text-xs text-muted-foreground">
                 • {style.style_id === 'casual' ? 'Casual' : style.style_id === 'sales' ? 'Sales' : 'Official'}: {style.count}
@@ -178,14 +178,14 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
     ];
 
     return (
-      <Card className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 border-slate-700/50">
+      <Card className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 border-border/50">
         <CardContent className="p-6">
           <div className="space-y-6">
             <div className="relative">
               <div className="absolute -top-2 -right-2 w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-full blur-2xl"></div>
               <div className="absolute -bottom-2 -left-2 w-20 h-20 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-2xl"></div>
 
-              <div className="relative backdrop-blur-sm bg-muted/50 rounded-xl p-6 border border-slate-700/50">
+              <div className="relative backdrop-blur-sm bg-muted/50 rounded-xl p-6 border border-border/50">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="p-2 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-lg border border-emerald-500/30">
                     <Lock className="w-5 h-5 text-emerald-400" />
@@ -197,22 +197,22 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
                 </div>
 
                 <div className="space-y-3">
-                  <div className="flex items-center gap-3 p-2.5 bg-muted/50 rounded-lg border border-slate-700/50 hover:border-emerald-500/30 transition-colors">
+                  <div className="flex items-center gap-3 p-2.5 bg-muted/50 rounded-lg border border-border/50 hover:border-emerald-500/30 transition-colors">
                     <BarChart3 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                     <span className="text-sm text-foreground">Gráfico de uso diário</span>
                   </div>
 
-                  <div className="flex items-center gap-3 p-2.5 bg-muted/50 rounded-lg border border-slate-700/50 hover:border-orange-500/30 transition-colors">
+                  <div className="flex items-center gap-3 p-2.5 bg-muted/50 rounded-lg border border-border/50 hover:border-orange-500/30 transition-colors">
                     <PieChartIcon className="w-4 h-4 text-orange-400 flex-shrink-0" />
                     <span className="text-sm text-foreground">Distribuição por estilo</span>
                   </div>
 
-                  <div className="flex items-center gap-3 p-2.5 bg-muted/50 rounded-lg border border-slate-700/50 hover:border-blue-500/30 transition-colors">
+                  <div className="flex items-center gap-3 p-2.5 bg-muted/50 rounded-lg border border-border/50 hover:border-blue-500/30 transition-colors">
                     <Grid3x3 className="w-4 h-4 text-blue-400 flex-shrink-0" />
                     <span className="text-sm text-foreground">Mapa de atividade</span>
                   </div>
 
-                  <div className="flex items-center gap-3 p-2.5 bg-muted/50 rounded-lg border border-slate-700/50 hover:border-purple-500/30 transition-colors">
+                  <div className="flex items-center gap-3 p-2.5 bg-muted/50 rounded-lg border border-border/50 hover:border-purple-500/30 transition-colors">
                     <TrendingUp className="w-4 h-4 text-purple-400 flex-shrink-0" />
                     <span className="text-sm text-foreground">Insights inteligentes</span>
                   </div>
@@ -476,13 +476,13 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
             <span className="text-sm font-semibold text-foreground">Insights Pro</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-            <div className="bg-muted/50 border border-slate-700 rounded-lg p-3">
+            <div className="bg-muted/50 border border-border rounded-lg p-3">
               <p className="text-muted-foreground mb-1">Melhor desempenho</p>
               <p className="text-foreground font-semibold">
                 {peakDay ? `${new Date(peakDay.date).toLocaleDateString('pt-BR', { weekday: 'long' })} (${peakDay.format_count} formatações)` : 'Sem dados'}
               </p>
             </div>
-            <div className="bg-muted/50 border border-slate-700 rounded-lg p-3">
+            <div className="bg-muted/50 border border-border rounded-lg p-3">
               <p className="text-muted-foreground mb-1">Tokens processados</p>
               <p className="text-foreground font-semibold">
                 {data.reduce((sum, item) => sum + item.token_count, 0).toLocaleString()} no período

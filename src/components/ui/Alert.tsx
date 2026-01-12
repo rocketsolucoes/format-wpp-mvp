@@ -9,7 +9,7 @@ interface AlertProps {
 
 export function Alert({ children, variant = 'default', className = '' }: AlertProps) {
   const variantClasses = {
-    default: 'bg-slate-800/50 border-slate-700 text-slate-300',
+    default: 'bg-muted/30 border-border text-foreground',
     success: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400',
     warning: 'bg-yellow-500/10 border-yellow-500/20 text-yellow-400',
     danger: 'bg-red-500/10 border-red-500/20 text-red-400',

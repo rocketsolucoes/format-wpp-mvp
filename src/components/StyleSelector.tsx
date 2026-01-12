@@ -160,7 +160,7 @@ export function StyleSelector({ selectedStyle, onStyleChange, userPlan, onProSty
               ${isLocked ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}
               ${isActive
                 ? `border-2 ${colors.border} shadow-lg ${colors.shadow}`
-                : 'border-slate-700 hover:border-slate-600 active:border-slate-500'
+                : 'border-border hover:border-slate-600 active:border-slate-500'
               }
               ${!isLocked && 'hover:scale-[1.01] hover:shadow-md hover:-translate-y-0.5 active:scale-[0.99]'}
               focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-950

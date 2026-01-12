@@ -570,7 +570,7 @@ export default function Settings() {
                       maxLength={200}
                       rows={3}
                       placeholder="Conte-nos sobre você..."
-                      className="w-full px-4 py-2 rounded-md border border-slate-700 bg-card text-foreground placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+                      className="w-full px-4 py-2 rounded-md border border-border bg-card text-foreground placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
                     />
                     <p className="text-xs text-slate-500 mt-1 text-right">
                       {bio.length}/200 caracteres

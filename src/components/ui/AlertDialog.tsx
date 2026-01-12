@@ -54,7 +54,7 @@ interface AlertDialogFooterProps {
 }
 
 export function AlertDialogFooter({ children }: AlertDialogFooterProps) {
-  return <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-slate-800">{children}</div>;
+  return <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-border">{children}</div>;
 }
 
 interface AlertDialogCancelProps {

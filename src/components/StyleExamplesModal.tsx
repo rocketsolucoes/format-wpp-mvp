@@ -111,7 +111,7 @@ export function StyleExamplesModal({ open, onOpenChange }: StyleExamplesModalPro
         </DialogHeader>
 
         <div className="py-2 max-h-[70vh] overflow-y-auto px-6">
-          <div className="flex gap-2 border-b border-slate-700 mb-4">
+          <div className="flex gap-2 border-b border-border mb-4">
             {Object.entries(EXAMPLES).map(([key, style]) => (
               <button
                 key={key}
@@ -119,7 +119,7 @@ export function StyleExamplesModal({ open, onOpenChange }: StyleExamplesModalPro
                 className={`px-3 py-1.5 text-xs font-medium transition-colors border-b-2 ${
                   activeTab === key
                     ? 'border-emerald-400 text-emerald-400'
-                    : 'border-transparent text-muted-foreground hover:text-muted-foreground'
+                    : 'border-transparent text-muted-foreground hover:text-foreground'
                 }`}
               >
                 <span className="mr-1.5">{style.icon}</span>
@@ -132,16 +132,16 @@ export function StyleExamplesModal({ open, onOpenChange }: StyleExamplesModalPro
             {currentStyle.examples.map((example, index) => (
               <div
                 key={index}
-                className="border border-slate-700 rounded-lg overflow-hidden bg-muted/30"
+                className="border border-border rounded-lg overflow-hidden bg-card"
               >
-                <div className="p-2.5 border-b border-slate-700 bg-muted/50">
+                <div className="p-2.5 border-b border-border bg-muted/30">
                   <h4 className="text-sm font-semibold text-foreground">{example.title}</h4>
                 </div>
 
                 <div className="p-3">
                   <div className="mb-3">
                     <p className="text-xs font-semibold text-muted-foreground mb-1.5">Antes:</p>
-                    <div className="bg-card/50 p-2 rounded border border-slate-700">
+                    <div className="bg-muted/50 p-2 rounded border border-border">
                       <p className="text-xs text-muted-foreground">{example.before}</p>
                     </div>
                   </div>

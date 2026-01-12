@@ -273,7 +273,7 @@ export default function Format() {
                   onChange={(e) => setInputText(e.target.value)}
                   placeholder="Cole ou digite sua mensagem aqui..."
                   disabled={isFormatting}
-                  className="w-full min-h-[180px] sm:min-h-[200px] px-3 sm:px-4 py-3 bg-card border border-slate-700 rounded-lg text-foreground placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-y disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                  className="w-full min-h-[180px] sm:min-h-[200px] px-3 sm:px-4 py-3 bg-card border border-border rounded-lg text-foreground placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-y disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                   aria-label="Original text input"
                 />
               </div>
@@ -307,7 +307,7 @@ export default function Format() {
                       id="output-text"
                       value={outputText}
                       readOnly
-                      className="w-full min-h-[180px] sm:min-h-[200px] px-3 sm:px-4 py-3 bg-card border border-slate-700 rounded-lg text-foreground resize-y pr-12 text-sm sm:text-base"
+                      className="w-full min-h-[180px] sm:min-h-[200px] px-3 sm:px-4 py-3 bg-card border border-border rounded-lg text-foreground resize-y pr-12 text-sm sm:text-base"
                       aria-label="Formatted text output"
                     />
                     <button

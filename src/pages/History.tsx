@@ -475,7 +475,7 @@ export default function History() {
               {records.map((record) => (
                 <div
                   key={record.id}
-                  className="p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-all border border-border hover:border-slate-700 group"
+                  className="p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-all border border-border hover:border-border group"
                 >
                   <div className="space-y-3">
                     <div className="flex items-start justify-between gap-3">
@@ -601,7 +601,7 @@ export default function History() {
                     <textarea
                       readOnly
                       value={selectedRecord.input_text}
-                      className="w-full h-80 p-4 rounded-lg border-2 border-slate-700 bg-card/50 text-foreground text-sm resize-none focus:outline-none focus:border-slate-600 transition-colors"
+                      className="w-full h-80 p-4 rounded-lg border-2 border-border bg-card/50 text-foreground text-sm resize-none focus:outline-none focus:border-slate-600 transition-colors"
                     />
                   </div>
                   <div className="space-y-3">
@@ -609,7 +609,7 @@ export default function History() {
                     <textarea
                       readOnly
                       value={selectedRecord.output_text}
-                      className="w-full h-80 p-4 rounded-lg border-2 border-slate-700 bg-card/50 text-foreground text-sm resize-none focus:outline-none focus:border-slate-600 transition-colors"
+                      className="w-full h-80 p-4 rounded-lg border-2 border-border bg-card/50 text-foreground text-sm resize-none focus:outline-none focus:border-slate-600 transition-colors"
                     />
                   </div>
                 </div>

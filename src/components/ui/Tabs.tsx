@@ -69,7 +69,7 @@ interface TabsListProps {
  */
 export const TabsList: React.FC<TabsListProps> = ({ children, className = '' }) => {
   return (
-    <div className={`flex gap-2 p-1 bg-slate-900/50 rounded-lg border border-slate-800 ${className}`}>
+    <div className={`flex gap-2 p-1 bg-muted/50 rounded-lg border border-border ${className}`}>
       {children}
     </div>
   );
@@ -104,7 +104,7 @@ export const TabsTrigger: React.FC<TabsTriggerProps> = ({ value, children, class
       className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-md font-medium transition-all whitespace-nowrap ${
         isActive
           ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-lg shadow-emerald-500/20'
-          : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+          : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'
       } ${className}`}
     >
       {children}

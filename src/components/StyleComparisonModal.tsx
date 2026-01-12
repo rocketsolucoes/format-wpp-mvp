@@ -65,7 +65,7 @@ export function StyleComparisonModal({ open, onOpenChange }: StyleComparisonModa
         </DialogHeader>
 
         <div className="py-2 max-h-[70vh] overflow-y-auto px-6">
-          <div className="mb-4 p-3 bg-muted/50 rounded-lg border border-slate-700">
+          <div className="mb-4 p-3 bg-muted/50 rounded-lg border border-border">
             <p className="text-xs font-semibold text-muted-foreground mb-1">Texto Original:</p>
             <p className="text-sm text-foreground">{SAMPLE_TEXT}</p>
           </div>
@@ -74,9 +74,9 @@ export function StyleComparisonModal({ open, onOpenChange }: StyleComparisonModa
             {STYLE_COMPARISONS.map((style) => (
               <div
                 key={style.id}
-                className="flex flex-col border border-slate-700 rounded-lg overflow-hidden bg-muted/30 hover:border-slate-600 transition-colors"
+                className="flex flex-col border border-border rounded-lg overflow-hidden bg-card hover:border-primary/50 transition-colors"
               >
-                <div className="p-3 border-b border-slate-700 bg-muted/50">
+                <div className="p-3 border-b border-border bg-muted/30">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">{style.icon}</span>
                     <div>

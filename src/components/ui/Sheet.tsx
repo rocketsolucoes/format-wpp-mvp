@@ -27,7 +27,7 @@ export function Sheet({ open, onOpenChange, children }: SheetProps) {
         className="fixed inset-0 bg-black/50 backdrop-blur-sm"
         onClick={() => onOpenChange(false)}
       />
-      <div className="fixed inset-y-0 left-0 z-50 w-72 bg-slate-950 border-r border-slate-800 shadow-xl animate-slide-in-left">
+      <div className="fixed inset-y-0 left-0 z-50 w-72 bg-background border-r border-border shadow-xl animate-slide-in-left">
         {children}
       </div>
     </div>
@@ -42,11 +42,11 @@ interface SheetContentProps {
 export function SheetContent({ children, onClose }: SheetContentProps) {
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between p-4 border-b border-slate-800">
+      <div className="flex items-center justify-between p-4 border-b border-border">
         <h2 className="text-lg font-semibold text-foreground">Menu</h2>
         <button
           onClick={onClose}
-          className="p-2 rounded-lg text-slate-400 hover:text-foreground hover:bg-slate-800 transition-colors"
+          className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
         >
           <X className="h-5 w-5" />
         </button>
