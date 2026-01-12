@@ -18,12 +18,12 @@ export function Dialog({ open, onOpenChange, children }: DialogProps) {
   }, []);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
         className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm"
         onClick={() => onOpenChange(false)}
       />
-      <div className="relative z-50 w-full mx-auto my-8">
+      <div className="relative z-50 w-full max-w-lg">
         {children}
       </div>
     </div>
@@ -37,7 +37,7 @@ interface DialogContentProps {
 
 export function DialogContent({ children, className = '' }: DialogContentProps) {
   return (
-    <div className={`bg-background border-2 border-border rounded-xl shadow-2xl ${className}`}>
+    <div className={`bg-background border-2 border-border rounded-xl shadow-2xl p-6 ${className}`}>
       {children}
     </div>
   );
