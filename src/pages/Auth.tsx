@@ -217,16 +217,16 @@ const Auth: React.FC = () => {
   };
 
   return (
-    <div className="h-screen bg-background flex items-center justify-center px-4 overflow-hidden">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8 overflow-y-auto">
+      <div className="w-full max-w-md my-auto">
         {/* Logo e Título */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <div className="flex justify-center mb-4">
             <div className="p-3 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-2xl shadow-lg shadow-emerald-500/20">
               <Sparkles className="w-8 h-8 text-white" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold mb-2">
+          <h1 className="text-2xl font-bold mb-2">
             <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
               {activeTab === 'signup' ? 'Crie sua Conta' : 'Bem-vindo de Volta'}
             </span>
@@ -239,7 +239,7 @@ const Auth: React.FC = () => {
         {/* Card com Tabs */}
         <div className="bg-card/50 backdrop-blur-sm border border-border rounded-lg p-6 shadow-xl">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <div className="flex justify-center mb-6">
+            <div className="flex justify-center mb-4">
               <TabsList className="w-auto">
                 <TabsTrigger value="login">Entrar</TabsTrigger>
                 <TabsTrigger value="signup">Criar Conta</TabsTrigger>
@@ -248,7 +248,7 @@ const Auth: React.FC = () => {
 
             {/* Login Form */}
             <TabsContent value="login">
-              <form onSubmit={handleLoginSubmit} className="space-y-4">
+              <form onSubmit={handleLoginSubmit} className="space-y-3">
                 <div>
                   <Label htmlFor="login-email" required>
                     E-mail
@@ -303,7 +303,7 @@ const Auth: React.FC = () => {
 
             {/* Signup Form */}
             <TabsContent value="signup">
-              <form onSubmit={handleSignupSubmit} className="space-y-4">
+              <form onSubmit={handleSignupSubmit} className="space-y-3">
                 <div>
                   <Label htmlFor="signup-name" required>
                     Nome Completo
