@@ -164,7 +164,7 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
       <Card className="hover:border-cyan-500/50 transition-colors border-cyan-500/30 bg-gradient-to-br from-cyan-500/5 to-emerald-500/5 h-full">
         <CardContent className="space-y-4 h-full flex flex-col">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">Créditos</span>
+            <span className="text-sm text-muted-foreground">Créditos</span>
             <div className="p-2 bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 rounded-lg">
               <Coins className="w-5 h-5 text-cyan-400" />
             </div>
@@ -179,7 +179,7 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
             </Badge>
           </div>
 
-          <div className="pt-3 border-t border-slate-800 space-y-2">
+          <div className="pt-3 border-t border-border space-y-2">
             <div className="flex items-start gap-2 text-sm text-emerald-400">
               <Sparkles className="w-4 h-4 mt-0.5 flex-shrink-0" />
               <span>Formatação ilimitada</span>
@@ -203,10 +203,10 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
       <CardContent className="space-y-4 h-full flex flex-col">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-slate-400">Créditos</span>
+            <span className="text-sm text-muted-foreground">Créditos</span>
             <Tooltip content="Você ganha 30 créditos novos todo mês. Cada formatação consome 1 crédito. Faça upgrade para créditos ilimitados!">
               <div className="w-4 h-4 rounded-full bg-slate-700/50 flex items-center justify-center cursor-help hover:bg-slate-700 transition-colors">
-                <span className="text-xs text-slate-400">?</span>
+                <span className="text-xs text-muted-foreground">?</span>
               </div>
             </Tooltip>
           </div>
@@ -217,15 +217,15 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">
+            <span className="text-sm text-muted-foreground">
               {getCreditMessage(percentage, creditsRemaining)}
             </span>
-            <span className="text-sm font-semibold text-slate-300">
+            <span className="text-sm font-semibold text-muted-foreground">
               {creditsRemaining}/{totalCredits}
             </span>
           </div>
 
-          <div className="relative h-2 bg-slate-800 rounded-full overflow-hidden">
+          <div className="relative h-2 bg-muted rounded-full overflow-hidden">
             <div
               className={`h-full ${colors.bar} transition-all duration-300 ease-out rounded-full`}
               style={{ width: `${percentage}%` }}
@@ -243,7 +243,7 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
         </div>
 
         <Tooltip content={`Renova em ${resetDate}`} side="right">
-          <div className="flex items-center gap-2 text-sm text-slate-400">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Calendar className="w-4 h-4" />
             <span>
               Renova em {daysUntilReset} {daysUntilReset === 1 ? 'dia' : 'dias'}
@@ -253,7 +253,7 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
 
         <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
           <CollapsibleTrigger asChild>
-            <button className="flex items-center justify-between w-full py-2 text-sm text-slate-400 hover:text-slate-300 transition-colors">
+            <button className="flex items-center justify-between w-full py-2 text-sm text-muted-foreground hover:text-muted-foreground transition-colors">
               <span className="flex items-center gap-2">
                 <BarChart2 className="w-4 h-4" />
                 Uso neste período
@@ -278,10 +278,10 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
                     key={style.style_id}
                     className="flex items-center justify-between text-xs"
                   >
-                    <span className="text-slate-400">
+                    <span className="text-muted-foreground">
                       • {style.style_name}:
                     </span>
-                    <span className="text-slate-300">
+                    <span className="text-muted-foreground">
                       {style.format_count} {style.format_count === 1 ? 'formato' : 'formatos'}
                       ({style.credits_used} {style.credits_used === 1 ? 'crédito' : 'créditos'})
                     </span>
@@ -297,17 +297,17 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
         </Collapsible>
 
         {percentage < 30 && (
-          <div className="pt-3 border-t border-slate-800 space-y-3">
+          <div className="pt-3 border-t border-border space-y-3">
             <div className="space-y-1.5 text-xs">
-              <div className="flex items-start gap-2 text-slate-400">
+              <div className="flex items-start gap-2 text-muted-foreground">
                 <Sparkles className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
                 <span>Formatação ilimitada</span>
               </div>
-              <div className="flex items-start gap-2 text-slate-400">
+              <div className="flex items-start gap-2 text-muted-foreground">
                 <BarChart2 className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
                 <span>Análises avançadas</span>
               </div>
-              <div className="flex items-start gap-2 text-slate-400">
+              <div className="flex items-start gap-2 text-muted-foreground">
                 <Star className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
                 <span>Salvar favoritos</span>
               </div>

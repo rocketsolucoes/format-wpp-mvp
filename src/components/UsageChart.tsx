@@ -34,7 +34,7 @@ const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 shadow-lg">
+      <div className="bg-card border border-slate-700 rounded-lg px-3 py-2 shadow-lg">
         <p className="text-xs font-semibold text-white mb-1">{data.dayFull}</p>
         <p className="text-xs text-emerald-400">
           {data.count} {data.count === 1 ? 'formatação' : 'formatações'}
@@ -42,7 +42,7 @@ const CustomTooltip = ({ active, payload }: any) => {
         {data.styles && data.styles.length > 0 && (
           <div className="mt-1 pt-1 border-t border-slate-700">
             {data.styles.map((style: any) => (
-              <p key={style.style_id} className="text-xs text-slate-400">
+              <p key={style.style_id} className="text-xs text-muted-foreground">
                 • {style.style_id === 'casual' ? 'Casual' : style.style_id === 'sales' ? 'Sales' : 'Official'}: {style.count}
               </p>
             ))}
@@ -185,36 +185,36 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
               <div className="absolute -top-2 -right-2 w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-full blur-2xl"></div>
               <div className="absolute -bottom-2 -left-2 w-20 h-20 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-2xl"></div>
 
-              <div className="relative backdrop-blur-sm bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
+              <div className="relative backdrop-blur-sm bg-muted/50 rounded-xl p-6 border border-slate-700/50">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="p-2 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-lg border border-emerald-500/30">
                     <Lock className="w-5 h-5 text-emerald-400" />
                   </div>
                   <div>
                     <h3 className="text-base font-bold text-white">Análises Avançadas</h3>
-                    <p className="text-xs text-slate-400">Recursos exclusivos Pro</p>
+                    <p className="text-xs text-muted-foreground">Recursos exclusivos Pro</p>
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  <div className="flex items-center gap-3 p-2.5 bg-slate-800/50 rounded-lg border border-slate-700/50 hover:border-emerald-500/30 transition-colors">
+                  <div className="flex items-center gap-3 p-2.5 bg-muted/50 rounded-lg border border-slate-700/50 hover:border-emerald-500/30 transition-colors">
                     <BarChart3 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                    <span className="text-sm text-slate-200">Gráfico de uso diário</span>
+                    <span className="text-sm text-foreground">Gráfico de uso diário</span>
                   </div>
 
-                  <div className="flex items-center gap-3 p-2.5 bg-slate-800/50 rounded-lg border border-slate-700/50 hover:border-orange-500/30 transition-colors">
+                  <div className="flex items-center gap-3 p-2.5 bg-muted/50 rounded-lg border border-slate-700/50 hover:border-orange-500/30 transition-colors">
                     <PieChartIcon className="w-4 h-4 text-orange-400 flex-shrink-0" />
-                    <span className="text-sm text-slate-200">Distribuição por estilo</span>
+                    <span className="text-sm text-foreground">Distribuição por estilo</span>
                   </div>
 
-                  <div className="flex items-center gap-3 p-2.5 bg-slate-800/50 rounded-lg border border-slate-700/50 hover:border-blue-500/30 transition-colors">
+                  <div className="flex items-center gap-3 p-2.5 bg-muted/50 rounded-lg border border-slate-700/50 hover:border-blue-500/30 transition-colors">
                     <Grid3x3 className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                    <span className="text-sm text-slate-200">Mapa de atividade</span>
+                    <span className="text-sm text-foreground">Mapa de atividade</span>
                   </div>
 
-                  <div className="flex items-center gap-3 p-2.5 bg-slate-800/50 rounded-lg border border-slate-700/50 hover:border-purple-500/30 transition-colors">
+                  <div className="flex items-center gap-3 p-2.5 bg-muted/50 rounded-lg border border-slate-700/50 hover:border-purple-500/30 transition-colors">
                     <TrendingUp className="w-4 h-4 text-purple-400 flex-shrink-0" />
-                    <span className="text-sm text-slate-200">Insights inteligentes</span>
+                    <span className="text-sm text-foreground">Insights inteligentes</span>
                   </div>
                 </div>
               </div>
@@ -223,7 +223,7 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
             <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 p-[2px]">
               <Button
                 onClick={() => setLocation('/pricing')}
-                className="w-full bg-slate-900 hover:bg-slate-800 text-white border-0 rounded-xl font-semibold transition-all"
+                className="w-full bg-card hover:bg-muted text-white border-0 rounded-xl font-semibold transition-all"
                 size="lg"
               >
                 <Lock className="w-4 h-4 mr-2" />
@@ -291,13 +291,13 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="bg-slate-900/95 backdrop-blur-sm border border-emerald-500/30 rounded-lg px-4 py-3 shadow-xl">
+        <div className="bg-card/95 backdrop-blur-sm border border-emerald-500/30 rounded-lg px-4 py-3 shadow-xl">
           <p className="text-xs font-semibold text-white mb-2">{data.date}</p>
           <div className="space-y-1">
             <p className="text-sm text-emerald-400 font-bold">
               {data.format_count} {data.format_count === 1 ? 'formatação' : 'formatações'}
             </p>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-muted-foreground">
               {data.token_count.toLocaleString()} tokens
             </p>
           </div>
@@ -339,7 +339,7 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
           <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/20 rounded-lg p-3">
             <div className="flex items-center gap-2 mb-1">
               <Activity className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-xs text-slate-400">Total</span>
+              <span className="text-xs text-muted-foreground">Total</span>
             </div>
             <p className="text-2xl font-bold text-white">{totalFormats}</p>
             <p className="text-xs text-emerald-400">formatações</p>
@@ -348,7 +348,7 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
           <div className="bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border border-cyan-500/20 rounded-lg p-3">
             <div className="flex items-center gap-2 mb-1">
               <BarChart3 className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="text-xs text-slate-400">Média/dia</span>
+              <span className="text-xs text-muted-foreground">Média/dia</span>
             </div>
             <p className="text-2xl font-bold text-white">{avgCount.toFixed(1)}</p>
             <p className="text-xs text-cyan-400">por dia</p>
@@ -357,7 +357,7 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
           <div className="bg-gradient-to-br from-orange-500/10 to-orange-500/5 border border-orange-500/20 rounded-lg p-3">
             <div className="flex items-center gap-2 mb-1">
               <Flame className="w-3.5 h-3.5 text-orange-400" />
-              <span className="text-xs text-slate-400">Pico</span>
+              <span className="text-xs text-muted-foreground">Pico</span>
             </div>
             <p className="text-2xl font-bold text-white">{peakDay?.format_count || 0}</p>
             <p className="text-xs text-orange-400 truncate">
@@ -368,7 +368,7 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
           <div className="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/20 rounded-lg p-3">
             <div className="flex items-center gap-2 mb-1">
               <TrendingUp className="w-3.5 h-3.5 text-blue-400" />
-              <span className="text-xs text-slate-400">Tendência</span>
+              <span className="text-xs text-muted-foreground">Tendência</span>
             </div>
             <p className="text-2xl font-bold text-white">
               {trendPercentage > 0 ? '+' : ''}{trendPercentage.toFixed(0)}%
@@ -398,7 +398,7 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
               Linha
             </Button>
           </div>
-          <div className="text-xs text-slate-400">
+          <div className="text-xs text-muted-foreground">
             Últimos {data.length} dias
           </div>
         </div>
@@ -476,14 +476,14 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
             <span className="text-sm font-semibold text-white">Insights Pro</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-            <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-3">
-              <p className="text-slate-400 mb-1">Melhor desempenho</p>
+            <div className="bg-muted/50 border border-slate-700 rounded-lg p-3">
+              <p className="text-muted-foreground mb-1">Melhor desempenho</p>
               <p className="text-white font-semibold">
                 {peakDay ? `${new Date(peakDay.date).toLocaleDateString('pt-BR', { weekday: 'long' })} (${peakDay.format_count} formatações)` : 'Sem dados'}
               </p>
             </div>
-            <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-3">
-              <p className="text-slate-400 mb-1">Tokens processados</p>
+            <div className="bg-muted/50 border border-slate-700 rounded-lg p-3">
+              <p className="text-muted-foreground mb-1">Tokens processados</p>
               <p className="text-white font-semibold">
                 {data.reduce((sum, item) => sum + item.token_count, 0).toLocaleString()} no período
               </p>

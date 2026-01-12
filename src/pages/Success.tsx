@@ -68,8 +68,8 @@ export default function Success() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center p-4">
-      <Card className="max-w-2xl w-full border-slate-800">
+    <div className="min-h-screen bg-background text-white flex items-center justify-center p-4">
+      <Card className="max-w-2xl w-full border-border">
         <CardContent className="pt-12 pb-8 text-center">
           <div className="flex justify-center mb-6">
             <div className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center animate-bounce">
@@ -81,19 +81,19 @@ export default function Success() {
             Payment Confirmed!
           </h1>
 
-          <p className="text-xl text-slate-300 mb-8">
+          <p className="text-xl text-muted-foreground mb-8">
             Your Pro plan has been successfully activated
           </p>
 
-          <div className="bg-slate-900/50 rounded-lg p-6 mb-8">
-            <h2 className="text-lg font-semibold mb-4 text-slate-200">
+          <div className="bg-card/50 rounded-lg p-6 mb-8">
+            <h2 className="text-lg font-semibold mb-4 text-foreground">
               You now have access to:
             </h2>
             <ul className="space-y-3 text-left max-w-md mx-auto">
               {benefits.map((benefit, index) => (
                 <li key={index} className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                  <span className="text-slate-300">{benefit}</span>
+                  <span className="text-muted-foreground">{benefit}</span>
                 </li>
               ))}
             </ul>
@@ -107,7 +107,7 @@ export default function Success() {
             Go to Dashboard
           </Button>
 
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-muted-foreground">
             Redirecting automatically in {countdown} seconds...
           </p>
         </CardContent>

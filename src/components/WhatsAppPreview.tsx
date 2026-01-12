@@ -122,7 +122,7 @@ export function WhatsAppPreview({ text, isLoading = false }: WhatsAppPreviewProp
           >
             <div className="absolute inset-0 border-[12px] border-slate-900 rounded-[2.5rem] pointer-events-none"></div>
 
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-5 bg-slate-900 rounded-b-2xl z-10"></div>
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-5 bg-card rounded-b-2xl z-10"></div>
 
             <div className="relative h-full flex flex-col bg-[#0a1014]">
               <div className="bg-[#075e54] px-3 py-2.5 pt-6 flex items-center justify-between shadow-md">

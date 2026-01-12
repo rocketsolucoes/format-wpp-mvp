@@ -33,13 +33,13 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="bg-slate-950 min-h-screen text-slate-100 selection:bg-emerald-500/30">
+    <div className="bg-background min-h-screen text-foreground selection:bg-emerald-500/30">
       {/* 1. Hero Section - Reduzido padding superior */}
       <HeroSection />
       
       {/* 2. Interactive Demo - Layout mais compacto */}
       <div id="formatter" className="container mx-auto px-4 py-4">
-        <div className="max-w-5xl mx-auto bg-slate-900/30 rounded-2xl border border-slate-800/50 p-1 shadow-xl">
+        <div className="max-w-5xl mx-auto bg-card/30 rounded-2xl border border-border/50 p-1 shadow-xl">
           <FormatterInterface
             onNoCredits={handleNoCredits}
             onFormatSuccess={(credits) => {

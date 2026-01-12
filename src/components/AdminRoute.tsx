@@ -64,10 +64,10 @@ export default function AdminRoute({ children }: AdminRouteProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500 mb-4"></div>
-          <p className="text-slate-400">Verifying access...</p>
+          <p className="text-muted-foreground">Verifying access...</p>
         </div>
       </div>
     );

@@ -130,7 +130,7 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
       <Card className="hover:border-yellow-500/50 transition-colors border-yellow-500/30 bg-gradient-to-br from-yellow-500/5 to-orange-500/5">
         <CardContent className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">Estilo Favorito</span>
+            <span className="text-sm text-muted-foreground">Estilo Favorito</span>
             <div className="p-2 bg-yellow-500/10 rounded-lg">
               <Star className="w-5 h-5 text-yellow-400" />
             </div>
@@ -139,7 +139,7 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
             <Sparkles className="w-16 h-16 text-yellow-400 flex-shrink-0" />
             <div className="flex-1">
               <div className="text-xl font-bold text-white">Sem favorito</div>
-              <p className="text-sm text-slate-400 mt-1">Comece a formatar para descobrir seu estilo preferido</p>
+              <p className="text-sm text-muted-foreground mt-1">Comece a formatar para descobrir seu estilo preferido</p>
             </div>
           </div>
         </CardContent>
@@ -152,7 +152,7 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
       <Card className="hover:border-yellow-500/50 transition-colors border-yellow-500/30 bg-gradient-to-br from-yellow-500/5 to-orange-500/5 h-full">
         <CardContent className="space-y-3 h-full flex flex-col">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">Estilo Favorito</span>
+            <span className="text-sm text-muted-foreground">Estilo Favorito</span>
             <div className="p-2 bg-yellow-500/10 rounded-lg">
               <Star className="w-5 h-5 text-yellow-400" />
             </div>
@@ -162,9 +162,9 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
               <div className="text-7xl mb-3">🎭</div>
               <div className="text-center">
                 <div className="text-xl font-bold text-white">Uso Misto</div>
-                <p className="text-sm text-slate-400">Vários estilos</p>
+                <p className="text-sm text-muted-foreground">Vários estilos</p>
                 <div className="mt-2">
-                  <span className="text-base font-semibold text-slate-300">
+                  <span className="text-base font-semibold text-muted-foreground">
                     {totalCount} {totalCount === 1 ? 'formato' : 'formatos'}
                   </span>
                 </div>
@@ -179,8 +179,8 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
                 return (
                   <div key={stat.style_id} className="space-y-1">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-slate-300 font-medium">{style.emoji} {style.name}</span>
-                      <span className="text-slate-400">{stat.count} <span className="text-slate-500">({stat.percentage.toFixed(0)}%)</span></span>
+                      <span className="text-muted-foreground font-medium">{style.emoji} {style.name}</span>
+                      <span className="text-muted-foreground">{stat.count} <span className="text-slate-500">({stat.percentage.toFixed(0)}%)</span></span>
                     </div>
                     <Progress value={stat.percentage} max={100} className="h-1.5" />
                   </div>
@@ -212,7 +212,7 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
     <Card className={`hover:border-yellow-500/50 transition-colors ${colorClasses[config.color as keyof typeof colorClasses]} h-full`}>
       <CardContent className="space-y-3 h-full flex flex-col">
         <div className="flex items-center justify-between">
-          <span className="text-sm text-slate-400">Estilo Favorito</span>
+          <span className="text-sm text-muted-foreground">Estilo Favorito</span>
           <div className={`p-2 rounded-lg ${iconColorClasses[config.color as keyof typeof iconColorClasses]}`}>
             <Star className="w-5 h-5" />
           </div>
@@ -225,9 +225,9 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
             </Tooltip>
             <div className="text-center">
               <div className="text-xl font-bold text-white">{config.name}</div>
-              <p className="text-sm text-slate-400">{config.subtitle}</p>
+              <p className="text-sm text-muted-foreground">{config.subtitle}</p>
               <div className="mt-2">
-                <span className="text-base font-semibold text-slate-300">
+                <span className="text-base font-semibold text-muted-foreground">
                   {favoriteStats?.count} {favoriteStats?.count === 1 ? 'vez' : 'vezes'}
                 </span>
                 <div className="text-sm text-slate-500">
@@ -245,8 +245,8 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
               return (
                 <div key={stat.style_id} className="space-y-1">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-300 font-medium">{style.emoji} {style.name}</span>
-                    <span className="text-slate-400">{stat.count} <span className="text-slate-500">({stat.percentage.toFixed(0)}%)</span></span>
+                    <span className="text-muted-foreground font-medium">{style.emoji} {style.name}</span>
+                    <span className="text-muted-foreground">{stat.count} <span className="text-slate-500">({stat.percentage.toFixed(0)}%)</span></span>
                   </div>
                   <Progress value={stat.percentage} max={100} className="h-1.5" />
                 </div>

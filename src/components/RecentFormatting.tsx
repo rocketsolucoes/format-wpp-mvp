@@ -202,7 +202,7 @@ export function RecentFormatting({ items, loading, onRefresh, totalCount }: Rece
         </CardHeader>
         <CardContent className="space-y-3">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="p-3 bg-slate-800/30 rounded-lg space-y-2">
+            <div key={i} className="p-3 bg-muted/30 rounded-lg space-y-2">
               <div className="flex items-center gap-2">
                 <Skeleton className="h-6 w-24" />
               </div>
@@ -237,7 +237,7 @@ export function RecentFormatting({ items, loading, onRefresh, totalCount }: Rece
           {localItems.length === 0 ? (
             <div className="text-center py-12">
               <FileText className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-              <p className="text-slate-400 mb-4">Nenhuma formatação ainda. Comece a formatar!</p>
+              <p className="text-muted-foreground mb-4">Nenhuma formatação ainda. Comece a formatar!</p>
               <Link href="/format">
                 <Button variant="primary" className="text-sm">
                   Formatar Texto Agora
@@ -249,7 +249,7 @@ export function RecentFormatting({ items, loading, onRefresh, totalCount }: Rece
               {localItems.slice(0, 3).map((item) => (
                 <div
                   key={item.id}
-                  className="p-3 bg-slate-800/30 rounded-lg hover:bg-slate-800/50 transition-all border border-slate-800 hover:border-slate-700 group"
+                  className="p-3 bg-muted/30 rounded-lg hover:bg-muted/50 transition-all border border-border hover:border-slate-700 group"
                 >
                   <div className="space-y-2">
                     <div className="flex items-start justify-between gap-3">
@@ -262,7 +262,7 @@ export function RecentFormatting({ items, loading, onRefresh, totalCount }: Rece
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-slate-300 line-clamp-2">
+                      <p className="text-sm text-muted-foreground line-clamp-2">
                         {item.output_text}
                       </p>
                     </div>
@@ -355,14 +355,14 @@ export function RecentFormatting({ items, loading, onRefresh, totalCount }: Rece
             <DialogBody>
               <ScrollArea className="max-h-[60vh] space-y-4">
                 <div>
-                  <h4 className="text-sm font-semibold text-slate-400 mb-2">Texto Original:</h4>
-                  <div className="p-3 bg-slate-800/50 rounded-lg text-sm text-slate-300 whitespace-pre-wrap">
+                  <h4 className="text-sm font-semibold text-muted-foreground mb-2">Texto Original:</h4>
+                  <div className="p-3 bg-muted/50 rounded-lg text-sm text-muted-foreground whitespace-pre-wrap">
                     {selectedItem.input_text}
                   </div>
                 </div>
                 <div className="pt-4">
-                  <h4 className="text-sm font-semibold text-slate-400 mb-2">Texto Formatado:</h4>
-                  <div className="p-3 bg-slate-800/50 rounded-lg text-sm text-slate-300 whitespace-pre-wrap">
+                  <h4 className="text-sm font-semibold text-muted-foreground mb-2">Texto Formatado:</h4>
+                  <div className="p-3 bg-muted/50 rounded-lg text-sm text-muted-foreground whitespace-pre-wrap">
                     {selectedItem.output_text}
                   </div>
                 </div>

@@ -335,9 +335,9 @@ export default function History() {
 
   return (
     <DashboardLayout>
-      <div className="px-4 py-4 sm:px-6 lg:px-8 border-b border-slate-800 bg-slate-950">
+      <div className="px-4 py-4 sm:px-6 lg:px-8 border-b border-border bg-background">
         <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Histórico de Formatação</h1>
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-muted-foreground">
           {totalCount > 0 ? `${totalCount} ${totalCount === 1 ? 'registro encontrado' : 'registros encontrados'}` : 'Visualize e gerencie suas solicitações de formatação anteriores'}
         </p>
       </div>
@@ -347,7 +347,7 @@ export default function History() {
           <div className="mb-6 p-4 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30 rounded-lg flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Sparkles className="w-5 h-5 text-emerald-400" />
-              <p className="text-slate-200">
+              <p className="text-foreground">
                 Faça upgrade para o Pro e tenha acesso ao histórico completo
               </p>
             </div>
@@ -367,10 +367,10 @@ export default function History() {
           </div>
         )}
 
-        <div className="sticky top-0 z-10 bg-slate-950/95 backdrop-blur-sm pb-4 mb-6 border-b border-slate-800">
+        <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm pb-4 mb-6 border-b border-border">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <Input
                 type="text"
                 placeholder="Buscar nos textos..."
@@ -385,7 +385,7 @@ export default function History() {
 
             {isPro && (
               <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
                 <Select
                   value={dateFilter}
                   onChange={(e) => {
@@ -403,7 +403,7 @@ export default function History() {
             )}
 
             <div className="relative">
-              <Star className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+              <Star className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
               <Select
                 value={favoriteFilter}
                 onChange={(e) => {
@@ -429,7 +429,7 @@ export default function History() {
         {loading ? (
           <div className="space-y-3">
             {[...Array(5)].map((_, i) => (
-              <Card key={i} className="border-slate-800">
+              <Card key={i} className="border-border">
                 <CardContent className="p-4">
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
@@ -450,11 +450,11 @@ export default function History() {
         ) : records.length === 0 ? (
           <div className="text-center py-16">
             <div className="mb-6 flex justify-center">
-              <div className="w-24 h-24 rounded-full bg-slate-800 flex items-center justify-center">
+              <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center">
                 <Search className="w-12 h-12 text-slate-600" />
               </div>
             </div>
-            <h2 className="text-2xl font-bold mb-2 text-slate-300">Nenhuma formatação encontrada</h2>
+            <h2 className="text-2xl font-bold mb-2 text-muted-foreground">Nenhuma formatação encontrada</h2>
             <p className="text-slate-500 mb-6">
               {hasActiveFilters
                 ? 'Tente ajustar seus filtros'
@@ -475,7 +475,7 @@ export default function History() {
               {records.map((record) => (
                 <div
                   key={record.id}
-                  className="p-4 bg-slate-800/30 rounded-lg hover:bg-slate-800/50 transition-all border border-slate-800 hover:border-slate-700 group"
+                  className="p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-all border border-border hover:border-slate-700 group"
                 >
                   <div className="space-y-3">
                     <div className="flex items-start justify-between gap-3">
@@ -488,7 +488,7 @@ export default function History() {
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-slate-300 line-clamp-2">
+                      <p className="text-sm text-muted-foreground line-clamp-2">
                         {record.output_text}
                       </p>
                     </div>
@@ -564,7 +564,7 @@ export default function History() {
                 >
                   Anterior
                 </Button>
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-muted-foreground">
                   Página {currentPage} de {totalPages}
                 </p>
                 <Button
@@ -597,24 +597,24 @@ export default function History() {
               <div className="px-6 py-6 overflow-y-auto flex-1">
                 <div className="grid lg:grid-cols-2 gap-6">
                   <div className="space-y-3">
-                    <h3 className="text-sm font-semibold text-slate-300 mb-3">Texto Original</h3>
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-3">Texto Original</h3>
                     <textarea
                       readOnly
                       value={selectedRecord.input_text}
-                      className="w-full h-80 p-4 rounded-lg border-2 border-slate-700 bg-slate-900/50 text-slate-200 text-sm resize-none focus:outline-none focus:border-slate-600 transition-colors"
+                      className="w-full h-80 p-4 rounded-lg border-2 border-slate-700 bg-card/50 text-foreground text-sm resize-none focus:outline-none focus:border-slate-600 transition-colors"
                     />
                   </div>
                   <div className="space-y-3">
-                    <h3 className="text-sm font-semibold text-slate-300 mb-3">Texto Formatado</h3>
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-3">Texto Formatado</h3>
                     <textarea
                       readOnly
                       value={selectedRecord.output_text}
-                      className="w-full h-80 p-4 rounded-lg border-2 border-slate-700 bg-slate-900/50 text-slate-200 text-sm resize-none focus:outline-none focus:border-slate-600 transition-colors"
+                      className="w-full h-80 p-4 rounded-lg border-2 border-slate-700 bg-card/50 text-foreground text-sm resize-none focus:outline-none focus:border-slate-600 transition-colors"
                     />
                   </div>
                 </div>
               </div>
-              <div className="px-6 py-4 border-t border-slate-800 bg-slate-900/30">
+              <div className="px-6 py-4 border-t border-border bg-card/30">
                 <div className="flex flex-wrap justify-end gap-3">
                   <Button
                     variant="outline"

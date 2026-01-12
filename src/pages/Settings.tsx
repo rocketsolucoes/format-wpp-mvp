@@ -464,9 +464,9 @@ export default function Settings() {
 
   return (
     <DashboardLayout>
-      <div className="px-4 py-4 sm:px-6 lg:px-8 border-b border-slate-800 bg-slate-950">
+      <div className="px-4 py-4 sm:px-6 lg:px-8 border-b border-border bg-background">
         <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Configurações</h1>
-        <p className="text-sm text-slate-400">Gerencie as configurações e preferências da sua conta</p>
+        <p className="text-sm text-muted-foreground">Gerencie as configurações e preferências da sua conta</p>
       </div>
 
       <div className="px-4 py-6 sm:px-6 lg:px-8">
@@ -495,7 +495,7 @@ export default function Settings() {
           </TabsList>
 
           <TabsContent value="profile">
-            <Card className="border-slate-800 max-w-2xl mx-auto">
+            <Card className="border-border max-w-2xl mx-auto">
               <CardContent className="p-6">
                 <div className="flex flex-col items-center mb-6">
                   <div className="w-32 h-32 mb-4 rounded-full overflow-hidden">
@@ -524,7 +524,7 @@ export default function Settings() {
                   </Button>
                   {uploadProgress > 0 && (
                     <div className="w-full max-w-xs mt-2">
-                      <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                      <div className="h-2 bg-muted rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-emerald-500 to-cyan-500 transition-all"
                           style={{ width: `${uploadProgress}%` }}
@@ -554,7 +554,7 @@ export default function Settings() {
                       id="email"
                       value={user.email}
                       disabled
-                      className="bg-slate-800/50 text-slate-500 cursor-not-allowed"
+                      className="bg-muted/50 text-slate-500 cursor-not-allowed"
                     />
                     <p className="text-xs text-slate-500 mt-1">O e-mail não pode ser alterado</p>
                   </div>
@@ -570,7 +570,7 @@ export default function Settings() {
                       maxLength={200}
                       rows={3}
                       placeholder="Conte-nos sobre você..."
-                      className="w-full px-4 py-2 rounded-md border border-slate-700 bg-slate-900 text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+                      className="w-full px-4 py-2 rounded-md border border-slate-700 bg-card text-foreground placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
                     />
                     <p className="text-xs text-slate-500 mt-1 text-right">
                       {bio.length}/200 caracteres
@@ -591,7 +591,7 @@ export default function Settings() {
 
           <TabsContent value="account" className="space-y-6">
             <div className="max-w-2xl mx-auto space-y-6">
-              <Card className="border-slate-800">
+              <Card className="border-border">
                 <CardHeader>
                   <CardTitle>Alterar Senha</CardTitle>
                 </CardHeader>
@@ -619,7 +619,7 @@ export default function Settings() {
                     {newPassword && (
                       <div className="mt-2">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs text-slate-400">Força da senha</span>
+                          <span className="text-xs text-muted-foreground">Força da senha</span>
                           <span className={`text-xs font-medium ${
                             passwordStrength.label === 'Fraca' ? 'text-red-400' :
                             passwordStrength.label === 'Média' ? 'text-yellow-400' :
@@ -628,7 +628,7 @@ export default function Settings() {
                             {passwordStrength.label}
                           </span>
                         </div>
-                        <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                        <div className="h-2 bg-muted rounded-full overflow-hidden">
                           <div
                             className={`h-full ${passwordStrength.color} transition-all`}
                             style={{ width: `${passwordStrength.strength}%` }}
@@ -663,7 +663,7 @@ export default function Settings() {
                   <CardTitle className="text-red-400">Zona de Perigo</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-slate-400 mb-4">
+                  <p className="text-muted-foreground mb-4">
                     Uma vez que você excluir sua conta, não há como voltar atrás. Por favor, tenha certeza.
                   </p>
                   <div className="mb-4">
@@ -691,7 +691,7 @@ export default function Settings() {
           </TabsContent>
 
           <TabsContent value="notifications">
-            <Card className="border-slate-800 max-w-2xl mx-auto">
+            <Card className="border-border max-w-2xl mx-auto">
               <CardContent className="p-6 space-y-6">
                 <div>
                   <h3 className="text-lg font-semibold mb-4">Notificações por E-mail</h3>
@@ -699,7 +699,7 @@ export default function Settings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium">Créditos acabando</p>
-                        <p className="text-sm text-slate-400">
+                        <p className="text-sm text-muted-foreground">
                           Seja notificado quando seus créditos estiverem quase esgotados
                         </p>
                       </div>
@@ -714,7 +714,7 @@ export default function Settings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium">Resumo semanal</p>
-                        <p className="text-sm text-slate-400">
+                        <p className="text-sm text-muted-foreground">
                           Receba um resumo semanal de sua atividade
                         </p>
                       </div>
@@ -729,7 +729,7 @@ export default function Settings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium">Notícias e atualizações</p>
-                        <p className="text-sm text-slate-400">
+                        <p className="text-sm text-muted-foreground">
                           Fique informado sobre novos recursos e melhorias
                         </p>
                       </div>
@@ -744,7 +744,7 @@ export default function Settings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium">E-mails de marketing</p>
-                        <p className="text-sm text-slate-400">
+                        <p className="text-sm text-muted-foreground">
                           Receba ofertas promocionais e dicas
                         </p>
                       </div>
@@ -766,7 +766,7 @@ export default function Settings() {
           </TabsContent>
 
           <TabsContent value="privacy">
-            <Card className="border-slate-800 max-w-2xl mx-auto">
+            <Card className="border-border max-w-2xl mx-auto">
               <CardContent className="p-6 space-y-6">
                 <div>
                   <h3 className="text-lg font-semibold mb-4">Coleta de Dados</h3>
@@ -774,7 +774,7 @@ export default function Settings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium">Análise de uso</p>
-                        <p className="text-sm text-slate-400">
+                        <p className="text-sm text-muted-foreground">
                           Ajude-nos a melhorar o produto compartilhando dados de uso
                         </p>
                       </div>
@@ -789,7 +789,7 @@ export default function Settings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium">Compartilhamento de dados anônimos</p>
-                        <p className="text-sm text-slate-400">
+                        <p className="text-sm text-muted-foreground">
                           Compartilhe dados anonimizados para melhoria do produto
                         </p>
                       </div>
@@ -804,7 +804,7 @@ export default function Settings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium">Perfil público</p>
-                        <p className="text-sm text-slate-400">
+                        <p className="text-sm text-muted-foreground">
                           Mostre seu perfil publicamente (em breve)
                         </p>
                       </div>
@@ -845,7 +845,7 @@ export default function Settings() {
 
                 <div>
                   <h3 className="text-lg font-semibold mb-4">Exportar Dados</h3>
-                  <p className="text-sm text-slate-400 mb-4">
+                  <p className="text-sm text-muted-foreground mb-4">
                     Baixe todos os seus dados em formato JSON (conformidade LGPD/GDPR)
                   </p>
                   <Button
@@ -868,12 +868,12 @@ export default function Settings() {
 
           <TabsContent value="billing">
             <div className="space-y-6 max-w-2xl mx-auto">
-              <Card className="border-slate-800">
+              <Card className="border-border">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-6">
                     <div>
                       <h3 className="text-2xl font-bold">Plano Atual</h3>
-                      <p className="text-slate-400">
+                      <p className="text-muted-foreground">
                         {isPro ? 'Você está no plano Pro' : 'Você está no plano Gratuito'}
                       </p>
                     </div>
@@ -885,11 +885,11 @@ export default function Settings() {
                   {isPro && (
                     <div className="mb-6 space-y-2">
                       <div className="flex justify-between">
-                        <span className="text-slate-400">Preço</span>
+                        <span className="text-muted-foreground">Preço</span>
                         <span className="font-semibold">{formatBRL(PRICING.PRO_MONTHLY_PRICE)}/mês</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-400">Status</span>
+                        <span className="text-muted-foreground">Status</span>
                         <span className="text-green-400 font-semibold">
                           {user.subscription_status === 'active' ? 'Ativo' : user.subscription_status}
                         </span>

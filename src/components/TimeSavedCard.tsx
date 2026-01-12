@@ -15,7 +15,7 @@ const TIME_PER_STYLE = {
 };
 
 const MOTIVATIONAL_MESSAGES = [
-  { max: 10, message: 'Todo segundo conta! 🚀', color: 'text-slate-400' },
+  { max: 10, message: 'Todo segundo conta! 🚀', color: 'text-muted-foreground' },
   { max: 30, message: 'Ótimo progresso! ⚡', color: 'text-emerald-400' },
   { max: 60, message: 'Você está em chamas! 🔥', color: 'text-orange-400' },
   { max: Infinity, message: 'Campeão de economia! 👑', color: 'text-yellow-400' },
@@ -126,7 +126,7 @@ export function TimeSavedCard({ userId }: TimeSavedCardProps) {
       <Card className="hover:border-cyan-500/50 transition-colors border-cyan-500/30 bg-gradient-to-br from-cyan-500/5 to-blue-500/5">
         <CardContent className="space-y-3 text-center">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">Tempo Economizado</span>
+            <span className="text-sm text-muted-foreground">Tempo Economizado</span>
             <div className="p-2 bg-cyan-500/10 rounded-lg">
               <Clock className="w-5 h-5 text-cyan-400" />
             </div>
@@ -135,7 +135,7 @@ export function TimeSavedCard({ userId }: TimeSavedCardProps) {
             <Clock className="w-12 h-12 text-cyan-400" />
           </div>
           <div className="text-3xl font-bold text-white">~0 min</div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-muted-foreground">
             Comece a formatar para economizar tempo
           </p>
         </CardContent>
@@ -147,7 +147,7 @@ export function TimeSavedCard({ userId }: TimeSavedCardProps) {
     <Card className="hover:border-cyan-500/50 transition-colors border-cyan-500/30 bg-gradient-to-br from-cyan-500/5 to-blue-500/5">
       <CardContent className="space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-sm text-slate-400">Tempo Economizado</span>
+          <span className="text-sm text-muted-foreground">Tempo Economizado</span>
           <div className="p-2 bg-cyan-500/10 rounded-lg">
             <Zap className="w-5 h-5 text-cyan-400" />
           </div>
@@ -160,20 +160,20 @@ export function TimeSavedCard({ userId }: TimeSavedCardProps) {
           <p className="text-xs text-slate-500 mt-1">este mês</p>
         </div>
 
-        <div className="pt-2 border-t border-slate-800 space-y-1.5 text-xs">
-          <div className="flex items-center justify-between text-slate-400">
+        <div className="pt-2 border-t border-border space-y-1.5 text-xs">
+          <div className="flex items-center justify-between text-muted-foreground">
             <span>Média por formato:</span>
-            <span className="text-slate-300">{avgTimePerFormat} min</span>
+            <span className="text-muted-foreground">{avgTimePerFormat} min</span>
           </div>
-          <div className="flex items-center justify-between text-slate-400">
+          <div className="flex items-center justify-between text-muted-foreground">
             <span>Total de formatos:</span>
-            <span className="text-slate-300">{thisMonthCount}</span>
+            <span className="text-muted-foreground">{thisMonthCount}</span>
           </div>
         </div>
 
         {hasComparison && (
           <div className={`flex items-center justify-center gap-1 text-xs ${
-            timeDifference > 0 ? 'text-emerald-400' : timeDifference < 0 ? 'text-red-400' : 'text-slate-400'
+            timeDifference > 0 ? 'text-emerald-400' : timeDifference < 0 ? 'text-red-400' : 'text-muted-foreground'
           }`}>
             {timeDifference > 0 ? (
               <>

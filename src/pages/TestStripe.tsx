@@ -71,9 +71,9 @@ export default function TestStripe() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white p-8">
+    <div className="min-h-screen bg-background text-white p-8">
       <div className="max-w-4xl mx-auto">
-        <Card className="border-slate-800 mb-6">
+        <Card className="border-border mb-6">
           <CardHeader>
             <CardTitle>Stripe Checkout Test</CardTitle>
           </CardHeader>
@@ -85,24 +85,24 @@ export default function TestStripe() {
         </Card>
 
         {result && (
-          <Card className="border-slate-800">
+          <Card className="border-border">
             <CardHeader>
               <CardTitle>Result</CardTitle>
             </CardHeader>
             <CardContent>
-              <pre className="bg-slate-900 p-4 rounded text-xs overflow-auto max-h-96">
+              <pre className="bg-card p-4 rounded text-xs overflow-auto max-h-96">
                 {JSON.stringify(result, null, 2)}
               </pre>
             </CardContent>
           </Card>
         )}
 
-        <Card className="border-slate-800 mt-6">
+        <Card className="border-border mt-6">
           <CardHeader>
             <CardTitle>Environment Check</CardTitle>
           </CardHeader>
           <CardContent>
-            <pre className="bg-slate-900 p-4 rounded text-xs">
+            <pre className="bg-card p-4 rounded text-xs">
               {JSON.stringify({
                 VITE_SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL,
                 VITE_STRIPE_PUBLISHABLE_KEY: import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ? 'Set (pk_test_...)' : 'Not set',

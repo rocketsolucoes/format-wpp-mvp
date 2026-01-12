@@ -59,7 +59,7 @@ export default function Format() {
   }, [inputText, outputText]);
 
   const charCount = inputText.length;
-  const charCountColor = charCount > 4500 ? 'text-red-400' : charCount > 4000 ? 'text-yellow-400' : 'text-slate-400';
+  const charCountColor = charCount > 4500 ? 'text-red-400' : charCount > 4000 ? 'text-yellow-400' : 'text-muted-foreground';
   const isInputValid = inputText.trim().length >= 10 && inputText.length <= 5000;
 
   const handleFormat = async () => {
@@ -188,11 +188,11 @@ export default function Format() {
 
   return (
     <DashboardLayout>
-      <div className="px-4 py-3 sm:py-4 sm:px-6 lg:px-8 border-b border-slate-800 bg-slate-950">
+      <div className="px-4 py-3 sm:py-4 sm:px-6 lg:px-8 border-b border-border bg-background">
         <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
           Formatador de Mensagens IA
         </h1>
-        <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
+        <p className="text-muted-foreground text-xs sm:text-sm mt-0.5">
           Transforme suas mensagens com formatação avançada por IA
         </p>
       </div>
@@ -273,7 +273,7 @@ export default function Format() {
                   onChange={(e) => setInputText(e.target.value)}
                   placeholder="Cole ou digite sua mensagem aqui..."
                   disabled={isFormatting}
-                  className="w-full min-h-[180px] sm:min-h-[200px] px-3 sm:px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-y disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                  className="w-full min-h-[180px] sm:min-h-[200px] px-3 sm:px-4 py-3 bg-card border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-y disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                   aria-label="Original text input"
                 />
               </div>
@@ -307,15 +307,15 @@ export default function Format() {
                       id="output-text"
                       value={outputText}
                       readOnly
-                      className="w-full min-h-[180px] sm:min-h-[200px] px-3 sm:px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white resize-y pr-12 text-sm sm:text-base"
+                      className="w-full min-h-[180px] sm:min-h-[200px] px-3 sm:px-4 py-3 bg-card border border-slate-700 rounded-lg text-white resize-y pr-12 text-sm sm:text-base"
                       aria-label="Formatted text output"
                     />
                     <button
                       onClick={handleCopy}
-                      className="absolute top-3 right-3 p-2 hover:bg-slate-800 rounded-lg transition-colors touch-manipulation"
+                      className="absolute top-3 right-3 p-2 hover:bg-muted rounded-lg transition-colors touch-manipulation"
                       aria-label="Copy to clipboard"
                     >
-                      <Copy className="w-4 h-4 text-slate-400" />
+                      <Copy className="w-4 h-4 text-muted-foreground" />
                     </button>
                   </div>
 

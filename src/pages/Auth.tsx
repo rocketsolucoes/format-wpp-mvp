@@ -189,7 +189,7 @@ const Auth: React.FC = () => {
   };
 
   return (
-    <div className="h-screen bg-slate-950 flex items-center justify-center px-4 overflow-hidden">
+    <div className="h-screen bg-background flex items-center justify-center px-4 overflow-hidden">
       <div className="w-full max-w-md">
         {/* Logo e Título */}
         <div className="text-center mb-8">
@@ -203,11 +203,11 @@ const Auth: React.FC = () => {
               Bem-vindo de Volta
             </span>
           </h1>
-          <p className="text-slate-400">Faça login para continuar formatando</p>
+          <p className="text-muted-foreground">Faça login para continuar formatando</p>
         </div>
 
         {/* Card com Tabs */}
-        <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-lg p-6 shadow-xl">
+        <div className="bg-card/50 backdrop-blur-sm border border-border rounded-lg p-6 shadow-xl">
           <Tabs defaultValue="login">
             <div className="flex justify-center mb-6">
               <TabsList className="w-auto">
@@ -371,7 +371,7 @@ const Auth: React.FC = () => {
         <div className="text-center mt-6">
           <button
             onClick={() => setLocation('/')}
-            className="text-sm text-slate-400 hover:text-slate-300 transition-colors"
+            className="text-sm text-muted-foreground hover:text-muted-foreground transition-colors"
           >
             Voltar para início
           </button>

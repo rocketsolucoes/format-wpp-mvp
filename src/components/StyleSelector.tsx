@@ -171,8 +171,8 @@ export function StyleSelector({ selectedStyle, onStyleChange, userPlan, onProSty
               <div className="flex items-center gap-2.5 sm:gap-3">
                 <div className={`p-2.5 sm:p-3 rounded-lg ${colors.bg} flex-shrink-0 relative`}>
                   {isLocked && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-slate-900/80 rounded-lg">
-                      <Lock className="w-4 h-4 text-slate-400" />
+                    <div className="absolute inset-0 flex items-center justify-center bg-card/80 rounded-lg">
+                      <Lock className="w-4 h-4 text-muted-foreground" />
                     </div>
                   )}
                   <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${colors.icon}`} />
@@ -189,7 +189,7 @@ export function StyleSelector({ selectedStyle, onStyleChange, userPlan, onProSty
                       </Badge>
                     )}
                   </div>
-                  <p className="text-[11px] sm:text-xs text-slate-400 leading-snug">
+                  <p className="text-[11px] sm:text-xs text-muted-foreground leading-snug">
                     {style.description}
                   </p>
                 </div>

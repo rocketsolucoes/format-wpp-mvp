@@ -68,7 +68,7 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
       <Card className="hover:border-blue-500/50 transition-colors h-full">
         <CardContent className="space-y-4 h-full flex flex-col">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">Atividade Recente</span>
+            <span className="text-sm text-muted-foreground">Atividade Recente</span>
             <div className={`p-2 rounded-lg ${
               monthTrend >= 0 ? 'bg-blue-500/10' : 'bg-red-500/10'
             }`}>
@@ -78,15 +78,15 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
 
           <div className="space-y-4 flex-1 flex flex-col justify-center">
             <div className="flex justify-between items-center">
-              <span className="text-sm text-slate-400">Este mês</span>
+              <span className="text-sm text-muted-foreground">Este mês</span>
               <span className="text-2xl font-bold text-white">
                 {stats?.this_month || 0}
               </span>
             </div>
 
             <div className="flex justify-between items-center">
-              <span className="text-sm text-slate-400">Total</span>
-              <span className="text-lg font-semibold text-slate-300">
+              <span className="text-sm text-muted-foreground">Total</span>
+              <span className="text-lg font-semibold text-muted-foreground">
                 {stats?.total_formatting || 0}
               </span>
             </div>
@@ -94,7 +94,7 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
             <div className="flex justify-between items-center pt-2 border-t border-slate-700">
               <span className="text-xs text-slate-500">Média semanal</span>
               <div className="flex items-center gap-1">
-                <span className="text-sm font-medium text-slate-300">{avgPerWeek}</span>
+                <span className="text-sm font-medium text-muted-foreground">{avgPerWeek}</span>
                 {monthTrend >= 0 ? (
                   <TrendingUp className="w-3 h-3 text-emerald-400" />
                 ) : (

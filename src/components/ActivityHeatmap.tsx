@@ -88,7 +88,7 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
   };
 
   const getIntensityColor = (count: number) => {
-    if (count === 0) return 'bg-slate-800/50';
+    if (count === 0) return 'bg-muted/50';
     const intensity = Math.min(count / maxCount, 1);
     if (intensity <= 0.25) return 'bg-emerald-500/20';
     if (intensity <= 0.5) return 'bg-emerald-500/40';
@@ -127,7 +127,7 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
             </div>
             <div>
               <h3 className="text-lg font-semibold text-white mb-2">Continue Formatando!</h3>
-              <p className="text-sm text-slate-400 max-w-xs mx-auto">
+              <p className="text-sm text-muted-foreground max-w-xs mx-auto">
                 Seu mapa de atividade aparecerá aqui após 10 dias de uso.
               </p>
             </div>
@@ -135,9 +135,9 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
               <div className="flex items-center justify-center gap-2 mb-2">
                 <span className="text-2xl font-bold text-blue-400">{activeDays}</span>
                 <span className="text-slate-500">/</span>
-                <span className="text-lg text-slate-400">10 dias</span>
+                <span className="text-lg text-muted-foreground">10 dias</span>
               </div>
-              <div className="w-full max-w-xs mx-auto h-3 bg-slate-800/50 rounded-full overflow-hidden">
+              <div className="w-full max-w-xs mx-auto h-3 bg-muted/50 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full transition-all duration-500"
                   style={{ width: `${(activeDays / 10) * 100}%` }}
@@ -181,7 +181,7 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
                       className={`w-3 h-3 rounded-sm ${getIntensityColor(dayData.count)} hover:ring-2 hover:ring-emerald-400 transition-all cursor-pointer group relative`}
                       title={`${new Date(dayData.date).toLocaleDateString('pt-BR')}: ${dayData.count} formatações`}
                     >
-                      <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+                      <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 bg-card text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
                         {new Date(dayData.date).toLocaleDateString('pt-BR')}
                         <br />
                         {dayData.count} {dayData.count === 1 ? 'formatação' : 'formatações'}
@@ -204,22 +204,22 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
 
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
-            <span className="text-slate-400">Menos</span>
+            <span className="text-muted-foreground">Menos</span>
             <div className="flex gap-1">
-              <div className="w-3 h-3 rounded-sm bg-slate-800/50" />
+              <div className="w-3 h-3 rounded-sm bg-muted/50" />
               <div className="w-3 h-3 rounded-sm bg-emerald-500/20" />
               <div className="w-3 h-3 rounded-sm bg-emerald-500/40" />
               <div className="w-3 h-3 rounded-sm bg-emerald-500/60" />
               <div className="w-3 h-3 rounded-sm bg-emerald-500/80" />
             </div>
-            <span className="text-slate-400">Mais</span>
+            <span className="text-muted-foreground">Mais</span>
           </div>
         </div>
 
         <div className="bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border border-cyan-500/20 rounded-lg p-3">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="w-4 h-4 text-cyan-400" />
-            <p className="text-xs text-slate-400">Taxa de consistência</p>
+            <p className="text-xs text-muted-foreground">Taxa de consistência</p>
           </div>
           <div className="flex items-baseline gap-2">
             <p className="text-2xl font-bold text-white">{consistencyRate.toFixed(0)}%</p>

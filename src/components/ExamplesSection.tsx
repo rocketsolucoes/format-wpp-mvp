@@ -19,7 +19,7 @@ _Não esqueçam_ de revisar o documento de *metas Q4* que enviei na semana passa
 Ansioso para ver todos lá! 🚀`;
 
   return (
-    <section className="container mx-auto px-4 py-12 bg-slate-950">
+    <section className="container mx-auto px-4 py-12 bg-background">
       <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto items-center">
         {/* Lado Esquerdo: Antes */}
         <div className="space-y-4">
@@ -28,14 +28,14 @@ Ansioso para ver todos lá! 🚀`;
             <h3 className="text-[10px] font-bold text-red-400 uppercase tracking-widest">Antes</h3>
           </div>
           
-          <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-6">
-            <p className="text-slate-400 text-base leading-relaxed italic">
+          <div className="bg-card/50 border border-border rounded-xl p-6">
+            <p className="text-muted-foreground text-base leading-relaxed italic">
               "{beforeText}"
             </p>
           </div>
           
           <div className="hidden lg:block p-4 border-l-2 border-emerald-500/30 bg-emerald-500/5">
-            <p className="text-sm text-slate-300 font-medium">
+            <p className="text-sm text-muted-foreground font-medium">
               "A diferença entre uma mensagem ignorada e uma mensagem lida está na clareza visual."
             </p>
           </div>

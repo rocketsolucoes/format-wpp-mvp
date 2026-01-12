@@ -51,23 +51,23 @@ export function UpgradeModal({ open, onOpenChange, onUpgrade }: UpgradeModalProp
 
         <DialogBody>
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 rounded-lg bg-slate-800/50 border border-slate-700">
+            <div className="p-4 rounded-lg bg-muted/50 border border-slate-700">
               <h3 className="font-semibold text-white mb-2">Free Plan</h3>
-              <div className="text-2xl font-bold text-slate-300 mb-3">$0</div>
+              <div className="text-2xl font-bold text-muted-foreground mb-3">$0</div>
               <ul className="space-y-2 text-sm">
-                <li className="flex items-start gap-2 text-slate-400">
+                <li className="flex items-start gap-2 text-muted-foreground">
                   <Check className="h-4 w-4 mt-0.5 flex-shrink-0" />
                   <span>30 créditos por mês</span>
                 </li>
-                <li className="flex items-start gap-2 text-slate-400">
+                <li className="flex items-start gap-2 text-muted-foreground">
                   <Check className="h-4 w-4 mt-0.5 flex-shrink-0" />
                   <span>Basic formatting styles</span>
                 </li>
-                <li className="flex items-start gap-2 text-slate-400">
+                <li className="flex items-start gap-2 text-muted-foreground">
                   <X className="h-4 w-4 mt-0.5 flex-shrink-0 text-red-400" />
                   <span>Priority support</span>
                 </li>
-                <li className="flex items-start gap-2 text-slate-400">
+                <li className="flex items-start gap-2 text-muted-foreground">
                   <X className="h-4 w-4 mt-0.5 flex-shrink-0 text-red-400" />
                   <span>Advanced features</span>
                 </li>
@@ -82,7 +82,7 @@ export function UpgradeModal({ open, onOpenChange, onUpgrade }: UpgradeModalProp
               </div>
               <h3 className="font-semibold text-white mb-2">Pro Plan</h3>
               <div className="text-2xl font-bold text-white mb-3">
-                $9.99<span className="text-sm text-slate-400">/month</span>
+                $9.99<span className="text-sm text-muted-foreground">/month</span>
               </div>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start gap-2 text-emerald-400">
@@ -111,7 +111,7 @@ export function UpgradeModal({ open, onOpenChange, onUpgrade }: UpgradeModalProp
               checked={dontShowAgain}
               onChange={(e) => setDontShowAgain(e.target.checked)}
             />
-            <Label htmlFor="dont-show" className="text-sm text-slate-400 cursor-pointer">
+            <Label htmlFor="dont-show" className="text-sm text-muted-foreground cursor-pointer">
               Don't show this message again
             </Label>
           </div>

@@ -103,7 +103,7 @@ export function StyleExamplesModal({ open, onOpenChange }: StyleExamplesModalPro
             <DialogTitle className="text-lg">Exemplos de Formatação</DialogTitle>
             <button
               onClick={() => onOpenChange(false)}
-              className="rounded-lg p-2 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="rounded-lg p-2 text-muted-foreground hover:text-white hover:bg-muted transition-colors"
             >
               <X className="h-4 w-4" />
             </button>
@@ -119,7 +119,7 @@ export function StyleExamplesModal({ open, onOpenChange }: StyleExamplesModalPro
                 className={`px-3 py-1.5 text-xs font-medium transition-colors border-b-2 ${
                   activeTab === key
                     ? 'border-emerald-400 text-emerald-400'
-                    : 'border-transparent text-slate-400 hover:text-slate-300'
+                    : 'border-transparent text-muted-foreground hover:text-muted-foreground'
                 }`}
               >
                 <span className="mr-1.5">{style.icon}</span>
@@ -132,22 +132,22 @@ export function StyleExamplesModal({ open, onOpenChange }: StyleExamplesModalPro
             {currentStyle.examples.map((example, index) => (
               <div
                 key={index}
-                className="border border-slate-700 rounded-lg overflow-hidden bg-slate-800/30"
+                className="border border-slate-700 rounded-lg overflow-hidden bg-muted/30"
               >
-                <div className="p-2.5 border-b border-slate-700 bg-slate-800/50">
-                  <h4 className="text-sm font-semibold text-slate-200">{example.title}</h4>
+                <div className="p-2.5 border-b border-slate-700 bg-muted/50">
+                  <h4 className="text-sm font-semibold text-foreground">{example.title}</h4>
                 </div>
 
                 <div className="p-3">
                   <div className="mb-3">
-                    <p className="text-xs font-semibold text-slate-400 mb-1.5">Antes:</p>
-                    <div className="bg-slate-900/50 p-2 rounded border border-slate-700">
-                      <p className="text-xs text-slate-300">{example.before}</p>
+                    <p className="text-xs font-semibold text-muted-foreground mb-1.5">Antes:</p>
+                    <div className="bg-card/50 p-2 rounded border border-slate-700">
+                      <p className="text-xs text-muted-foreground">{example.before}</p>
                     </div>
                   </div>
 
                   <div>
-                    <p className="text-xs font-semibold text-slate-400 mb-1.5">Depois (como aparece no WhatsApp):</p>
+                    <p className="text-xs font-semibold text-muted-foreground mb-1.5">Depois (como aparece no WhatsApp):</p>
                     <WhatsAppPreviewCompact text={example.after} />
                   </div>
                 </div>

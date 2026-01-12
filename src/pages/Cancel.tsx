@@ -8,8 +8,8 @@ export default function Cancel() {
   const [, setLocation] = useLocation();
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center p-4">
-      <Card className="max-w-lg w-full border-slate-800">
+    <div className="min-h-screen bg-background text-white flex items-center justify-center p-4">
+      <Card className="max-w-lg w-full border-border">
         <CardContent className="pt-12 pb-8 text-center">
           <div className="flex justify-center mb-6">
             <div className="w-24 h-24 rounded-full bg-red-500/20 flex items-center justify-center">
@@ -21,12 +21,12 @@ export default function Cancel() {
             Payment Canceled
           </h1>
 
-          <p className="text-xl text-slate-300 mb-8">
+          <p className="text-xl text-muted-foreground mb-8">
             Don't worry, you can try again anytime
           </p>
 
-          <div className="bg-slate-900/50 rounded-lg p-6 mb-8">
-            <p className="text-slate-400">
+          <div className="bg-card/50 rounded-lg p-6 mb-8">
+            <p className="text-muted-foreground">
               Your payment was not processed. No charges have been made to your account.
               Feel free to review our plans and try again when you're ready.
             </p>

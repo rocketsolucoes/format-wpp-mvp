@@ -207,7 +207,7 @@ export default function Pricing() {
                 className={`relative transition-all duration-300 hover:scale-105 ${
                   plan.highlighted
                     ? 'border-2 border-transparent bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 scale-105 shadow-2xl shadow-emerald-500/20'
-                    : 'border-slate-800 hover:shadow-xl'
+                    : 'border-border hover:shadow-xl'
                 }`}
               >
                 {plan.highlighted && (
@@ -236,10 +236,10 @@ export default function Pricing() {
                       <>
                         <div className="text-5xl font-bold">
                           {formatBRL(plan.price)}
-                          <span className="text-xl text-slate-400 font-normal">/{plan.period.split(' ')[0]}</span>
+                          <span className="text-xl text-muted-foreground font-normal">/{plan.period.split(' ')[0]}</span>
                         </div>
                         {billingPeriod === 'annual' && plan.name === 'Pro' && (
-                          <p className="text-sm text-slate-400 mt-2">
+                          <p className="text-sm text-muted-foreground mt-2">
                             {formatBRL(proTotal)} cobrado anualmente
                           </p>
                         )}
@@ -262,7 +262,7 @@ export default function Pricing() {
                         ) : (
                           <X className="w-5 h-5 text-slate-600 flex-shrink-0 mt-0.5" />
                         )}
-                        <span className={feature.included ? 'text-slate-200' : 'text-slate-600'}>
+                        <span className={feature.included ? 'text-foreground' : 'text-slate-600'}>
                           {feature.text}
                         </span>
                       </li>
@@ -299,19 +299,19 @@ export default function Pricing() {
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full border-collapse">
               <thead>
-                <tr className="border-b border-slate-800">
-                  <th className="text-left p-4 text-slate-400 font-semibold">Recurso</th>
-                  <th className="text-center p-4 text-slate-400 font-semibold">Gratuito</th>
+                <tr className="border-b border-border">
+                  <th className="text-left p-4 text-muted-foreground font-semibold">Recurso</th>
+                  <th className="text-center p-4 text-muted-foreground font-semibold">Gratuito</th>
                   <th className="text-center p-4 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 font-semibold text-emerald-400">
                     Pro
                   </th>
-                  <th className="text-center p-4 text-slate-400 font-semibold">Enterprise</th>
+                  <th className="text-center p-4 text-muted-foreground font-semibold">Enterprise</th>
                 </tr>
               </thead>
               <tbody>
                 {comparisonFeatures.map((feature, index) => (
-                  <tr key={index} className="border-b border-slate-800/50">
-                    <td className="p-4 text-slate-200">{feature.name}</td>
+                  <tr key={index} className="border-b border-border/50">
+                    <td className="p-4 text-foreground">{feature.name}</td>
                     <td className="p-4 text-center">
                       {typeof feature.free === 'boolean' ? (
                         feature.free ? (
@@ -320,7 +320,7 @@ export default function Pricing() {
                           <X className="w-5 h-5 text-slate-600 mx-auto" />
                         )
                       ) : (
-                        <span className="text-slate-400">{feature.free}</span>
+                        <span className="text-muted-foreground">{feature.free}</span>
                       )}
                     </td>
                     <td className="p-4 text-center bg-gradient-to-br from-emerald-500/5 to-cyan-500/5">
@@ -342,7 +342,7 @@ export default function Pricing() {
                           <X className="w-5 h-5 text-slate-600 mx-auto" />
                         )
                       ) : (
-                        <span className="text-slate-400">{feature.enterprise}</span>
+                        <span className="text-muted-foreground">{feature.enterprise}</span>
                       )}
                     </td>
                   </tr>
@@ -353,7 +353,7 @@ export default function Pricing() {
 
           <div className="md:hidden space-y-4">
             {comparisonFeatures.map((feature, index) => (
-              <Card key={index} className="border-slate-800">
+              <Card key={index} className="border-border">
                 <CardHeader>
                   <CardTitle className="text-lg">{feature.name}</CardTitle>
                 </CardHeader>
@@ -367,7 +367,7 @@ export default function Pricing() {
                         <X className="w-5 h-5 text-slate-600 mx-auto" />
                       )
                     ) : (
-                      <span className="text-slate-400 text-sm">{feature.free}</span>
+                      <span className="text-muted-foreground text-sm">{feature.free}</span>
                     )}
                   </div>
                   <div>
@@ -391,7 +391,7 @@ export default function Pricing() {
                         <X className="w-5 h-5 text-slate-600 mx-auto" />
                       )
                     ) : (
-                      <span className="text-slate-400 text-sm">{feature.enterprise}</span>
+                      <span className="text-muted-foreground text-sm">{feature.enterprise}</span>
                     )}
                   </div>
                 </CardContent>
@@ -406,7 +406,7 @@ export default function Pricing() {
             {faqs.map((faq, index) => (
               <Card
                 key={index}
-                className="border-slate-800 cursor-pointer hover:border-emerald-700/50 transition-colors"
+                className="border-border cursor-pointer hover:border-emerald-700/50 transition-colors"
                 onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
               >
                 <CardHeader>
@@ -417,7 +417,7 @@ export default function Pricing() {
                 </CardHeader>
                 {expandedFaq === index && (
                   <CardContent>
-                    <p className="text-slate-400 leading-relaxed">{faq.answer}</p>
+                    <p className="text-muted-foreground leading-relaxed">{faq.answer}</p>
                   </CardContent>
                 )}
               </Card>
@@ -429,21 +429,21 @@ export default function Pricing() {
           <h2 className="text-4xl font-bold text-center mb-12">O Que Nossos Usuários Dizem</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="border-slate-800">
+              <Card key={index} className="border-border">
                 <CardContent className="pt-6">
                   <div className="flex mb-4">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
                     ))}
                   </div>
-                  <p className="text-slate-300 mb-6 italic">"{testimonial.quote}"</p>
+                  <p className="text-muted-foreground mb-6 italic">"{testimonial.quote}"</p>
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center text-white font-bold">
                       {testimonial.initial}
                     </div>
                     <div>
                       <p className="font-semibold text-white">{testimonial.name}</p>
-                      <p className="text-sm text-slate-400">{testimonial.role}</p>
+                      <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                       <p className="text-sm text-slate-500">{testimonial.company}</p>
                     </div>
                   </div>
@@ -455,7 +455,7 @@ export default function Pricing() {
 
         <div className="max-w-4xl mx-auto bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-2xl p-12 text-center border border-emerald-500/20">
           <h2 className="text-4xl font-bold mb-4">Pronto para Começar?</h2>
-          <p className="text-xl text-slate-300 mb-8">
+          <p className="text-xl text-muted-foreground mb-8">
             Junte-se a milhares de usuários formatando mensagens profissionalmente
           </p>
           <Button
@@ -465,7 +465,7 @@ export default function Pricing() {
           >
             Criar Conta Gratuita
           </Button>
-          <p className="text-sm text-slate-400 mt-4">Sem cartão de crédito necessário</p>
+          <p className="text-sm text-muted-foreground mt-4">Sem cartão de crédito necessário</p>
         </div>
     </div>
   );
@@ -507,9 +507,9 @@ export default function Pricing() {
   if (user) {
     return (
       <DashboardLayout>
-        <div className="px-4 py-4 sm:px-6 lg:px-8 border-b border-slate-800 bg-slate-950">
+        <div className="px-4 py-4 sm:px-6 lg:px-8 border-b border-border bg-background">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Preços</h1>
-          <p className="text-sm text-slate-400">Escolha o plano perfeito para você</p>
+          <p className="text-sm text-muted-foreground">Escolha o plano perfeito para você</p>
         </div>
         {pricingContent}
         {contactModal}
@@ -518,13 +518,13 @@ export default function Pricing() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen bg-background text-white">
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
             Escolha o Plano Perfeito para Você
           </h1>
-          <p className="text-xl text-slate-400 mb-8">
+          <p className="text-xl text-muted-foreground mb-8">
             Comece grátis e faça upgrade quando precisar
           </p>
         </div>

@@ -39,12 +39,12 @@ const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0];
     return (
-      <div className="bg-slate-900/95 backdrop-blur-sm border border-slate-700 rounded-lg px-4 py-3 shadow-xl">
+      <div className="bg-card/95 backdrop-blur-sm border border-slate-700 rounded-lg px-4 py-3 shadow-xl">
         <div className="flex items-center gap-2 mb-1">
           <span className="text-lg">{data.payload.icon}</span>
           <p className="text-sm font-semibold text-white">{data.name}</p>
         </div>
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-muted-foreground">
           {data.value} formatações ({((data.value / data.payload.total) * 100).toFixed(1)}%)
         </p>
       </div>
@@ -145,7 +145,7 @@ export function StyleDistributionChart({ userId, isPro }: StyleDistributionProps
         <CardContent>
           <div className="flex flex-col items-center justify-center py-8 text-center">
             <div className="text-5xl mb-3 opacity-50">📊</div>
-            <p className="text-slate-400 text-sm">
+            <p className="text-muted-foreground text-sm">
               Nenhuma formatação nos últimos 30 dias
             </p>
           </div>
@@ -199,7 +199,7 @@ export function StyleDistributionChart({ userId, isPro }: StyleDistributionProps
               <div key={style.name} className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-2">
                   <span className="text-lg">{style.icon}</span>
-                  <span className="text-slate-400">{style.name}</span>
+                  <span className="text-muted-foreground">{style.name}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-white font-semibold">{style.value}</span>
@@ -211,7 +211,7 @@ export function StyleDistributionChart({ userId, isPro }: StyleDistributionProps
         </div>
 
         <div className="bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/20 rounded-lg p-3 mt-4">
-          <p className="text-xs text-slate-400 mb-1">Estilo favorito</p>
+          <p className="text-xs text-muted-foreground mb-1">Estilo favorito</p>
           <div className="flex items-center gap-2">
             <span className="text-2xl">{mostUsedStyle.icon}</span>
             <div>

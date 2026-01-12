@@ -86,15 +86,15 @@ export function StyleSelectionCard({
           <div className="flex items-center gap-3">
             <div className="text-2xl flex-shrink-0 relative">
               {isLocked && (
-                <div className="absolute inset-0 flex items-center justify-center bg-slate-900/70 rounded">
-                  <Lock className="w-4 h-4 text-slate-400" />
+                <div className="absolute inset-0 flex items-center justify-center bg-card/70 rounded">
+                  <Lock className="w-4 h-4 text-muted-foreground" />
                 </div>
               )}
               {icon}
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-semibold text-slate-200">{title}</h3>
+                <h3 className="text-sm font-semibold text-foreground">{title}</h3>
                 {isPro && (
                   <Badge className="bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-400 border-emerald-500/30 text-[10px] px-1.5 py-0">
                     PRO
@@ -140,14 +140,14 @@ export function StyleSelectionCard({
         <div className="text-3xl relative">
           {isLocked && (
             <div className="absolute inset-0 flex items-center justify-center">
-              <Lock className="w-6 h-6 text-slate-400" />
+              <Lock className="w-6 h-6 text-muted-foreground" />
             </div>
           )}
           {icon}
         </div>
 
         <div>
-          <h3 className="text-base font-bold text-slate-200">{title}</h3>
+          <h3 className="text-base font-bold text-foreground">{title}</h3>
           <p className="text-xs text-slate-500">{subtitle}</p>
         </div>
 
