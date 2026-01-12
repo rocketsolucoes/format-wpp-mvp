@@ -31,7 +31,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-lg border-b border-border">
+    <header className="sticky top-0 z-[100] w-full bg-background/80 backdrop-blur-lg border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -48,17 +48,21 @@ const Header: React.FC = () => {
 
           {/* Actions Section */}
           <div className="flex items-center gap-2 sm:gap-4">
-            {/* Theme Toggle - Garantindo visibilidade com borda e hover */}
+            {/* Theme Toggle - Forçando visibilidade absoluta se necessário */}
             <button
-              onClick={toggleTheme}
-              className="p-2.5 rounded-xl border border-border bg-card hover:bg-muted transition-all duration-200 text-foreground shadow-sm flex items-center justify-center"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleTheme();
+              }}
+              className="relative z-[110] p-2.5 rounded-xl border-2 border-primary/20 bg-card hover:bg-muted transition-all duration-200 text-foreground shadow-md flex items-center justify-center min-w-[44px] min-h-[44px]"
               title={theme === 'dark' ? 'Mudar para modo claro' : 'Mudar para modo escuro'}
               aria-label="Alternar tema"
             >
               {theme === 'dark' ? (
-                <Sun className="w-5 h-5 text-amber-500" />
+                <Sun className="w-5 h-5 text-amber-500 fill-amber-500/20" />
               ) : (
-                <Moon className="w-5 h-5 text-indigo-500" />
+                <Moon className="w-5 h-5 text-indigo-500 fill-indigo-500/20" />
               )}
             </button>
 

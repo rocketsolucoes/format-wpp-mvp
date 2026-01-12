@@ -12,8 +12,11 @@ import {
   LogOut,
   Wrench,
   Shield,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { useTheme } from '../contexts/ThemeContext';
 import { supabase } from '../lib/supabase';
 import { Badge } from './ui/Badge';
 import { Button } from './ui/Button';
@@ -44,6 +47,7 @@ interface DashboardSidebarProps {
 export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollapse }: DashboardSidebarProps) {
   const [location, setLocation] = useLocation();
   const { user, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminCheckDone, setAdminCheckDone] = useState(false);
 
@@ -273,6 +277,18 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
       </nav>
 
       <div className="p-3 border-t border-border space-y-2">
+        {/* Theme Toggle no Sidebar */}
+        <button
+          onClick={toggleTheme}
+          className={`flex items-center gap-3 w-full px-3 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200 ${
+            collapsed ? 'justify-center' : ''
+          }`}
+          title={theme === 'dark' ? 'Modo Claro' : 'Modo Escuro'}
+        >
+          {theme === 'dark' ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-indigo-500" />}
+          {!collapsed && <span className="text-sm font-medium">{theme === 'dark' ? 'Modo Claro' : 'Modo Escuro'}</span>}
+        </button>
+
         <Button
           variant="ghost"
           fullWidth={!collapsed}
