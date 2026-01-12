@@ -284,11 +284,15 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
     for (let i = 0; i < sortedData.length; i++) {
       const checkDate = new Date(today);
       checkDate.setDate(today.getDate() - i);
-      const checkDateStr = checkDate.toISOString().split('T')[0];
+      // Usar data local ao invés de UTC para evitar diferença de timezone
+      const year = checkDate.getFullYear();
+      const month = String(checkDate.getMonth() + 1).padStart(2, '0');
+      const day = String(checkDate.getDate()).padStart(2, '0');
+      const checkDateStr = `${year}-${month}-${day}`;
       
       const hasActivity = sortedData.some(item => {
-        const itemDate = new Date(item.date).toISOString().split('T')[0];
-        return itemDate === checkDateStr && item.format_count > 0;
+        // Comparar diretamente as strings de data (já estão no formato YYYY-MM-DD)
+        return item.date.split('T')[0] === checkDateStr && item.format_count > 0;
       });
       
       if (hasActivity) {
