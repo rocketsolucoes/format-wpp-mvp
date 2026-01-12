@@ -34,23 +34,28 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
       setValidationError(null);
     } else if (inputText.trim().length < 10) {
       setValidationError('O texto deve ter pelo menos 10 caracteres');
+    } else if (!user && inputText.length > 500) {
+      setValidationError('Preview limitado a 500 caracteres. Cadastre-se para mais!');
     } else if (inputText.length > 5000) {
       setValidationError('O texto deve ter menos de 5000 caracteres');
     } else {
       setValidationError(null);
     }
-  }, [inputText]);
+  }, [inputText, user]);
 
   const getCharCountColor = () => {
     const length = inputText.length;
-    if (length <= 4000) return 'text-emerald-500';
-    if (length <= 4900) return 'text-amber-500';
+    const limit = user ? 5000 : 500;
+    
+    if (length <= limit * 0.8) return 'text-emerald-500';
+    if (length <= limit * 0.98) return 'text-amber-500';
     return 'text-destructive';
   };
 
   const isInputValid = (): boolean => {
     const trimmedText = inputText.trim();
-    return trimmedText.length >= 10 && trimmedText.length <= 5000;
+    const maxLength = user ? 5000 : 500;
+    return trimmedText.length >= 10 && trimmedText.length <= maxLength;
   };
 
   const handleCancel = () => {
@@ -85,65 +90,44 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
     setLocation('/auth?tab=signup&redirect=/format');
   };
 
+  const formatTextPreview = async (text: string): Promise<string> => {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const apiUrl = `${supabaseUrl}/functions/v1/format-text-preview`;
+
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      
+      if (response.status === 429) {
+        throw new Error(errorData.error || 'Limite de tentativas excedido. Tente novamente em alguns minutos.');
+      }
+      
+      if (response.status === 400 && errorData.code === 'PREVIEW_LIMIT_EXCEEDED') {
+        throw new Error(errorData.error);
+      }
+      
+      throw new Error(errorData.error || 'Falha ao formatar texto');
+    }
+
+    const data = await response.json();
+    return data.formatted_text;
+  };
+
   const handleFormat = async () => {
     if (!isInputValid()) {
       toast.error(validationError || 'Por favor, insira um texto válido');
       return;
     }
 
-    // Se não estiver logado, formata mas não usa API real
-    if (!user) {
-      setIsFormatting(true);
-      setProgress(0);
-
-      // Simula formatação com delay
-      const progressInterval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 90) return prev;
-          return prev + Math.random() * 15;
-        });
-      }, 200);
-
-      // Simula delay de 1.5s
-      setTimeout(() => {
-        clearInterval(progressInterval);
-        setProgress(100);
-        
-        // Formatação melhorada com negritos aplicados
-        const lines = inputText.split('\n');
-        const formattedLines = lines.map(line => {
-          if (line.trim().length === 0) return line;
-          
-          // Aplica negritos em palavras-chave e padrões comuns
-          let formatted = line
-            // Palavras de ação/urgência
-            .replace(/\b(importante|atenção|urgente|lembrete|aviso|obrigatório|necessário|essencial)\b/gi, '*$1*')
-            // Informações chave
-            .replace(/\b(horário|data|local|endereço|reunião|evento|prazo)\b/gi, '*$1*')
-            // Números com contexto (ex: "10h", "R$ 50", "30%")
-            .replace(/\b(\d+[h:]?\d*|R\$\s*\d+|\\d+%)\b/g, '*$1*')
-            // Primeira palavra de cada linha (títulos)
-            .replace(/^([^\s:]+)(:)/g, '*$1*$2');
-          
-          return formatted;
-        });
-        
-        const simulatedFormatted = formattedLines.join('\n');
-        
-        setOutputText(simulatedFormatted);
-        setIsFormatting(false);
-        setProgress(0);
-        
-        toast.success('Texto formatado! 🎉 Veja o resultado abaixo.', { duration: 3000 });
-      }, 1500);
-
-      return;
-    }
-
-    // Fluxo normal para usuários logados
     setIsFormatting(true);
     setProgress(0);
-    abortControllerRef.current = new AbortController();
 
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
@@ -153,23 +137,35 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
     }, 300);
 
     try {
-      const result = await formatText(inputText.trim());
+      let formattedText: string;
 
-      setProgress(100);
-      setOutputText(result.formatted_text);
-
-      await refreshUser();
-
-      if (onFormatSuccess) {
-        onFormatSuccess(result.credits_remaining);
-      }
-
-      if (result.credits_remaining === 0) {
-        toast.warning('Você usou todos os seus créditos!', { icon: '⚠️', duration: 4000 });
-      } else if (result.credits_remaining > 0 && result.credits_remaining <= 5) {
-        toast.warning(`Apenas ${result.credits_remaining} créditos restantes`, { icon: '⚠️', duration: 3000 });
+      // Se não estiver logado, usa API de preview
+      if (!user) {
+        formattedText = await formatTextPreview(inputText.trim());
+        setProgress(100);
+        setOutputText(formattedText);
+        toast.success('Texto formatado pela IA! 🎉 Veja o resultado abaixo.', { duration: 3000 });
       } else {
-        toast.success('Texto formatado com sucesso! ✨', { icon: '✅', duration: 3000 });
+        // Fluxo normal para usuários logados
+        abortControllerRef.current = new AbortController();
+        const result = await formatText(inputText.trim());
+        
+        setProgress(100);
+        setOutputText(result.formatted_text);
+
+        await refreshUser();
+
+        if (onFormatSuccess) {
+          onFormatSuccess(result.credits_remaining);
+        }
+
+        if (result.credits_remaining === 0) {
+          toast.warning('Você usou todos os seus créditos!', { icon: '⚠️', duration: 4000 });
+        } else if (result.credits_remaining > 0 && result.credits_remaining <= 5) {
+          toast.warning(`Apenas ${result.credits_remaining} créditos restantes`, { icon: '⚠️', duration: 3000 });
+        } else {
+          toast.success('Texto formatado com sucesso! ✨', { icon: '✅', duration: 3000 });
+        }
       }
     } catch (error) {
       setProgress(0);
@@ -197,6 +193,8 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
             toast.error('Ops! Algo deu errado. Tente novamente.', { icon: '⚠️', duration: 4000 });
             break;
         }
+      } else if (error instanceof Error) {
+        toast.error(error.message, { icon: '⚠️', duration: 4000 });
       } else {
         toast.error('Ocorreu um erro inesperado', { icon: '⚠️', duration: 4000 });
       }
@@ -209,6 +207,8 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
       abortControllerRef.current = null;
     }
   };
+
+  const maxChars = user ? 5000 : 500;
 
   return (
     <>
@@ -223,7 +223,8 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
               />
               <div className="flex items-center justify-between px-1">
                 <span className={`text-[10px] font-medium uppercase tracking-wider ${getCharCountColor()}`}>
-                  {inputText.length} / 5000 caracteres
+                  {inputText.length} / {maxChars} caracteres
+                  {!user && <span className="ml-2 text-muted-foreground">(Preview limitado)</span>}
                 </span>
                 {validationError && (
                   <span className="text-[10px] text-destructive font-medium">{validationError}</span>
@@ -237,8 +238,15 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
                 <WhatsAppPreview text={outputText} isLoading={isFormatting} />
               ) : (
                 <div className="bg-card border border-border rounded-lg shadow-lg min-h-[400px] flex items-center justify-center">
-                  <p className="text-muted-foreground text-sm">
-                    Seu texto formatado aparecerá aqui no estilo WhatsApp...
+                  <p className="text-muted-foreground text-sm text-center px-4">
+                    {!user ? (
+                      <>
+                        Seu texto formatado pela <strong>IA real</strong> aparecerá aqui<br />
+                        no estilo WhatsApp...
+                      </>
+                    ) : (
+                      'Seu texto formatado aparecerá aqui no estilo WhatsApp...'
+                    )}
                   </p>
                 </div>
               )}
@@ -283,7 +291,7 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
                       className="w-full lg:w-auto px-8 py-3 bg-primary text-primary-foreground rounded-lg font-bold shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                       <Sparkles className="w-4 h-4" />
-                      Estilizar Mensagem
+                      {!user ? 'Testar com IA Real' : 'Estilizar Mensagem'}
                     </button>
                   )}
                 </div>
@@ -297,7 +305,7 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
                 <span className="flex items-center gap-2">
                   <span className="animate-pulse">Processando</span>
                 </span>
-                <span>{user ? 'IA trabalhando...' : 'Preparando preview...'}</span>
+                <span>IA trabalhando...</span>
               </div>
               <Progress value={progress} max={100} className="h-1" />
             </div>
