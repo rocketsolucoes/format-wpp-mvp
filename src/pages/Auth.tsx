@@ -43,12 +43,14 @@ const Auth: React.FC = () => {
   // Estados do formulário de Signup
   const [signupFullName, setSignupFullName] = useState('');
   const [signupEmail, setSignupEmail] = useState('');
+  const [signupWhatsapp, setSignupWhatsapp] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
   const [signupConfirmPassword, setSignupConfirmPassword] = useState('');
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [signupErrors, setSignupErrors] = useState<{
     fullName?: string;
     email?: string;
+    whatsapp?: string;
     password?: string;
     confirmPassword?: string;
     terms?: string;
@@ -83,6 +85,7 @@ const Auth: React.FC = () => {
     const errors: {
       fullName?: string;
       email?: string;
+      whatsapp?: string;
       password?: string;
       confirmPassword?: string;
       terms?: string;
@@ -98,6 +101,12 @@ const Auth: React.FC = () => {
       errors.email = 'E-mail é obrigatório';
     } else if (!/\S+@\S+\.\S+/.test(signupEmail)) {
       errors.email = 'E-mail é inválido';
+    }
+
+    if (!signupWhatsapp) {
+      errors.whatsapp = 'WhatsApp é obrigatório';
+    } else if (!/^\+?[1-9]\d{1,14}$/.test(signupWhatsapp.replace(/[\s()-]/g, ''))) {
+      errors.whatsapp = 'Número de WhatsApp inválido';
     }
 
     if (!signupPassword) {
@@ -166,6 +175,7 @@ const Auth: React.FC = () => {
       await signUp(signupEmail, signupPassword, signupFullName);
       setSignupFullName('');
       setSignupEmail('');
+      setSignupWhatsapp('');
       setSignupPassword('');
       setSignupConfirmPassword('');
       setAcceptTerms(false);
@@ -325,6 +335,24 @@ const Auth: React.FC = () => {
                     value={signupEmail}
                     onChange={(e) => setSignupEmail(e.target.value)}
                     error={signupErrors.email}
+                    disabled={loading}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="signup-whatsapp" required>
+                    WhatsApp
+                  </Label>
+                  <Input
+                    id="signup-whatsapp"
+                    name="whatsapp"
+                    type="tel"
+                    autoComplete="tel"
+                    placeholder="+55 11 99999-9999"
+                    value={signupWhatsapp}
+                    onChange={(e) => setSignupWhatsapp(e.target.value)}
+                    error={signupErrors.whatsapp}
                     disabled={loading}
                     required
                   />
