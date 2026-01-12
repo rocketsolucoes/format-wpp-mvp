@@ -51,7 +51,7 @@ export function StyleComparisonModal({ open, onOpenChange }: StyleComparisonModa
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-7xl mx-auto">
+      <DialogContent className="max-w-5xl mx-auto">
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="text-lg">Comparação de Estilos</DialogTitle>
@@ -89,7 +89,9 @@ export function StyleComparisonModal({ open, onOpenChange }: StyleComparisonModa
                 <div className="flex-1 p-4">
                   <div className="mb-4">
                     <p className="text-xs font-semibold text-muted-foreground mb-2">Como aparece no WhatsApp:</p>
-                    <WhatsAppPreviewCompact text={style.example} />
+                    <div className="max-h-[300px] overflow-y-auto">
+                      <WhatsAppPreviewCompact text={style.example} />
+                    </div>
                   </div>
 
                   <Button
