@@ -251,7 +251,12 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
     );
   }
 
-  const formattedData = data.map(item => ({
+  // Ordenar dados da data mais antiga para a mais recente
+  const sortedData = [...data].sort((a, b) => 
+    new Date(a.date).getTime() - new Date(b.date).getTime()
+  );
+
+  const formattedData = sortedData.map(item => ({
     ...item,
     date: new Date(item.date).toLocaleDateString('pt-BR', { month: 'short', day: 'numeric' }),
     dateObj: new Date(item.date)
@@ -382,7 +387,11 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
               variant={viewMode === 'area' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setViewMode('area')}
-              className="text-xs"
+              className={`text-xs transition-all ${
+                viewMode === 'area' 
+                  ? 'bg-emerald-500 hover:bg-emerald-600 text-white border-emerald-500 shadow-lg shadow-emerald-500/30' 
+                  : 'bg-transparent hover:bg-muted text-muted-foreground'
+              }`}
             >
               Área
             </Button>
@@ -390,7 +399,11 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
               variant={viewMode === 'line' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setViewMode('line')}
-              className="text-xs"
+              className={`text-xs transition-all ${
+                viewMode === 'line' 
+                  ? 'bg-emerald-500 hover:bg-emerald-600 text-white border-emerald-500 shadow-lg shadow-emerald-500/30' 
+                  : 'bg-transparent hover:bg-muted text-muted-foreground'
+              }`}
             >
               Linha
             </Button>
