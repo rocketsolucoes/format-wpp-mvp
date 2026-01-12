@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, Sparkles, Search, BookOpen, Zap } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { useAuth } from '../hooks/useAuth';
 import { supabase } from '../lib/supabase';
@@ -117,19 +117,13 @@ const Dashboard: React.FC = () => {
     setUpgradeModalOpen(true);
   };
 
-  const handleQuickFormat = () => {
-    const style = lastUsedStyle || 'casual';
-    localStorage.setItem('selectedStyle', style);
-    setLocation('/format');
-  };
-
   return (
     <DashboardLayout>
-      <div className="px-4 py-4 sm:px-6 lg:px-8 border-b border-slate-800 bg-slate-950">
+      <div className="px-4 py-4 sm:px-6 lg:px-8 border-b border-border bg-card transition-colors duration-300">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Painel</h1>
-            <p className="text-sm text-slate-400">Bem-vindo de volta, {user?.full_name || 'Usuário'}!</p>
+            <p className="text-sm text-muted-foreground">Bem-vindo de volta, {user?.full_name || 'Usuário'}!</p>
           </div>
           <Button
             variant="outline"
@@ -145,7 +139,7 @@ const Dashboard: React.FC = () => {
 
       <div className="px-4 py-6 sm:px-6 lg:px-8 space-y-8">
           {error && (
-            <Alert variant="danger">
+            <Alert variant="destructive">
               <AlertDescription>
                 {error}
                 <button
@@ -158,12 +152,12 @@ const Dashboard: React.FC = () => {
             </Alert>
           )}
 
-          <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-xl p-4">
+          <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 transition-colors duration-300">
             <div className="text-center mb-3">
               <h2 className="text-base font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
                 Pronto para Formatar?
               </h2>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Escolha seu estilo:
               </p>
             </div>
@@ -218,14 +212,14 @@ const Dashboard: React.FC = () => {
             <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
               <button
                 onClick={() => setComparisonModalOpen(true)}
-                className="text-slate-500 hover:text-emerald-400 transition-colors"
+                className="text-muted-foreground hover:text-primary transition-colors"
               >
                 Comparar estilos
               </button>
-              <span className="text-slate-700">|</span>
+              <span className="text-border">|</span>
               <button
                 onClick={() => setExamplesModalOpen(true)}
-                className="text-slate-500 hover:text-emerald-400 transition-colors"
+                className="text-muted-foreground hover:text-primary transition-colors"
               >
                 Ver exemplos
               </button>
@@ -304,7 +298,7 @@ const Dashboard: React.FC = () => {
                   setUpgradeModalOpen(false);
                   setLocation('/pricing');
                 }}
-                className="bg-gradient-to-r from-emerald-500 to-cyan-500"
+                className="bg-primary text-primary-foreground"
               >
                 Ver Planos
               </Button>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { DashboardSidebar } from '../components/DashboardSidebar';
 import { Button } from '../components/ui/Button';
 
@@ -20,6 +20,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <div className="flex h-screen bg-background overflow-hidden transition-colors duration-300">
+      {/* Desktop Sidebar */}
       <aside
         className={`hidden lg:flex flex-col border-r border-border bg-card transition-all duration-300 ${
           sidebarCollapsed ? 'w-16' : 'w-56'
@@ -31,40 +32,44 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         />
       </aside>
 
+      {/* Mobile Sidebar Overlay */}
       {mobileSidebarOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 bg-black/50" onClick={() => setMobileSidebarOpen(false)}>
+        <div 
+          className="lg:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-all duration-300" 
+          onClick={() => setMobileSidebarOpen(false)}
+        >
           <div
-            className="w-64 h-full bg-card border-r border-border"
+            className="w-64 h-full bg-card shadow-2xl animate-slide-in"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between p-4 border-b border-border">
-              <h2 className="text-lg font-semibold">Menu</h2>
-              <Button
-                variant="ghost"
-                onClick={() => setMobileSidebarOpen(false)}
-              >
-                <X className="w-5 h-5" />
-              </Button>
-            </div>
-            <DashboardSidebar onNavigate={() => setMobileSidebarOpen(false)} />
+            <DashboardSidebar 
+              isMobile={true}
+              onCloseMobile={() => setMobileSidebarOpen(false)}
+              onNavigate={() => setMobileSidebarOpen(false)} 
+            />
           </div>
         </div>
       )}
 
+      {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Mobile Header */}
         <div className="lg:hidden flex items-center justify-between px-4 py-3 border-b border-border bg-card">
           <Button
             variant="ghost"
-            onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
+            size="sm"
+            onClick={() => setMobileSidebarOpen(true)}
+            className="p-2"
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="w-6 h-6" />
           </Button>
           <span className="text-sm font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
             Magic Formatter
           </span>
+          <div className="w-10" /> {/* Spacer for centering */}
         </div>
 
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto bg-background/50">
           {children}
         </main>
       </div>

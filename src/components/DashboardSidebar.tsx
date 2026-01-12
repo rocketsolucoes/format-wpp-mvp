@@ -13,7 +13,8 @@ import {
   Wrench,
   Shield,
   Sun,
-  Moon
+  Moon,
+  X
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../contexts/ThemeContext';
@@ -42,9 +43,17 @@ interface DashboardSidebarProps {
   onNavigate?: () => void;
   collapsed?: boolean;
   onToggleCollapse?: () => void;
+  isMobile?: boolean;
+  onCloseMobile?: () => void;
 }
 
-export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollapse }: DashboardSidebarProps) {
+export function DashboardSidebar({ 
+  onNavigate, 
+  collapsed = false, 
+  onToggleCollapse,
+  isMobile = false,
+  onCloseMobile
+}: DashboardSidebarProps) {
   const [location, setLocation] = useLocation();
   const { user, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
@@ -96,20 +105,29 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
 
   return (
     <div className="flex flex-col h-full bg-card border-r border-border transition-colors duration-300">
+      {/* Header da Sidebar */}
       <div className="p-3 border-b border-border flex items-center justify-between">
         <Link href="/">
           <a className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
             <div className="p-1.5 bg-primary rounded-lg flex-shrink-0">
               <Sparkles className="w-4 h-4 text-primary-foreground" />
             </div>
-            {!collapsed && (
+            {(!collapsed || isMobile) && (
               <span className="font-bold text-sm bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent whitespace-nowrap">
                 Magic Formatter
               </span>
             )}
           </a>
         </Link>
-        {onToggleCollapse && (
+        
+        {isMobile ? (
+          <button
+            onClick={onCloseMobile}
+            className="p-1.5 hover:bg-muted rounded-lg transition-colors text-muted-foreground hover:text-foreground"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        ) : onToggleCollapse && (
           <button
             onClick={onToggleCollapse}
             className="p-1.5 hover:bg-muted rounded-lg transition-colors text-muted-foreground hover:text-foreground flex-shrink-0"
@@ -120,9 +138,10 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
         )}
       </div>
 
+      {/* Perfil do Usuário */}
       {user && (
-        <div className={`p-3 border-b border-border ${collapsed ? 'flex justify-center' : ''}`}>
-          {collapsed ? (
+        <div className={`p-3 border-b border-border ${(collapsed && !isMobile) ? 'flex justify-center' : ''}`}>
+          {(collapsed && !isMobile) ? (
             <div className="relative group">
               <Avatar
                 src={user.avatar_url}
@@ -172,45 +191,45 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
         </div>
       )}
 
-      {!collapsed && (user?.plan === 'pro' || user?.plan === 'enterprise') && (
+      {/* Créditos / Upgrade */}
+      {(!collapsed || isMobile) && (
         <div className="px-3 py-3 border-b border-border">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 rounded-lg">
-            <Zap className="w-4 h-4 text-primary flex-shrink-0" />
-            <span className="text-sm font-semibold text-primary">
-              Ilimitado
-            </span>
-          </div>
-        </div>
-      )}
-
-      {!collapsed && user?.plan === 'free' && (
-        <div className="px-3 py-3 border-b border-border">
-          <div className="bg-muted/50 border border-border rounded-lg p-3 space-y-2.5">
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-muted-foreground">Créditos</span>
-                <span className={`font-semibold ${
-                  (user?.credits_remaining || 0) >= 15 ? 'text-green-500' :
-                  (user?.credits_remaining || 0) >= 6 ? 'text-amber-500' :
-                  'text-destructive'
-                }`}>
-                  {user?.credits_remaining || 0} / 30
-                </span>
-              </div>
-              <Progress value={user?.credits_remaining || 0} max={30} className="h-1.5" />
+          {user?.plan === 'pro' || user?.plan === 'enterprise' ? (
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 rounded-lg">
+              <Zap className="w-4 h-4 text-primary flex-shrink-0" />
+              <span className="text-sm font-semibold text-primary">
+                Ilimitado
+              </span>
             </div>
-
-            <Button
-              variant="primary"
-              fullWidth
-              onClick={() => window.location.href = '/pricing'}
-            >
-              Upgrade para o Pro
-            </Button>
-          </div>
+          ) : (
+            <div className="bg-muted/50 border border-border rounded-lg p-3 space-y-2.5">
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-muted-foreground">Créditos</span>
+                  <span className={`font-semibold ${
+                    (user?.credits_remaining || 0) >= 15 ? 'text-green-500' :
+                    (user?.credits_remaining || 0) >= 6 ? 'text-amber-500' :
+                    'text-destructive'
+                  }`}>
+                    {user?.credits_remaining || 0} / 30
+                  </span>
+                </div>
+                <Progress value={user?.credits_remaining || 0} max={30} className="h-1.5" />
+              </div>
+              <Button
+                variant="primary"
+                fullWidth
+                onClick={() => window.location.href = '/pricing'}
+                size="sm"
+              >
+                Upgrade para o Pro
+              </Button>
+            </div>
+          )}
         </div>
       )}
 
+      {/* Navegação Principal */}
       <nav className="flex-1 px-2 py-3 space-y-1 overflow-y-auto pt-4">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -220,18 +239,18 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
             <Link key={item.href} href={item.href}>
               <a
                 onClick={handleNavClick}
-                className={`flex items-center ${collapsed ? 'justify-center' : 'justify-between'} px-2.5 py-2 rounded-lg transition-colors cursor-pointer ${
+                className={`flex items-center ${(collapsed && !isMobile) ? 'justify-center' : 'justify-between'} px-2.5 py-2 rounded-lg transition-colors cursor-pointer ${
                   isActive
                     ? 'bg-primary/10 text-primary border border-primary/20'
                     : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                 }`}
-                title={collapsed ? item.label : undefined}
+                title={(collapsed && !isMobile) ? item.label : undefined}
               >
                 <div className="flex items-center gap-2.5">
                   <Icon className="w-4 h-4 flex-shrink-0" />
-                  {!collapsed && <span className="font-medium text-sm whitespace-nowrap">{item.label}</span>}
+                  {(!collapsed || isMobile) && <span className="font-medium text-sm whitespace-nowrap">{item.label}</span>}
                 </div>
-                {item.proBadge && !collapsed && (
+                {item.proBadge && (!collapsed || isMobile) && (
                   <Badge variant="info" className="text-xs">
                     Pro
                   </Badge>
@@ -241,9 +260,10 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
           );
         })}
 
+        {/* Admin Section */}
         {adminCheckDone && isAdmin && (
           <>
-            {!collapsed && (
+            {(!collapsed || isMobile) && (
               <div className="pt-4 pb-2 px-2">
                 <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                   <Shield className="w-3 h-3" />
@@ -254,18 +274,18 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
             <Link href="/admin/prompts">
               <a
                 onClick={handleNavClick}
-                className={`flex items-center ${collapsed ? 'justify-center' : 'justify-between'} px-2.5 py-2 rounded-lg transition-colors cursor-pointer ${
+                className={`flex items-center ${(collapsed && !isMobile) ? 'justify-center' : 'justify-between'} px-2.5 py-2 rounded-lg transition-colors cursor-pointer ${
                   location === '/admin/prompts'
                     ? 'bg-primary/10 text-primary border border-primary/20'
                     : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                 }`}
-                title={collapsed ? 'Gerenciar Prompts' : undefined}
+                title={(collapsed && !isMobile) ? 'Gerenciar Prompts' : undefined}
               >
                 <div className="flex items-center gap-2.5">
                   <Wrench className="w-4 h-4 flex-shrink-0" />
-                  {!collapsed && <span className="font-medium text-sm whitespace-nowrap">Gerenciar Prompts</span>}
+                  {(!collapsed || isMobile) && <span className="font-medium text-sm whitespace-nowrap">Gerenciar Prompts</span>}
                 </div>
-                {!collapsed && (
+                {(!collapsed || isMobile) && (
                   <Badge className="text-xs bg-destructive/10 text-destructive border-destructive/20">
                     Admin
                   </Badge>
@@ -276,16 +296,14 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
         )}
       </nav>
 
+      {/* Footer da Sidebar (Tema e Sair) */}
       <div className="p-3 border-t border-border space-y-2 mt-auto">
-        {/* Theme Toggle no Sidebar - Garantindo que seja o ÚLTIMO elemento antes do Sair */}
         <button
           onClick={(e) => {
             e.preventDefault();
             toggleTheme();
           }}
-          className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg border border-border bg-muted/30 text-foreground hover:bg-muted transition-all duration-200 shadow-sm ${
-            collapsed ? 'justify-center' : ''
-          }`}
+          className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg border border-border bg-muted/30 text-foreground hover:bg-muted transition-all duration-200 shadow-sm ${(collapsed && !isMobile) ? 'justify-center' : ''}`}
           title={theme === 'dark' ? 'Mudar para Modo Claro' : 'Mudar para Modo Escuro'}
         >
           {theme === 'dark' ? (
@@ -293,18 +311,18 @@ export function DashboardSidebar({ onNavigate, collapsed = false, onToggleCollap
           ) : (
             <Moon className="w-5 h-5 text-indigo-500 fill-indigo-500/20" />
           )}
-          {!collapsed && <span className="text-sm font-bold">{theme === 'dark' ? 'Modo Claro' : 'Modo Escuro'}</span>}
+          {(!collapsed || isMobile) && <span className="text-sm font-bold">{theme === 'dark' ? 'Modo Claro' : 'Modo Escuro'}</span>}
         </button>
 
         <Button
           variant="ghost"
-          fullWidth={!collapsed}
+          fullWidth={(!collapsed || isMobile)}
           onClick={handleSignOut}
-          className={`${collapsed ? 'w-full justify-center' : 'justify-start'} text-destructive hover:text-destructive hover:bg-destructive/10 h-11`}
-          title={collapsed ? 'Sair' : undefined}
+          className={`${(collapsed && !isMobile) ? 'w-full justify-center' : 'justify-start'} text-destructive hover:text-destructive hover:bg-destructive/10 h-11`}
+          title={(collapsed && !isMobile) ? 'Sair' : undefined}
         >
           <LogOut className="w-4 h-4" />
-          {!collapsed && <span className="ml-2 font-medium">Sair</span>}
+          {(!collapsed || isMobile) && <span className="ml-2 font-medium">Sair</span>}
         </Button>
       </div>
     </div>
