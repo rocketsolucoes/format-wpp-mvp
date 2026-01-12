@@ -170,6 +170,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           throw new Error(profileErrorMsg);
         }
 
+        // Buscar o perfil recém-criado e atualizar o estado
+        const profile = await fetchUserProfile(data.user.id);
+        if (profile) {
+          setUser(profile);
+        }
+
         toast.success('Conta criada com sucesso! ✨', { icon: '✅', duration: 3000 });
       }
     } catch (err: any) {

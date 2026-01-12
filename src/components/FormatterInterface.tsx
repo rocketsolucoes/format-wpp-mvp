@@ -7,7 +7,7 @@ import { Progress } from './ui/Progress';
 import { formatText, FormatterError } from '../services/formatter';
 import { useAuth } from '../hooks/useAuth';
 import { useLocation } from 'wouter';
-import { savePendingText } from '../utils/textPersistence';
+import { savePendingText, saveFormattedPreview } from '../utils/textPersistence';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/Dialog';
 
 interface FormatterInterfaceProps {
@@ -71,9 +71,8 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
   const handleCopyClick = () => {
     // Se não estiver logado, mostra modal
     if (!user && outputText) {
-      // Salvar textos para restaurar depois
-      localStorage.setItem('pendingFormattedText', outputText);
-      localStorage.setItem('pendingInputText', inputText);
+      // Salvar textos usando a função de persistência
+      saveFormattedPreview(inputText, outputText);
       setShowSignupModal(true);
       return;
     }
