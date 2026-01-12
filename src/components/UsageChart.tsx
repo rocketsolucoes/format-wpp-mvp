@@ -272,6 +272,43 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
   const secondHalfSum = data.slice(prevPeriodStart).reduce((sum, item) => sum + item.format_count, 0);
   const trendPercentage = firstHalfSum > 0 ? ((secondHalfSum - firstHalfSum) / firstHalfSum) * 100 : 0;
 
+  // Calcular sequência de dias consecutivos (a partir do dia mais recente)
+  const calculateStreak = () => {
+    if (sortedData.length === 0) return 0;
+    
+    let streak = 0;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    // Verificar do dia mais recente para trás
+    for (let i = 0; i < sortedData.length; i++) {
+      const checkDate = new Date(today);
+      checkDate.setDate(today.getDate() - i);
+      const checkDateStr = checkDate.toISOString().split('T')[0];
+      
+      const hasActivity = sortedData.some(item => {
+        const itemDate = new Date(item.date).toISOString().split('T')[0];
+        return itemDate === checkDateStr && item.format_count > 0;
+      });
+      
+      if (hasActivity) {
+        streak++;
+      } else if (i > 0) {
+        // Se não é o primeiro dia e não tem atividade, para a contagem
+        break;
+      }
+    }
+    
+    return streak;
+  };
+  
+  const currentStreak = calculateStreak();
+
+  // Calcular média de tokens por formatação
+  const avgTokensPerFormat = totalFormats > 0 
+    ? Math.round(data.reduce((sum, item) => sum + item.token_count, 0) / totalFormats)
+    : 0;
+
   const exportToCSV = () => {
     const csvContent = [
       ['Data', 'Formatações', 'Tokens'],
@@ -496,6 +533,18 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
               <p className="text-muted-foreground mb-1">Tokens processados</p>
               <p className="text-foreground font-semibold">
                 {data.reduce((sum, item) => sum + item.token_count, 0).toLocaleString()} no período
+              </p>
+            </div>
+            <div className="bg-muted/50 border border-border rounded-lg p-3">
+              <p className="text-muted-foreground mb-1">Sequência atual</p>
+              <p className="text-foreground font-semibold">
+                {currentStreak > 0 ? `${currentStreak} ${currentStreak === 1 ? 'dia' : 'dias'} consecutivos` : 'Nenhuma sequência ativa'}
+              </p>
+            </div>
+            <div className="bg-muted/50 border border-border rounded-lg p-3">
+              <p className="text-muted-foreground mb-1">Média por formatação</p>
+              <p className="text-foreground font-semibold">
+                {avgTokensPerFormat.toLocaleString()} tokens
               </p>
             </div>
           </div>

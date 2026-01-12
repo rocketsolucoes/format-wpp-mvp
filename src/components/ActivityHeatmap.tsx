@@ -36,7 +36,7 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
 
     setLoading(true);
     try {
-      const daysToShow = 28;
+      const daysToShow = 42;
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - daysToShow);
 
@@ -109,7 +109,7 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
       <Card>
         <CardHeader>
           <CardTitle>Mapa de Atividade</CardTitle>
-          <CardDescription>Últimas 4 semanas</CardDescription>
+          <CardDescription>Últimas 6 semanas</CardDescription>
         </CardHeader>
         <CardContent>
           <Skeleton className="h-24 w-full" />
@@ -171,7 +171,7 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
           Mapa de Atividade
         </CardTitle>
         <CardDescription>
-          Padrão de uso nas últimas 4 semanas
+          Padrão de uso nas últimas 6 semanas
         </CardDescription>
       </CardHeader>
       <CardContent>
