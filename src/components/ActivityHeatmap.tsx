@@ -62,7 +62,11 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
       for (let i = daysToShow - 1; i >= 0; i--) {
         const date = new Date();
         date.setDate(date.getDate() - i);
-        const dateStr = date.toISOString().split('T')[0];
+        // Usar data local ao invés de UTC
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const dateStr = `${year}-${month}-${day}`;
         const count = dayCounts[dateStr] || 0;
 
         if (count > 0) active++;
