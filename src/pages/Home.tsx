@@ -34,12 +34,12 @@ const Home: React.FC = () => {
 
   return (
     <div className="bg-slate-950 min-h-screen text-slate-100 selection:bg-emerald-500/30">
-      {/* 1. Hero Section - Foco em Conversão */}
+      {/* 1. Hero Section - Reduzido padding superior */}
       <HeroSection />
       
-      {/* 2. Interactive Demo - Valor Imediato */}
-      <div id="formatter" className="container mx-auto px-4 py-12">
-        <div className="max-w-5xl mx-auto bg-slate-900/50 rounded-3xl border border-slate-800 p-1 shadow-2xl">
+      {/* 2. Interactive Demo - Layout mais compacto */}
+      <div id="formatter" className="container mx-auto px-4 py-4">
+        <div className="max-w-5xl mx-auto bg-slate-900/30 rounded-2xl border border-slate-800/50 p-1 shadow-xl">
           <FormatterInterface
             onNoCredits={handleNoCredits}
             onFormatSuccess={(credits) => {
@@ -51,23 +51,31 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* 3. Features - Benefícios Reais */}
-      <FeaturesSection />
+      {/* 3. Features - Reduzido padding vertical */}
+      <div className="py-8">
+        <FeaturesSection />
+      </div>
 
-      {/* 4. Social Proof - Depoimentos */}
-      <TestimonialsSection />
+      {/* 4. Social Proof - Reduzido padding vertical */}
+      <div className="py-8">
+        <TestimonialsSection />
+      </div>
 
-      {/* 5. Examples - Casos de Uso */}
+      {/* 5. Examples - Reduzido padding vertical */}
       <ExamplesSection />
 
-      {/* 6. Pricing - Conversão Final */}
-      <PricingSection />
+      {/* 6. Pricing - Reduzido padding vertical */}
+      <div className="py-8">
+        <PricingSection />
+      </div>
 
-      {/* 7. FAQ - Quebra de Objeções */}
-      <FAQSection />
+      {/* 7. FAQ - Reduzido padding vertical */}
+      <div className="py-8">
+        <FAQSection />
+      </div>
 
       {/* Footer Simples */}
-      <footer className="container mx-auto px-4 py-12 border-t border-slate-900 text-center text-slate-500 text-sm">
+      <footer className="container mx-auto px-4 py-8 border-t border-slate-900 text-center text-slate-500 text-[10px] uppercase tracking-widest">
         <p>© 2026 Format App. Todos os direitos reservados.</p>
       </footer>
 

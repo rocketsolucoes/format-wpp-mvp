@@ -146,78 +146,64 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
   };
 
   return (
-    <section id="formatter" className="container mx-auto px-4 py-16">
-      <h2 className="text-3xl font-bold text-center mb-12 text-slate-100">
-        Formate Sua Mensagem
-      </h2>
-
+    <section id="formatter" className="container mx-auto px-4 py-8">
       <div className="max-w-6xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-6 items-start">
-          <InputTextarea
-            value={inputText}
-            onChange={setInputText}
-            disabled={isFormatting}
-          />
-
-          <OutputTextarea
-            value={outputText}
-            disabled={isFormatting}
-          />
-        </div>
-
-        <div className="mt-6 space-y-4">
-          {validationError && (
-            <Alert variant="danger" className="max-w-6xl mx-auto">
-              <AlertDescription>{validationError}</AlertDescription>
-            </Alert>
-          )}
-
-          <div className="flex items-center justify-between max-w-6xl mx-auto">
-            <div className="flex items-center gap-4">
-              <span className={`text-sm font-medium ${getCharCountColor()}`}>
+        <div className="grid lg:grid-cols-2 gap-4 items-start">
+          <div className="space-y-2">
+            <InputTextarea
+              value={inputText}
+              onChange={setInputText}
+              disabled={isFormatting}
+            />
+            <div className="flex items-center justify-between px-1">
+              <span className={`text-[10px] font-medium uppercase tracking-wider ${getCharCountColor()}`}>
                 {inputText.length} / 5000 caracteres
               </span>
+              {validationError && (
+                <span className="text-[10px] text-red-400 font-medium">{validationError}</span>
+              )}
             </div>
           </div>
 
-          {isFormatting && (
-            <div className="max-w-6xl mx-auto space-y-2">
-              <div className="flex items-center justify-between text-sm text-slate-400">
-                <span className="flex items-center gap-2">
-                  <span className="animate-pulse">Formatando</span>
-                  <span className="flex gap-1">
-                    <span className="animate-bounce" style={{ animationDelay: '0ms' }}>.</span>
-                    <span className="animate-bounce" style={{ animationDelay: '150ms' }}>.</span>
-                    <span className="animate-bounce" style={{ animationDelay: '300ms' }}>.</span>
-                  </span>
-                </span>
-                <span>Tempo estimado: 2-5 segundos</span>
-              </div>
-              <Progress value={progress} max={100} />
+          <div className="space-y-2">
+            <OutputTextarea
+              value={outputText}
+              disabled={isFormatting}
+            />
+            <div className="flex justify-center lg:justify-end">
+              {isFormatting ? (
+                <button
+                  onClick={handleCancel}
+                  className="w-full lg:w-auto px-6 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-lg font-semibold text-white text-sm transition-all duration-300 flex items-center justify-center gap-2 border border-slate-700"
+                >
+                  <X className="w-4 h-4" />
+                  Cancelar
+                </button>
+              ) : (
+                <button
+                  onClick={handleFormat}
+                  disabled={!isInputValid() || isFormatting}
+                  className="w-full lg:w-auto px-8 py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-lg font-bold text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Estilizar Mensagem
+                </button>
+              )}
             </div>
-          )}
-
-          <div className="flex justify-center gap-3">
-            {isFormatting ? (
-              <button
-                onClick={handleCancel}
-                className="px-8 py-4 bg-slate-800 hover:bg-slate-700 rounded-lg font-semibold text-white transition-all duration-300 flex items-center gap-2 border border-slate-700"
-              >
-                <X className="w-5 h-5" />
-                Cancelar
-              </button>
-            ) : (
-              <button
-                onClick={handleFormat}
-                disabled={!isInputValid() || isFormatting}
-                className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-lg font-semibold text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2"
-              >
-                <Sparkles className="w-5 h-5" />
-                Formatar com IA
-              </button>
-            )}
           </div>
         </div>
+
+        {isFormatting && (
+          <div className="mt-4 space-y-2">
+            <div className="flex items-center justify-between text-[10px] text-slate-400 uppercase tracking-widest">
+              <span className="flex items-center gap-2">
+                <span className="animate-pulse">Processando</span>
+              </span>
+              <span>IA trabalhando...</span>
+            </div>
+            <Progress value={progress} max={100} className="h-1" />
+          </div>
+        )}
       </div>
     </section>
   );
