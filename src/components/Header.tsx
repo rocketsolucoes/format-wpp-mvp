@@ -33,16 +33,18 @@ const Header: React.FC = () => {
   return (
     <header className="sticky top-0 z-[100] w-full bg-background/80 backdrop-blur-lg border-b border-border">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/">
-            <a className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
-              <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-12" />
-            </a>
-          </Link>
+        <div className="flex items-center justify-between h-20">
+          {/* Logo - Centralizada */}
+          <div className="flex-1 flex justify-center md:justify-start">
+            <Link href="/">
+              <a className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
+                <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-14" />
+              </a>
+            </Link>
+          </div>
 
           {/* Actions Section */}
-          <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 md:absolute md:right-4">
             {/* Theme Toggle - Forçando visibilidade absoluta se necessário */}
             <button
               onClick={(e) => {

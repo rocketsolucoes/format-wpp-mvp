@@ -110,9 +110,9 @@ export function DashboardSidebar({
         <Link href="/">
           <a className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
             {(!collapsed || isMobile) ? (
-              <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-8" />
+              <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-10" />
             ) : (
-              <img src="/favicon.png" alt="ZapStyle" className="h-10 w-10 rounded-lg object-cover" />
+              <img src="/favicon.png" alt="ZapStyle" className="h-12 w-12 rounded-lg object-cover" />
             )}
           </a>
         </Link>

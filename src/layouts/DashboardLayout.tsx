@@ -63,7 +63,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           >
             <Menu className="w-6 h-6" />
           </Button>
-          <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-8" />
+          <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-10" />
           <div className="w-10" /> {/* Spacer for centering */}
         </div>
 
