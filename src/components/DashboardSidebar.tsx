@@ -108,13 +108,11 @@ export function DashboardSidebar({
       {/* Header da Sidebar */}
       <div className="p-4 border-b border-border flex items-center justify-between gap-2">
         <Link href="/">
-          <a className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer flex-1">
+          <a className={`hover:opacity-80 transition-opacity cursor-pointer ${(!collapsed || isMobile) ? 'flex items-center gap-2' : 'flex justify-center w-full'}">
             {(!collapsed || isMobile) ? (
               <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-12" />
             ) : (
-              <div className="flex justify-center w-full">
-                <img src="/favicon.png" alt="ZapStyle" className="h-14 w-14 rounded-xl object-contain" />
-              </div>
+              <img src="/favicon.png" alt="ZapStyle" className="h-14 w-14 rounded-xl object-contain" />
             )}
           </a>
         </Link>
