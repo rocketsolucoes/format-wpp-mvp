@@ -89,9 +89,7 @@ export function StyleComparisonModal({ open, onOpenChange }: StyleComparisonModa
                 <div className="flex-1 p-4">
                   <div className="mb-4">
                     <p className="text-xs font-semibold text-muted-foreground mb-2">Como aparece no WhatsApp:</p>
-                    <div className="max-h-[300px] overflow-y-auto">
-                      <WhatsAppPreviewCompact text={style.example} />
-                    </div>
+                    <WhatsAppPreviewCompact text={style.example} />
                   </div>
 
                   <Button
