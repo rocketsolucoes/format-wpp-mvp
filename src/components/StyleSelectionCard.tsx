@@ -22,22 +22,28 @@ interface StyleSelectionCardProps {
 
 const colorClasses = {
   emerald: {
-    border: 'border-emerald-500/30 hover:border-emerald-500/50',
-    bg: 'bg-emerald-500/5 hover:bg-emerald-500/10',
+    border: 'border-emerald-500/30',
+    borderHover: 'hover:border-emerald-500/50',
+    bg: 'bg-emerald-500/5',
+    bgHover: 'hover:bg-emerald-500/10',
     shadow: 'hover:shadow-emerald-500/20',
     button: 'bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border-emerald-500/30',
     badge: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
   },
   orange: {
-    border: 'border-orange-500/30 hover:border-orange-500/50',
-    bg: 'bg-orange-500/5 hover:bg-orange-500/10',
+    border: 'border-orange-500/30',
+    borderHover: 'hover:border-orange-500/50',
+    bg: 'bg-orange-500/5',
+    bgHover: 'hover:bg-orange-500/10',
     shadow: 'hover:shadow-orange-500/20',
     button: 'bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 border-orange-500/30',
     badge: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
   },
   blue: {
-    border: 'border-blue-500/30 hover:border-blue-500/50',
-    bg: 'bg-blue-500/5 hover:bg-blue-500/10',
+    border: 'border-blue-500/30',
+    borderHover: 'hover:border-blue-500/50',
+    bg: 'bg-blue-500/5',
+    bgHover: 'hover:bg-blue-500/10',
     shadow: 'hover:shadow-blue-500/20',
     button: 'bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 border-blue-500/30',
     badge: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
@@ -79,7 +85,7 @@ export function StyleSelectionCard({
   if (compact) {
     return (
       <Card
-        className={`relative border ${colors.border} ${colors.bg} transition-all duration-200 ${isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:shadow-md hover:scale-102 cursor-pointer'} ${colors.shadow} group`}
+        className={`relative border ${isLastUsed ? `${colors.border} ${colors.bg}` : `border-border ${colors.borderHover} ${colors.bgHover}`} transition-all duration-200 ${isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:shadow-md hover:scale-102 cursor-pointer'} ${colors.shadow} group`}
         onClick={handleSelect}
       >
         <CardContent className="p-3">
@@ -116,7 +122,7 @@ export function StyleSelectionCard({
 
   return (
     <Card
-      className={`relative border ${colors.border} ${colors.bg} transition-all duration-200 ${isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:shadow-md hover:scale-102 cursor-pointer'} ${colors.shadow} group`}
+      className={`relative border ${isLastUsed ? `${colors.border} ${colors.bg}` : `border-border ${colors.borderHover} ${colors.bgHover}`} transition-all duration-200 ${isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:shadow-md hover:scale-102 cursor-pointer'} ${colors.shadow} group`}
       onClick={handleSelect}
     >
       <CardContent className="p-4 text-center space-y-2">
