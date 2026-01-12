@@ -26,9 +26,9 @@ const PricingSection: React.FC = () => {
       period: 'mês',
       description: 'Perfeito para experimentar a plataforma',
       features: [
-        { text: '30 créditos por mês', included: true },
+        { text: '30 formatações por mês', included: true },
         { text: 'Estilo Casual', included: true },
-        { text: 'Formatação básica por IA', included: true },
+        { text: 'Estilização básica por IA', included: true },
         { text: 'Histórico completo', included: true },
         { text: 'Estilos Pro (Sales e Official)', included: false },
       ],
@@ -80,7 +80,7 @@ const PricingSection: React.FC = () => {
       <div className="text-center mb-12">
         <h2 className="text-4xl font-bold mb-4 text-white">Planos Simples e Transparentes</h2>
         <p className="text-slate-400 max-w-2xl mx-auto mb-8">
-          Escolha o plano ideal para o seu momento. Deixe a IA cuidar da sua comunicação enquanto você foca no que importa.
+          Escolha o plano ideal para o seu momento. Deixe a IA cuidar da estilização das suas mensagens enquanto você foca no que importa.
         </p>
         
         <Tabs value={billingPeriod} onValueChange={(value) => setBillingPeriod(value as BillingPeriod)} className="inline-flex">

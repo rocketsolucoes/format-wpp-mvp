@@ -4,11 +4,15 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 const faqs = [
   {
     question: "Como funciona o plano gratuito?",
-    answer: "Todos os novos usuários começam com 30 créditos gratuitos por mês. Você pode formatar mensagens usando o estilo Casual e ter acesso ao seu histórico completo."
+    answer: "Todos os novos usuários começam com 30 créditos de formatação gratuitos por mês. Você pode estilizar mensagens usando o estilo Casual e ter acesso ao seu histórico completo."
   },
   {
     question: "O que são os 'Estilos Pro'?",
-    answer: "São modelos de IA otimizados para objetivos específicos. O estilo 'Sales' foca em gatilhos mentais e conversão, enquanto o 'Official' é ideal para comunicados sérios e profissionais."
+    answer: "São modelos de IA otimizados para estilizar sua mensagem com objetivos específicos. O estilo 'Sales' aplica negritos e quebras de linha focadas em conversão, enquanto o 'Official' é ideal para comunicados sérios."
+  },
+  {
+    question: "O sistema cria o texto para mim?",
+    answer: "Não, o Format App é focado em estilizar e formatar o texto que você já tem. Ele aplica as melhores práticas de formatação do WhatsApp (negrito, itálico, listas) para tornar sua mensagem existente mais profissional."
   },
   {
     question: "Posso cancelar minha assinatura Pro quando quiser?",
