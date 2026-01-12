@@ -49,20 +49,29 @@ interface StyleSelectorProps {
 const colorClasses = {
   green: {
     icon: 'text-green-500',
+    iconHover: 'group-hover:text-green-500',
     bg: 'bg-green-500/10',
+    bgHover: 'group-hover:bg-green-500/10',
     border: 'border-green-500',
+    borderHover: 'hover:border-green-500',
     shadow: 'shadow-green-500/50',
   },
   orange: {
     icon: 'text-orange-500',
+    iconHover: 'group-hover:text-orange-500',
     bg: 'bg-orange-500/10',
+    bgHover: 'group-hover:bg-orange-500/10',
     border: 'border-orange-500',
+    borderHover: 'hover:border-orange-500',
     shadow: 'shadow-orange-500/50',
   },
   blue: {
     icon: 'text-blue-500',
+    iconHover: 'group-hover:text-blue-500',
     bg: 'bg-blue-500/10',
+    bgHover: 'group-hover:bg-blue-500/10',
     border: 'border-blue-500',
+    borderHover: 'hover:border-blue-500',
     shadow: 'shadow-blue-500/50',
   },
 };
@@ -156,11 +165,11 @@ export function StyleSelector({ selectedStyle, onStyleChange, userPlan, onProSty
             onClick={() => handleStyleClick(style, index)}
             onKeyDown={(e) => handleKeyDown(e, index)}
             className={`
-              relative transition-all duration-200
+              relative transition-all duration-200 group
               ${isLocked ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}
               ${isActive
-                ? `border-2 ${colors.border} shadow-lg ${colors.shadow}`
-                : 'border-border hover:border-slate-600 active:border-slate-500'
+                ? `border-2 ${colors.border} shadow-lg ${colors.shadow} ${colors.bg}`
+                : `border-border ${colors.borderHover} ${colors.bgHover}`
               }
               ${!isLocked && 'hover:scale-[1.01] hover:shadow-md hover:-translate-y-0.5 active:scale-[0.99]'}
               focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-950
@@ -169,13 +178,13 @@ export function StyleSelector({ selectedStyle, onStyleChange, userPlan, onProSty
           >
             <CardContent className="p-3 sm:p-4">
               <div className="flex items-center gap-2.5 sm:gap-3">
-                <div className={`p-2.5 sm:p-3 rounded-lg ${colors.bg} flex-shrink-0 relative`}>
+                <div className={`p-2.5 sm:p-3 rounded-lg ${isActive ? colors.bg : `bg-muted/50 ${colors.bgHover}`} flex-shrink-0 relative transition-colors duration-200`}>
                   {isLocked && (
                     <div className="absolute inset-0 flex items-center justify-center bg-card/80 rounded-lg">
                       <Lock className="w-4 h-4 text-muted-foreground" />
                     </div>
                   )}
-                  <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${colors.icon}`} />
+                  <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${isActive ? colors.icon : `text-muted-foreground ${colors.iconHover}`} transition-colors duration-200`} />
                 </div>
 
                 <div className="flex-1 min-w-0">
