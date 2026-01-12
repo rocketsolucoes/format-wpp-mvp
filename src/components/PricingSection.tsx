@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, Sparkles, Zap, Building } from 'lucide-react';
+import { Check, Sparkles, Zap, Building, ShieldCheck } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from './ui/Card';
 import { Button } from './ui/Button';
@@ -92,6 +92,14 @@ const PricingSection: React.FC = () => {
             </TabsTrigger>
           </TabsList>
         </Tabs>
+        
+        {/* Garantia destacada */}
+        <div className="mt-8 flex items-center justify-center gap-2 text-sm text-muted-foreground">
+          <ShieldCheck className="w-5 h-5 text-primary" />
+          <span>
+            <strong className="text-foreground">Cancele quando quiser.</strong> Sem fidelidade, sem letras miúdas.
+          </span>
+        </div>
       </div>
 
       <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
