@@ -197,10 +197,13 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
                     <div
                       key={weekIndex}
                       className={`w-3 h-3 rounded-sm ${getIntensityColor(dayData.count)} hover:ring-2 hover:ring-emerald-400 transition-all cursor-pointer group relative`}
-                      title={`${new Date(dayData.date).toLocaleDateString('pt-BR')}: ${dayData.count} formatações`}
+                      title={`${dayData.date.split('-').reverse().join('/')}: ${dayData.count} formatações`}
                     >
                       <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 bg-card border border-border text-foreground text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10 shadow-lg">
-                        {new Date(dayData.date).toLocaleDateString('pt-BR')}
+                        {(() => {
+                          const [year, month, day] = dayData.date.split('-');
+                          return `${day}/${month}/${year}`;
+                        })()}
                         <br />
                         {dayData.count} {dayData.count === 1 ? 'formatação' : 'formatações'}
                       </div>
