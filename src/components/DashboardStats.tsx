@@ -79,7 +79,7 @@ export function DashboardStats({ stats, loading, user }: DashboardStatsProps) {
           <div className="space-y-4 flex-1 flex flex-col justify-center">
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Este mês</span>
-              <span className="text-2xl font-bold text-white">
+              <span className="text-2xl font-bold text-foreground">
                 {stats?.this_month || 0}
               </span>
             </div>

@@ -126,7 +126,7 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
               <Calendar className="w-8 h-8 text-blue-400" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-white mb-2">Continue Formatando!</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-2">Continue Formatando!</h3>
               <p className="text-sm text-muted-foreground max-w-xs mx-auto">
                 Seu mapa de atividade aparecerá aqui após 10 dias de uso.
               </p>
@@ -181,7 +181,7 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
                       className={`w-3 h-3 rounded-sm ${getIntensityColor(dayData.count)} hover:ring-2 hover:ring-emerald-400 transition-all cursor-pointer group relative`}
                       title={`${new Date(dayData.date).toLocaleDateString('pt-BR')}: ${dayData.count} formatações`}
                     >
-                      <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 bg-card text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+                      <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 bg-card text-foreground text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
                         {new Date(dayData.date).toLocaleDateString('pt-BR')}
                         <br />
                         {dayData.count} {dayData.count === 1 ? 'formatação' : 'formatações'}
@@ -222,7 +222,7 @@ export function ActivityHeatmap({ userId, isPro }: ActivityHeatmapProps) {
             <p className="text-xs text-muted-foreground">Taxa de consistência</p>
           </div>
           <div className="flex items-baseline gap-2">
-            <p className="text-2xl font-bold text-white">{consistencyRate.toFixed(0)}%</p>
+            <p className="text-2xl font-bold text-foreground">{consistencyRate.toFixed(0)}%</p>
             <p className="text-xs text-cyan-400">
               {activeDays} de {totalDays} dias ativos
             </p>

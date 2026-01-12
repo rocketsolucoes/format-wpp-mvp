@@ -8,7 +8,7 @@ export default function Cancel() {
   const [, setLocation] = useLocation();
 
   return (
-    <div className="min-h-screen bg-background text-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-4">
       <Card className="max-w-lg w-full border-border">
         <CardContent className="pt-12 pb-8 text-center">
           <div className="flex justify-center mb-6">
@@ -17,7 +17,7 @@ export default function Cancel() {
             </div>
           </div>
 
-          <h1 className="text-4xl font-bold mb-4 text-white">
+          <h1 className="text-4xl font-bold mb-4 text-foreground">
             Payment Canceled
           </h1>
 

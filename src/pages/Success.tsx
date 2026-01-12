@@ -68,12 +68,12 @@ export default function Success() {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-4">
       <Card className="max-w-2xl w-full border-border">
         <CardContent className="pt-12 pb-8 text-center">
           <div className="flex justify-center mb-6">
             <div className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center animate-bounce">
-              <CheckCircle className="w-12 h-12 text-white" />
+              <CheckCircle className="w-12 h-12 text-foreground" />
             </div>
           </div>
 

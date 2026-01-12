@@ -134,7 +134,7 @@ export function TimeSavedCard({ userId }: TimeSavedCardProps) {
           <div className="flex items-center justify-center my-2">
             <Clock className="w-12 h-12 text-cyan-400" />
           </div>
-          <div className="text-3xl font-bold text-white">~0 min</div>
+          <div className="text-3xl font-bold text-foreground">~0 min</div>
           <p className="text-xs text-muted-foreground">
             Comece a formatar para economizar tempo
           </p>

@@ -55,7 +55,7 @@ export function DialogHeader({ children, onClose }: DialogHeaderProps) {
       {onClose && (
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-lg p-2 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+          className="absolute right-4 top-4 rounded-lg p-2 text-slate-400 hover:text-foreground hover:bg-slate-800 transition-colors"
         >
           <X className="h-4 w-4" />
         </button>
@@ -70,7 +70,7 @@ interface DialogTitleProps {
 
 export function DialogTitle({ children, className = '' }: DialogTitleProps & { className?: string }) {
   return (
-    <h2 className={`text-xl font-bold text-white ${className}`}>
+    <h2 className={`text-xl font-bold text-foreground ${className}`}>
       {children}
     </h2>
   );

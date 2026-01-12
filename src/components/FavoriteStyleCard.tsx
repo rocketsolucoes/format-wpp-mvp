@@ -138,7 +138,7 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
           <div className="flex items-center gap-6">
             <Sparkles className="w-16 h-16 text-yellow-400 flex-shrink-0" />
             <div className="flex-1">
-              <div className="text-xl font-bold text-white">Sem favorito</div>
+              <div className="text-xl font-bold text-foreground">Sem favorito</div>
               <p className="text-sm text-muted-foreground mt-1">Comece a formatar para descobrir seu estilo preferido</p>
             </div>
           </div>
@@ -161,7 +161,7 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
             <div className="flex flex-col items-center justify-start flex-shrink-0 w-32 pt-2">
               <div className="text-7xl mb-3">🎭</div>
               <div className="text-center">
-                <div className="text-xl font-bold text-white">Uso Misto</div>
+                <div className="text-xl font-bold text-foreground">Uso Misto</div>
                 <p className="text-sm text-muted-foreground">Vários estilos</p>
                 <div className="mt-2">
                   <span className="text-base font-semibold text-muted-foreground">
@@ -224,7 +224,7 @@ export function FavoriteStyleCard({ userId, onTryOtherStyles }: FavoriteStyleCar
               <div className="text-7xl cursor-help mb-3">{config.emoji}</div>
             </Tooltip>
             <div className="text-center">
-              <div className="text-xl font-bold text-white">{config.name}</div>
+              <div className="text-xl font-bold text-foreground">{config.name}</div>
               <p className="text-sm text-muted-foreground">{config.subtitle}</p>
               <div className="mt-2">
                 <span className="text-base font-semibold text-muted-foreground">

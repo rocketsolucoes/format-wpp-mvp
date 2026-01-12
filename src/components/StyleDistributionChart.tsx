@@ -42,7 +42,7 @@ const CustomTooltip = ({ active, payload }: any) => {
       <div className="bg-card/95 backdrop-blur-sm border border-slate-700 rounded-lg px-4 py-3 shadow-xl">
         <div className="flex items-center gap-2 mb-1">
           <span className="text-lg">{data.payload.icon}</span>
-          <p className="text-sm font-semibold text-white">{data.name}</p>
+          <p className="text-sm font-semibold text-foreground">{data.name}</p>
         </div>
         <p className="text-xs text-muted-foreground">
           {data.value} formatações ({((data.value / data.payload.total) * 100).toFixed(1)}%)
@@ -202,7 +202,7 @@ export function StyleDistributionChart({ userId, isPro }: StyleDistributionProps
                   <span className="text-muted-foreground">{style.name}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-white font-semibold">{style.value}</span>
+                  <span className="text-foreground font-semibold">{style.value}</span>
                   <span className="text-slate-500 text-xs">({percentage.toFixed(0)}%)</span>
                 </div>
               </div>
@@ -215,7 +215,7 @@ export function StyleDistributionChart({ userId, isPro }: StyleDistributionProps
           <div className="flex items-center gap-2">
             <span className="text-2xl">{mostUsedStyle.icon}</span>
             <div>
-              <p className="text-white font-semibold text-sm">{mostUsedStyle.name}</p>
+              <p className="text-foreground font-semibold text-sm">{mostUsedStyle.name}</p>
               <p className="text-purple-400 text-xs">
                 {((mostUsedStyle.value / totalFormats) * 100).toFixed(0)}% do uso total
               </p>

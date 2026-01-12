@@ -199,7 +199,7 @@ export default function Format() {
 
       <div className="px-4 py-6 sm:px-6 lg:px-8">
         <div className="lg:hidden mb-6">
-          <h2 className="text-sm font-semibold text-white mb-3">Estilos de Formatação</h2>
+          <h2 className="text-sm font-semibold text-foreground mb-3">Estilos de Formatação</h2>
           <StyleSelector
             selectedStyle={selectedStyle}
             onStyleChange={setSelectedStyle}
@@ -215,7 +215,7 @@ export default function Format() {
           <aside className="hidden lg:block w-64 flex-shrink-0">
             <div className="sticky top-6 space-y-4">
               <div>
-                <h2 className="text-sm font-semibold text-white mb-3">Estilos de Formatação</h2>
+                <h2 className="text-sm font-semibold text-foreground mb-3">Estilos de Formatação</h2>
                 <StyleSelector
                   selectedStyle={selectedStyle}
                   onStyleChange={setSelectedStyle}
@@ -264,7 +264,7 @@ export default function Format() {
 
             <div className="space-y-4">
               <div>
-                <label htmlFor="input-text" className="block text-sm font-medium text-white mb-2">
+                <label htmlFor="input-text" className="block text-sm font-medium text-foreground mb-2">
                   Texto Original
                 </label>
                 <textarea
@@ -273,7 +273,7 @@ export default function Format() {
                   onChange={(e) => setInputText(e.target.value)}
                   placeholder="Cole ou digite sua mensagem aqui..."
                   disabled={isFormatting}
-                  className="w-full min-h-[180px] sm:min-h-[200px] px-3 sm:px-4 py-3 bg-card border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-y disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                  className="w-full min-h-[180px] sm:min-h-[200px] px-3 sm:px-4 py-3 bg-card border border-slate-700 rounded-lg text-foreground placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-y disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                   aria-label="Original text input"
                 />
               </div>
@@ -299,7 +299,7 @@ export default function Format() {
 
               {outputText && (
                 <div className="space-y-3 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                  <label htmlFor="output-text" className="block text-sm font-medium text-white">
+                  <label htmlFor="output-text" className="block text-sm font-medium text-foreground">
                     Formatado para WhatsApp
                   </label>
                   <div className="relative">
@@ -307,7 +307,7 @@ export default function Format() {
                       id="output-text"
                       value={outputText}
                       readOnly
-                      className="w-full min-h-[180px] sm:min-h-[200px] px-3 sm:px-4 py-3 bg-card border border-slate-700 rounded-lg text-white resize-y pr-12 text-sm sm:text-base"
+                      className="w-full min-h-[180px] sm:min-h-[200px] px-3 sm:px-4 py-3 bg-card border border-slate-700 rounded-lg text-foreground resize-y pr-12 text-sm sm:text-base"
                       aria-label="Formatted text output"
                     />
                     <button
@@ -331,7 +331,7 @@ export default function Format() {
                     </Button>
                     <Button
                       onClick={handleSendToWhatsApp}
-                      className="flex-1 h-11 sm:h-10 bg-[#25D366] hover:bg-[#20BD5A] text-white border-0"
+                      className="flex-1 h-11 sm:h-10 bg-[#25D366] hover:bg-[#20BD5A] text-foreground border-0"
                       aria-label="Send to WhatsApp"
                     >
                       <MessageCircle className="w-4 h-4 mr-2" />
@@ -396,7 +396,7 @@ export default function Format() {
             </Button>
             <Button
               onClick={handleCopyFromFallback}
-              className="bg-[#25D366] hover:bg-[#20BD5A] text-white"
+              className="bg-[#25D366] hover:bg-[#20BD5A] text-foreground"
             >
               <Copy className="w-4 h-4 mr-2" />
               Copiar Texto

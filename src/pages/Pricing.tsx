@@ -226,7 +226,7 @@ export default function Pricing() {
                 <CardHeader className="text-center pt-8">
                   <div className="flex justify-center mb-4">
                     <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
-                      <Icon className="w-8 h-8 text-white" />
+                      <Icon className="w-8 h-8 text-foreground" />
                     </div>
                   </div>
                   <CardTitle className="text-2xl mb-2">{plan.name}</CardTitle>
@@ -438,11 +438,11 @@ export default function Pricing() {
                   </div>
                   <p className="text-muted-foreground mb-6 italic">"{testimonial.quote}"</p>
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center text-white font-bold">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center text-foreground font-bold">
                       {testimonial.initial}
                     </div>
                     <div>
-                      <p className="font-semibold text-white">{testimonial.name}</p>
+                      <p className="font-semibold text-foreground">{testimonial.name}</p>
                       <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                       <p className="text-sm text-slate-500">{testimonial.company}</p>
                     </div>
@@ -518,7 +518,7 @@ export default function Pricing() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">

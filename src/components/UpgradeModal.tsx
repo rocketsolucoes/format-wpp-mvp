@@ -40,7 +40,7 @@ export function UpgradeModal({ open, onOpenChange, onUpgrade }: UpgradeModalProp
         <DialogHeader onClose={handleClose}>
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500">
-              <Zap className="h-5 w-5 text-white" />
+              <Zap className="h-5 w-5 text-foreground" />
             </div>
             <DialogTitle>Upgrade to Pro</DialogTitle>
           </div>
@@ -52,7 +52,7 @@ export function UpgradeModal({ open, onOpenChange, onUpgrade }: UpgradeModalProp
         <DialogBody>
           <div className="grid grid-cols-2 gap-4">
             <div className="p-4 rounded-lg bg-muted/50 border border-slate-700">
-              <h3 className="font-semibold text-white mb-2">Free Plan</h3>
+              <h3 className="font-semibold text-foreground mb-2">Free Plan</h3>
               <div className="text-2xl font-bold text-muted-foreground mb-3">$0</div>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start gap-2 text-muted-foreground">
@@ -76,12 +76,12 @@ export function UpgradeModal({ open, onOpenChange, onUpgrade }: UpgradeModalProp
 
             <div className="p-4 rounded-lg bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border-2 border-emerald-500/50 relative">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span className="px-3 py-1 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white text-xs font-semibold rounded-full">
+                <span className="px-3 py-1 bg-gradient-to-r from-emerald-500 to-cyan-500 text-foreground text-xs font-semibold rounded-full">
                   Popular
                 </span>
               </div>
-              <h3 className="font-semibold text-white mb-2">Pro Plan</h3>
-              <div className="text-2xl font-bold text-white mb-3">
+              <h3 className="font-semibold text-foreground mb-2">Pro Plan</h3>
+              <div className="text-2xl font-bold text-foreground mb-3">
                 $9.99<span className="text-sm text-muted-foreground">/month</span>
               </div>
               <ul className="space-y-2 text-sm">

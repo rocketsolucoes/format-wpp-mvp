@@ -130,7 +130,7 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
   return (
     <button
       onClick={onClick}
-      className={`w-full px-4 py-2 text-left text-sm text-slate-300 hover:bg-slate-800 hover:text-white transition-colors ${className}`}
+      className={`w-full px-4 py-2 text-left text-sm text-slate-300 hover:bg-slate-800 hover:text-foreground transition-colors ${className}`}
     >
       {children}
     </button>

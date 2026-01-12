@@ -60,7 +60,7 @@ export function ExtensionBadgeDetector() {
         <div className="flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
           <div className="flex-1 space-y-2">
-            <h4 className="font-semibold text-white">Badges Numerados Detectados</h4>
+            <h4 className="font-semibold text-foreground">Badges Numerados Detectados</h4>
             <AlertDescription className="text-yellow-100/90 text-sm leading-relaxed">
               Detectamos badges numerados na interface. Eles são injetados por extensões como
               <strong className="text-yellow-200"> Vimium</strong> ou

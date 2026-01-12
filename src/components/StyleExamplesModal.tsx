@@ -103,7 +103,7 @@ export function StyleExamplesModal({ open, onOpenChange }: StyleExamplesModalPro
             <DialogTitle className="text-lg">Exemplos de Formatação</DialogTitle>
             <button
               onClick={() => onOpenChange(false)}
-              className="rounded-lg p-2 text-muted-foreground hover:text-white hover:bg-muted transition-colors"
+              className="rounded-lg p-2 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
             >
               <X className="h-4 w-4" />
             </button>

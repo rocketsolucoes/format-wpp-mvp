@@ -71,7 +71,7 @@ export default function TestStripe() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-white p-8">
+    <div className="min-h-screen bg-background text-foreground p-8">
       <div className="max-w-4xl mx-auto">
         <Card className="border-border mb-6">
           <CardHeader>
