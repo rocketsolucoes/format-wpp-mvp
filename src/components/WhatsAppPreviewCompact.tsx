@@ -103,16 +103,16 @@ export function WhatsAppPreviewCompact({ text }: WhatsAppPreviewCompactProps) {
   });
 
   return (
-    <div className="bg-[#0a1014] p-3 rounded-lg border border-border">
+    <div className="bg-[#0a1014] p-4 rounded-lg border border-border">
       <div className="flex justify-end">
-        <div className="relative bg-[#005c4b] rounded-lg rounded-br-sm p-2.5 max-w-full shadow-md">
+        <div className="relative bg-[#005c4b] rounded-lg rounded-br-sm p-3 max-w-full shadow-md">
           <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[6px] border-l-transparent border-t-[6px] border-t-[#005c4b] transform translate-x-[6px]"></div>
 
           <div
-            className="text-white text-xs mb-1 break-words"
+            className="text-white text-sm mb-1.5 break-words"
             style={{
               fontFamily: 'system-ui, -apple-system, sans-serif',
-              lineHeight: '1.4',
+              lineHeight: '1.5',
             }}
           >
             {renderFormattedText(text)}

@@ -51,7 +51,7 @@ export function StyleComparisonModal({ open, onOpenChange }: StyleComparisonModa
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-5xl mx-auto">
+      <DialogContent className="max-w-7xl mx-auto">
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="text-lg">Comparação de Estilos</DialogTitle>
@@ -64,19 +64,19 @@ export function StyleComparisonModal({ open, onOpenChange }: StyleComparisonModa
           </div>
         </DialogHeader>
 
-        <div className="py-2 max-h-[70vh] overflow-y-auto px-6">
-          <div className="mb-4 p-3 bg-muted/50 rounded-lg border border-border">
-            <p className="text-xs font-semibold text-muted-foreground mb-1">Texto Original:</p>
-            <p className="text-sm text-foreground">{SAMPLE_TEXT}</p>
+        <div className="py-4 max-h-[75vh] overflow-y-auto px-6">
+          <div className="mb-6 p-4 bg-muted/50 rounded-lg border border-border">
+            <p className="text-sm font-semibold text-muted-foreground mb-2">Texto Original:</p>
+            <p className="text-base text-foreground">{SAMPLE_TEXT}</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {STYLE_COMPARISONS.map((style) => (
               <div
                 key={style.id}
                 className="flex flex-col border border-border rounded-lg overflow-hidden bg-card hover:border-primary/50 transition-colors"
               >
-                <div className="p-3 border-b border-border bg-muted/30">
+                <div className="p-4 border-b border-border bg-muted/30">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">{style.icon}</span>
                     <div>
@@ -86,8 +86,8 @@ export function StyleComparisonModal({ open, onOpenChange }: StyleComparisonModa
                   </div>
                 </div>
 
-                <div className="flex-1 p-3">
-                  <div className="mb-3">
+                <div className="flex-1 p-4">
+                  <div className="mb-4">
                     <p className="text-xs font-semibold text-muted-foreground mb-2">Como aparece no WhatsApp:</p>
                     <WhatsAppPreviewCompact text={style.example} />
                   </div>
