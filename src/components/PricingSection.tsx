@@ -51,7 +51,7 @@ const PricingSection: React.FC = () => {
         { text: 'Salvar favoritos ilimitados', included: true },
       ],
       cta: 'Assinar o Pro',
-      ctaVariant: 'default' as const,
+      ctaVariant: 'primary' as const,
       highlighted: true,
       icon: Zap,
     },
@@ -78,13 +78,13 @@ const PricingSection: React.FC = () => {
   return (
     <section id="pricing" className="container mx-auto px-4 py-24">
       <div className="text-center mb-12">
-        <h2 className="text-4xl font-bold mb-4 text-white">Planos Simples e Transparentes</h2>
-        <p className="text-slate-400 max-w-2xl mx-auto mb-8">
+        <h2 className="text-4xl font-bold mb-4">Planos Simples e Transparentes</h2>
+        <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
           Escolha o plano ideal para o seu momento. Deixe a IA cuidar da estilização das suas mensagens enquanto você foca no que importa.
         </p>
         
         <Tabs value={billingPeriod} onValueChange={(value) => setBillingPeriod(value as BillingPeriod)} className="inline-flex">
-          <TabsList className="bg-slate-900 border border-slate-800">
+          <TabsList className="bg-muted border border-border">
             <TabsTrigger value="monthly">Mensal</TabsTrigger>
             <TabsTrigger value="annual" className="gap-2">
               Anual
@@ -102,13 +102,13 @@ const PricingSection: React.FC = () => {
               key={plan.name}
               className={`relative transition-all duration-300 hover:scale-105 flex flex-col ${
                 plan.highlighted
-                  ? 'border-emerald-500/50 bg-slate-900 shadow-2xl shadow-emerald-500/10'
-                  : 'border-slate-800 bg-slate-900/50'
+                  ? 'border-primary shadow-2xl shadow-primary/10'
+                  : 'bg-card/50'
               }`}
             >
               {plan.highlighted && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <Badge className="bg-emerald-500 text-white border-none px-3 py-1">
+                  <Badge className="bg-primary text-primary-foreground border-none px-3 py-1">
                     RECOMENDADO
                   </Badge>
                 </div>
@@ -116,24 +116,24 @@ const PricingSection: React.FC = () => {
               
               <CardHeader>
                 <div className="flex items-center justify-between mb-2">
-                  <div className={`p-2 rounded-lg ${plan.highlighted ? 'bg-emerald-500/20' : 'bg-slate-800'}`}>
-                    <Icon className={`w-5 h-5 ${plan.highlighted ? 'text-emerald-400' : 'text-slate-400'}`} />
+                  <div className={`p-2 rounded-lg ${plan.highlighted ? 'bg-primary/20' : 'bg-muted'}`}>
+                    <Icon className={`w-5 h-5 ${plan.highlighted ? 'text-primary' : 'text-muted-foreground'}`} />
                   </div>
                   <Badge variant={plan.badge.variant}>{plan.badge.text}</Badge>
                 </div>
-                <CardTitle className="text-2xl text-white">{plan.name}</CardTitle>
-                <CardDescription className="text-slate-400">{plan.description}</CardDescription>
+                <CardTitle className="text-2xl">{plan.name}</CardTitle>
+                <CardDescription>{plan.description}</CardDescription>
               </CardHeader>
 
               <CardContent className="flex-1 flex flex-col">
                 <div className="mb-6">
                   {plan.price !== null ? (
                     <div className="flex items-baseline gap-1">
-                      <span className="text-4xl font-bold text-white">{formatBRL(plan.price)}</span>
-                      <span className="text-slate-500 text-sm">/{plan.period}</span>
+                      <span className="text-4xl font-bold">{formatBRL(plan.price)}</span>
+                      <span className="text-muted-foreground text-sm">/{plan.period}</span>
                     </div>
                   ) : (
-                    <span className="text-3xl font-bold text-white">Sob Consulta</span>
+                    <span className="text-3xl font-bold">Sob Consulta</span>
                   )}
                 </div>
 
@@ -141,11 +141,11 @@ const PricingSection: React.FC = () => {
                   {plan.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-3 text-sm">
                       {feature.included ? (
-                        <Check className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
+                        <Check className="w-4 h-4 text-primary mt-0.5 shrink-0" />
                       ) : (
-                        <div className="w-4 h-4 border border-slate-700 rounded-full mt-0.5 shrink-0" />
+                        <div className="w-4 h-4 border border-border rounded-full mt-0.5 shrink-0" />
                       )}
-                      <span className={feature.included ? 'text-slate-300' : 'text-slate-600'}>
+                      <span className={feature.included ? 'text-foreground' : 'text-muted-foreground/50'}>
                         {feature.text}
                       </span>
                     </li>
@@ -154,11 +154,7 @@ const PricingSection: React.FC = () => {
 
                 <Button
                   variant={plan.ctaVariant}
-                  className={`w-full h-12 font-bold ${
-                    plan.highlighted
-                      ? 'bg-emerald-500 hover:bg-emerald-600 text-white border-none'
-                      : 'border-slate-700 text-slate-300 hover:bg-slate-800'
-                  }`}
+                  className="w-full h-12 font-bold"
                   onClick={() => setLocation('/auth')}
                 >
                   {plan.cta}

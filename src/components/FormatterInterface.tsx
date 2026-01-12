@@ -4,7 +4,6 @@ import InputTextarea from './InputTextarea';
 import OutputTextarea from './OutputTextarea';
 import { toast } from './ui/Toaster';
 import { Progress } from './ui/Progress';
-import { Alert, AlertDescription } from './ui/Alert';
 import { formatText, FormatterError } from '../services/formatter';
 import { useAuth } from '../hooks/useAuth';
 import { useLocation } from 'wouter';
@@ -42,9 +41,9 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
 
   const getCharCountColor = () => {
     const length = inputText.length;
-    if (length <= 4000) return 'text-emerald-400';
-    if (length <= 4900) return 'text-yellow-400';
-    return 'text-red-400';
+    if (length <= 4000) return 'text-emerald-500';
+    if (length <= 4900) return 'text-amber-500';
+    return 'text-destructive';
   };
 
   const isInputValid = (): boolean => {
@@ -160,7 +159,7 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
                 {inputText.length} / 5000 caracteres
               </span>
               {validationError && (
-                <span className="text-[10px] text-red-400 font-medium">{validationError}</span>
+                <span className="text-[10px] text-destructive font-medium">{validationError}</span>
               )}
             </div>
           </div>
@@ -174,7 +173,7 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
               {isFormatting ? (
                 <button
                   onClick={handleCancel}
-                  className="w-full lg:w-auto px-6 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-lg font-semibold text-white text-sm transition-all duration-300 flex items-center justify-center gap-2 border border-slate-700"
+                  className="w-full lg:w-auto px-6 py-2.5 bg-secondary hover:bg-secondary/80 rounded-lg font-semibold text-secondary-foreground text-sm transition-all duration-300 flex items-center justify-center gap-2 border border-border"
                 >
                   <X className="w-4 h-4" />
                   Cancelar
@@ -183,7 +182,7 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
                 <button
                   onClick={handleFormat}
                   disabled={!isInputValid() || isFormatting}
-                  className="w-full lg:w-auto px-8 py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-lg font-bold text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full lg:w-auto px-8 py-3 bg-primary text-primary-foreground rounded-lg font-bold shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   <Sparkles className="w-4 h-4" />
                   Estilizar Mensagem
@@ -195,7 +194,7 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
 
         {isFormatting && (
           <div className="mt-4 space-y-2">
-            <div className="flex items-center justify-between text-[10px] text-slate-400 uppercase tracking-widest">
+            <div className="flex items-center justify-between text-[10px] text-muted-foreground uppercase tracking-widest">
               <span className="flex items-center gap-2">
                 <span className="animate-pulse">Processando</span>
               </span>

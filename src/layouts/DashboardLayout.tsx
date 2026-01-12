@@ -19,9 +19,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   }, [sidebarCollapsed]);
 
   return (
-    <div className="flex h-screen bg-slate-950 overflow-hidden">
+    <div className="flex h-screen bg-background overflow-hidden transition-colors duration-300">
       <aside
-        className={`hidden lg:flex flex-col border-r border-slate-800 bg-slate-950 transition-all duration-300 ${
+        className={`hidden lg:flex flex-col border-r border-border bg-card transition-all duration-300 ${
           sidebarCollapsed ? 'w-16' : 'w-56'
         }`}
       >
@@ -34,14 +34,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       {mobileSidebarOpen && (
         <div className="lg:hidden fixed inset-0 z-50 bg-black/50" onClick={() => setMobileSidebarOpen(false)}>
           <div
-            className="w-64 h-full bg-slate-950 border-r border-slate-800"
+            className="w-64 h-full bg-card border-r border-border"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between p-4 border-b border-slate-800">
+            <div className="flex items-center justify-between p-4 border-b border-border">
               <h2 className="text-lg font-semibold">Menu</h2>
               <Button
                 variant="ghost"
-                size="sm"
                 onClick={() => setMobileSidebarOpen(false)}
               >
                 <X className="w-5 h-5" />
@@ -53,10 +52,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       )}
 
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="lg:hidden flex items-center justify-between px-4 py-3 border-b border-slate-800 bg-slate-950">
+        <div className="lg:hidden flex items-center justify-between px-4 py-3 border-b border-border bg-card">
           <Button
             variant="ghost"
-            size="sm"
             onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
           >
             <Menu className="w-5 h-5" />

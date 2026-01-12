@@ -1,31 +1,14 @@
 import React, { ButtonHTMLAttributes } from 'react';
 import { Loader2 } from 'lucide-react';
 
-/**
- * Variantes de estilo do botão
- */
 type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline';
 
-/**
- * Props do componente Button
- */
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   loading?: boolean;
   fullWidth?: boolean;
 }
 
-/**
- * Button Component
- *
- * Botão estilizado com múltiplas variantes e estado de carregamento.
- *
- * Variantes disponíveis:
- * - primary: Gradiente emerald-to-cyan (padrão)
- * - secondary: Fundo slate com borda
- * - ghost: Transparente com hover
- * - danger: Vermelho para ações destrutivas
- */
 const Button: React.FC<ButtonProps> = ({
   children,
   variant = 'primary',
@@ -35,21 +18,18 @@ const Button: React.FC<ButtonProps> = ({
   disabled,
   ...props
 }) => {
-  /**
-   * Retorna as classes CSS baseadas na variante
-   */
   const getVariantClasses = () => {
     switch (variant) {
       case 'primary':
-        return 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40';
+        return 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:shadow-primary/40';
       case 'secondary':
-        return 'bg-slate-800 text-slate-100 border border-slate-700 hover:bg-slate-700';
+        return 'bg-secondary text-secondary-foreground border border-border hover:bg-secondary/80';
       case 'ghost':
-        return 'bg-transparent text-slate-300 hover:bg-slate-800/50';
+        return 'bg-transparent text-muted-foreground hover:bg-accent hover:text-accent-foreground';
       case 'danger':
-        return 'bg-red-500 text-white hover:bg-red-600 shadow-lg shadow-red-500/20';
+        return 'bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-lg shadow-destructive/20';
       case 'outline':
-        return 'bg-transparent text-slate-300 border border-slate-700 hover:bg-slate-800/50';
+        return 'bg-transparent text-foreground border border-input hover:bg-accent hover:text-accent-foreground';
       default:
         return '';
     }

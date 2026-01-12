@@ -30,22 +30,22 @@ const FAQSection: React.FC = () => {
   return (
     <section className="container mx-auto px-4 py-24">
       <div className="max-w-3xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-white mb-12">Perguntas Frequentes</h2>
+        <h2 className="text-3xl font-bold text-center text-foreground mb-12">Perguntas Frequentes</h2>
         <div className="space-y-4">
           {faqs.map((faq, i) => (
             <div 
               key={i} 
-              className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden transition-all"
+              className="bg-card border border-border rounded-xl overflow-hidden transition-all shadow-sm"
             >
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                className="w-full px-6 py-4 flex items-center justify-between text-left text-white font-medium hover:bg-slate-800/50 transition-colors"
+                className="w-full px-6 py-4 flex items-center justify-between text-left font-medium hover:bg-muted/50 transition-colors"
               >
                 <span>{faq.question}</span>
-                {openIndex === i ? <ChevronUp className="w-5 h-5 text-emerald-500" /> : <ChevronDown className="w-5 h-5 text-slate-500" />}
+                {openIndex === i ? <ChevronUp className="w-5 h-5 text-primary" /> : <ChevronDown className="w-5 h-5 text-muted-foreground" />}
               </button>
               {openIndex === i && (
-                <div className="px-6 py-4 text-slate-400 border-t border-slate-800 bg-slate-900/50">
+                <div className="px-6 py-4 text-muted-foreground border-t border-border bg-muted/20">
                   {faq.answer}
                 </div>
               )}
