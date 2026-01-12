@@ -218,10 +218,12 @@ const Auth: React.FC = () => {
           </div>
           <h1 className="text-3xl font-bold mb-2">
             <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-              Bem-vindo de Volta
+              {activeTab === 'signup' ? 'Crie sua Conta' : 'Bem-vindo de Volta'}
             </span>
           </h1>
-          <p className="text-muted-foreground">Faça login para continuar formatando</p>
+          <p className="text-muted-foreground">
+            {activeTab === 'signup' ? 'Comece a formatar suas mensagens gratuitamente' : 'Faça login para continuar formatando'}
+          </p>
         </div>
 
         {/* Card com Tabs */}
