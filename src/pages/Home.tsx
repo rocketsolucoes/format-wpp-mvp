@@ -46,9 +46,32 @@ const Home: React.FC = () => {
       <div className="container mx-auto px-4">
         <TrustBadges />
       </div>
-      
-      {/* 3. Interactive Demo */}
-      <div id="formatter" className="container mx-auto px-4 py-8">
+
+      {/* 3. Features - Mostra O QUE o sistema faz */}
+      <div id="features" className="py-8">
+        <FeaturesSection />
+      </div>
+
+      {/* 4. How It Works - Mostra COMO funciona (3 passos) */}
+      <div id="how-it-works" className="py-8">
+        <HowItWorksSection />
+      </div>
+
+      {/* 5. Examples - Mostra o RESULTADO (Antes vs Depois) */}
+      <div id="examples" className="py-8">
+        <ExamplesSection />
+      </div>
+
+      {/* 6. Interactive Demo - AGORA o usuário testa com contexto */}
+      <div id="formatter" className="container mx-auto px-4 py-12">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            Experimente Agora Gratuitamente
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Cole sua mensagem abaixo e veja a mágica acontecer. Sem cadastro, sem cartão de crédito.
+          </p>
+        </div>
         <div className="max-w-5xl mx-auto bg-card/30 rounded-2xl border border-border/50 p-1 shadow-xl">
           <FormatterInterface
             onNoCredits={handleNoCredits}
@@ -61,22 +84,7 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* 4. Features */}
-      <div id="features" className="py-8">
-        <FeaturesSection />
-      </div>
-
-      {/* 5. How It Works - Nova seção */}
-      <div id="how-it-works" className="py-8">
-        <HowItWorksSection />
-      </div>
-
-      {/* 6. Examples - Antes vs Depois */}
-      <div id="examples" className="py-8">
-        <ExamplesSection />
-      </div>
-
-      {/* 7. Testimonials - Social Proof */}
+      {/* 7. Testimonials - Social Proof após o usuário testar */}
       <div className="py-8">
         <TestimonialsSection />
       </div>
