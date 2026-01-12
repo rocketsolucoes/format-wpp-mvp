@@ -9,7 +9,7 @@ import { Button } from '../components/ui/Button';
 import { StyleSelector } from '../components/StyleSelector';
 import { WhatsAppPreview } from '../components/WhatsAppPreview';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter } from '../components/ui/Dialog';
-import { getPendingText, clearPendingText } from '../utils/textPersistence';
+import { getPendingText, clearPendingText, getFormattedPreview, clearFormattedPreview } from '../utils/textPersistence';
 
 export default function Format() {
   const [inputText, setInputText] = useState('');
@@ -25,15 +25,27 @@ export default function Format() {
 
   useEffect(() => {
     const pendingText = getPendingText();
+    const formattedPreview = getFormattedPreview();
     const reformatText = localStorage.getItem('reformat_text');
     const reformatStyle = localStorage.getItem('reformat_style');
     const selectedStyleFromDashboard = localStorage.getItem('selectedStyle');
 
-    if (pendingText) {
+    // Prioridade 1: Preview formatado da landing page
+    if (formattedPreview) {
+      setInputText(formattedPreview.inputText);
+      setOutputText(formattedPreview.formattedText);
+      setPreviewText(formattedPreview.formattedText);
+      clearFormattedPreview();
+      toast.success('🎉 Seu texto já está formatado! Agora você pode copiar e usar todos os recursos.', { duration: 5000 });
+    }
+    // Prioridade 2: Texto pendente (fluxo antigo)
+    else if (pendingText) {
       setInputText(pendingText);
       clearPendingText();
       toast.success('Seu texto foi restaurado! ✨ Clique em Formatar para continuar.');
-    } else if (reformatText) {
+    }
+    // Prioridade 3: Reformatar do histórico
+    else if (reformatText) {
       setInputText(reformatText);
       localStorage.removeItem('reformat_text');
     }

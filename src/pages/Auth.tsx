@@ -23,11 +23,17 @@ import { hasPendingText } from '../utils/textPersistence';
  * - Redirecionamento após login bem-sucedido
  */
 const Auth: React.FC = () => {
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
   const { signIn, signUp, loading, resetPassword } = useAuth();
+
+  // Extrair parâmetros da URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const tabParam = urlParams.get('tab');
+  const redirectParam = urlParams.get('redirect');
 
   const [showResetModal, setShowResetModal] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
+  const [activeTab, setActiveTab] = useState(tabParam === 'signup' ? 'signup' : 'login');
 
   // Estados do formulário de Login
   const [loginEmail, setLoginEmail] = useState('');
@@ -129,6 +135,12 @@ const Auth: React.FC = () => {
       setLoginEmail('');
       setLoginPassword('');
 
+      // Redirecionar para a página especificada ou padrão
+      if (redirectParam) {
+        setLocation(redirectParam);
+        return;
+      }
+
       if (hasPendingText()) {
         setLocation('/format');
         return;
@@ -157,6 +169,12 @@ const Auth: React.FC = () => {
       setSignupPassword('');
       setSignupConfirmPassword('');
       setAcceptTerms(false);
+
+      // Redirecionar para a página especificada ou padrão
+      if (redirectParam) {
+        setLocation(redirectParam);
+        return;
+      }
 
       if (hasPendingText()) {
         setLocation('/format');
@@ -208,7 +226,7 @@ const Auth: React.FC = () => {
 
         {/* Card com Tabs */}
         <div className="bg-card/50 backdrop-blur-sm border border-border rounded-lg p-6 shadow-xl">
-          <Tabs defaultValue="login">
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
             <div className="flex justify-center mb-6">
               <TabsList className="w-auto">
                 <TabsTrigger value="login">Entrar</TabsTrigger>

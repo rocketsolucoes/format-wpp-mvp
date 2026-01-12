@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Sparkles, X } from 'lucide-react';
+import { Sparkles, X, Lock } from 'lucide-react';
 import InputTextarea from './InputTextarea';
 import OutputTextarea from './OutputTextarea';
 import { toast } from './ui/Toaster';
@@ -23,6 +23,7 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
   const [isFormatting, setIsFormatting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [showSignupPrompt, setShowSignupPrompt] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
   const { user, refreshUser } = useAuth();
   const [, setLocation] = useLocation();
@@ -61,20 +62,68 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
     toast.warning('Formatação cancelada');
   };
 
+  const handleSignupRedirect = () => {
+    // Salvar texto formatado para restaurar depois
+    if (outputText) {
+      localStorage.setItem('pendingFormattedText', outputText);
+      localStorage.setItem('pendingInputText', inputText);
+    }
+    // Redirecionar para auth com parâmetros
+    setLocation('/auth?tab=signup&redirect=/format');
+  };
+
   const handleFormat = async () => {
     if (!isInputValid()) {
       toast.error(validationError || 'Por favor, insira um texto válido');
       return;
     }
 
+    // Se não estiver logado, formata mas mostra prompt de cadastro
     if (!user) {
-      if (savePendingText(inputText)) {
-        toast.success('Redirecionando para login...');
-      }
-      setLocation('/auth');
+      setIsFormatting(true);
+      setProgress(0);
+
+      // Simula formatação com delay para dar sensação de processamento
+      const progressInterval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 90) return prev;
+          return prev + Math.random() * 15;
+        });
+      }, 200);
+
+      // Simula delay de 1.5s
+      setTimeout(() => {
+        clearInterval(progressInterval);
+        setProgress(100);
+        
+        // Formatação básica simulada (adiciona alguns negritos e quebras de linha)
+        const simulatedFormatted = inputText
+          .split('\n')
+          .map(line => {
+            if (line.trim().length > 0) {
+              // Adiciona negrito em palavras-chave comuns
+              return line
+                .replace(/\b(importante|atenção|urgente|lembrete|aviso)\b/gi, '*$1*')
+                .replace(/\b(horário|data|local|endereço)\b/gi, '*$1*');
+            }
+            return line;
+          })
+          .join('\n');
+        
+        setOutputText(simulatedFormatted);
+        setIsFormatting(false);
+        setProgress(0);
+        
+        // Mostra prompt de cadastro após 500ms
+        setTimeout(() => {
+          setShowSignupPrompt(true);
+        }, 500);
+      }, 1500);
+
       return;
     }
 
+    // Fluxo normal para usuários logados
     setIsFormatting(true);
     setProgress(0);
     abortControllerRef.current = new AbortController();
@@ -164,11 +213,56 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 relative">
             <OutputTextarea
               value={outputText}
-              disabled={isFormatting}
+              disabled={isFormatting || (!user && outputText.length > 0)}
             />
+            
+            {/* Overlay de bloqueio quando não está logado e tem texto formatado */}
+            {!user && outputText && showSignupPrompt && (
+              <div className="absolute inset-0 bg-background/95 backdrop-blur-sm rounded-xl flex items-center justify-center z-10 border-2 border-primary/20">
+                <div className="text-center p-8 max-w-md">
+                  <div className="mb-6 flex justify-center">
+                    <div className="p-4 bg-primary/10 rounded-full">
+                      <Lock className="w-12 h-12 text-primary" />
+                    </div>
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold text-foreground mb-3">
+                    🎉 Gostou do Resultado?
+                  </h3>
+                  
+                  <p className="text-muted-foreground mb-6 leading-relaxed">
+                    Cadastre-se <strong className="text-foreground">GRÁTIS</strong> para copiar esta mensagem e ganhar <strong className="text-primary">30 créditos/mês</strong> para formatar quantas mensagens quiser!
+                  </p>
+                  
+                  <div className="space-y-3">
+                    <button
+                      onClick={handleSignupRedirect}
+                      className="w-full px-8 py-4 bg-primary text-primary-foreground rounded-xl font-bold shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+                    >
+                      <Sparkles className="w-5 h-5" />
+                      Cadastrar e Copiar Grátis
+                    </button>
+                    
+                    <button
+                      onClick={() => setShowSignupPrompt(false)}
+                      className="w-full px-6 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      Continuar explorando
+                    </button>
+                  </div>
+                  
+                  <div className="mt-6 pt-6 border-t border-border">
+                    <p className="text-xs text-muted-foreground">
+                      ✓ Sem cartão de crédito • ✓ 30 créditos grátis • ✓ Cancele quando quiser
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+            
             <div className="flex justify-center lg:justify-end">
               {isFormatting ? (
                 <button
@@ -198,7 +292,7 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
               <span className="flex items-center gap-2">
                 <span className="animate-pulse">Processando</span>
               </span>
-              <span>IA trabalhando...</span>
+              <span>{user ? 'IA trabalhando...' : 'Preparando preview...'}</span>
             </div>
             <Progress value={progress} max={100} className="h-1" />
           </div>

@@ -92,3 +92,69 @@ export const getPendingTextTimeRemaining = (): number => {
     return 0;
   }
 };
+
+/**
+ * Save formatted text and input text for preview flow
+ */
+export const saveFormattedPreview = (inputText: string, formattedText: string): boolean => {
+  try {
+    if (!inputText || !formattedText) {
+      return false;
+    }
+
+    localStorage.setItem('pendingInputText', inputText.trim());
+    localStorage.setItem('pendingFormattedText', formattedText.trim());
+    localStorage.setItem('pendingFormattedTime', Date.now().toString());
+    return true;
+  } catch (error) {
+    console.error('Failed to save formatted preview to localStorage:', error);
+    return false;
+  }
+};
+
+/**
+ * Get formatted preview if it exists and hasn't expired
+ */
+export const getFormattedPreview = (): { inputText: string; formattedText: string } | null => {
+  try {
+    const inputText = localStorage.getItem('pendingInputText');
+    const formattedText = localStorage.getItem('pendingFormattedText');
+    const timeStr = localStorage.getItem('pendingFormattedTime');
+
+    if (!inputText || !formattedText || !timeStr) {
+      return null;
+    }
+
+    const elapsed = Date.now() - parseInt(timeStr, 10);
+
+    if (elapsed >= EXPIRATION_TIME) {
+      clearFormattedPreview();
+      return null;
+    }
+
+    return { inputText, formattedText };
+  } catch (error) {
+    console.error('Failed to get formatted preview from localStorage:', error);
+    return null;
+  }
+};
+
+/**
+ * Clear formatted preview from localStorage
+ */
+export const clearFormattedPreview = (): void => {
+  try {
+    localStorage.removeItem('pendingInputText');
+    localStorage.removeItem('pendingFormattedText');
+    localStorage.removeItem('pendingFormattedTime');
+  } catch (error) {
+    console.error('Failed to clear formatted preview from localStorage:', error);
+  }
+};
+
+/**
+ * Check if formatted preview exists and is valid
+ */
+export const hasFormattedPreview = (): boolean => {
+  return getFormattedPreview() !== null;
+};
