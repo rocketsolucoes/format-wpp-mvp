@@ -300,8 +300,8 @@ export default function Prompts() {
                 readOnly={!isEditing}
                 className={`min-h-[400px] font-mono text-sm p-4 transition-all duration-200 ${
                   isEditing 
-                    ? 'bg-background border-primary ring-1 ring-primary/20' 
-                    : 'bg-muted/50 border-border text-muted-foreground cursor-not-allowed'
+                    ? 'bg-background border-primary ring-1 ring-primary/20 text-foreground' 
+                    : 'bg-muted/50 border-border text-foreground/80 cursor-not-allowed'
                 }`}
                 placeholder="Instruções da IA..."
               />
