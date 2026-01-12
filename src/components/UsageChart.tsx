@@ -233,7 +233,7 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Gráfico de Uso</CardTitle>
+          <CardTitle>Análise de Uso Avançada</CardTitle>
           <CardDescription>Últimos 30 dias</CardDescription>
         </CardHeader>
         <CardContent>
