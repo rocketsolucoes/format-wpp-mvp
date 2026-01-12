@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
           <div className="md:col-span-1">
             <Link href="/">
               <a className="flex items-center gap-2 mb-4 hover:opacity-80 transition-opacity">
-                <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-8" />
+                <img src="/zapstyle_logo.png" alt="ZapStyle" className="h-10" />
               </a>
             </Link>
             <p className="text-sm text-muted-foreground mb-4">
