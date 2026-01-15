@@ -133,20 +133,20 @@ serve(async (req) => {
     switch (webhookEvent.event) {
       case 'PURCHASE_COMPLETE':
       case 'PURCHASE_APPROVED':
-        await handlePurchaseComplete(supabaseClient, user.id, webhookEvent);
+        await handlePurchaseComplete(supabaseClient, userId, webhookEvent);
         break;
 
       case 'SUBSCRIPTION_CANCELLATION':
       case 'PURCHASE_CANCELED':
-        await handleSubscriptionCancellation(supabaseClient, user.id, webhookEvent);
+        await handleSubscriptionCancellation(supabaseClient, userId, webhookEvent);
         break;
 
       case 'PURCHASE_REFUNDED':
-        await handleRefund(supabaseClient, user.id, webhookEvent);
+        await handleRefund(supabaseClient, userId, webhookEvent);
         break;
 
       case 'SUBSCRIPTION_REACTIVATION':
-        await handleSubscriptionReactivation(supabaseClient, user.id, webhookEvent);
+        await handleSubscriptionReactivation(supabaseClient, userId, webhookEvent);
         break;
 
       default:
