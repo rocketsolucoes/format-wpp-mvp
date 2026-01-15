@@ -105,11 +105,11 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onClose }) => {
   const getIcon = () => {
     switch (toast.type) {
       case 'success':
-        return <CheckCircle className="w-5 h-5 text-emerald-600" />;
+        return <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />;
       case 'error':
-        return <XCircle className="w-5 h-5 text-red-600" />;
+        return <XCircle className="w-5 h-5 text-red-600 dark:text-red-400" />;
       case 'warning':
-        return <AlertCircle className="w-5 h-5 text-yellow-600" />;
+        return <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />;
     }
   };
 
@@ -119,11 +119,11 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onClose }) => {
   const getStyles = () => {
     switch (toast.type) {
       case 'success':
-        return 'bg-emerald-50 border-emerald-200 text-emerald-900';
+        return 'bg-emerald-50 border-emerald-200 text-emerald-900 dark:bg-emerald-900/20 dark:border-emerald-800/30 dark:text-emerald-100';
       case 'error':
-        return 'bg-red-50 border-red-200 text-red-900';
+        return 'bg-red-50 border-red-200 text-red-900 dark:bg-red-900/20 dark:border-red-800/30 dark:text-red-100';
       case 'warning':
-        return 'bg-yellow-50 border-yellow-200 text-yellow-900';
+        return 'bg-yellow-50 border-yellow-200 text-yellow-900 dark:bg-yellow-900/20 dark:border-yellow-800/30 dark:text-yellow-100';
     }
   };
 

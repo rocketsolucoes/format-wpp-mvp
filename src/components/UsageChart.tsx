@@ -167,7 +167,7 @@ export function UsageChart({ data, loading, isPro, userId }: UsageChartProps) {
     ];
 
     return (
-      <Card className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 border-border/50">
+      <Card className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 border-border/50">
         <CardContent className="p-6">
           <div className="space-y-6">
             <div className="relative">
