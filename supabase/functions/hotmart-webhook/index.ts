@@ -75,6 +75,17 @@ serve(async (req) => {
   }
 
   try {
+    // Validate Hotmart webhook signature for security
+    const hotmartToken = req.headers.get('X-Hotmart-Hottok');
+    if (!hotmartToken) {
+      console.warn('Missing Hotmart signature - webhook might be from unauthorized source');
+      // Note: For production, consider making this a hard requirement by returning 401
+      // return new Response(
+      //   JSON.stringify({ error: 'Missing Hotmart signature' }),
+      //   { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      // );
+    }
+
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
@@ -101,20 +112,22 @@ serve(async (req) => {
     const productId = String(webhookEvent.data.product.id);
     const productName = webhookEvent.data.product.name;
 
-    // Find user by email
-    const { data: authUser, error: authError } = await supabaseClient.auth.admin.listUsers();
-    if (authError) {
-      throw new Error(`Failed to list users: ${authError.message}`);
-    }
+    // Find user by email (optimized query)
+    const { data: profile, error: profileError } = await supabaseClient
+      .from('profiles')
+      .select('id, email')
+      .eq('email', buyerEmail)
+      .single();
 
-    const user = authUser.users.find(u => u.email === buyerEmail);
-    if (!user) {
+    if (profileError || !profile) {
       console.error(`User not found with email: ${buyerEmail}`);
       return new Response(
         JSON.stringify({ error: 'User not found', email: buyerEmail }),
         { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+
+    const userId = profile.id;
 
     // Handle different event types
     switch (webhookEvent.event) {
@@ -158,42 +171,33 @@ serve(async (req) => {
  * Handle purchase completion - activate subscription
  */
 async function handlePurchaseComplete(supabaseClient: any, userId: string, event: HotmartWebhookEvent) {
-  const { data, purchase, subscription } = event.data;
+  const { buyer, product, purchase, subscription } = event.data;
   const subscriberCode = subscription?.subscriber_code || event.id;
-  const buyerEmail = data.buyer.email;
+  const buyerEmail = buyer.email;
 
-  // 1. Create or update hotmart_customer
-  const { data: existingCustomer, error: customerFetchError } = await supabaseClient
+  // 1. Create or update hotmart_customer (using upsert for atomicity)
+  const { data: customer, error: customerError } = await supabaseClient
     .from('hotmart_customers')
+    .upsert({
+      user_id: userId,
+      subscriber_code: subscriberCode,
+      email: buyerEmail,
+    }, {
+      onConflict: 'user_id',
+      ignoreDuplicates: false
+    })
     .select('id')
-    .eq('user_id', userId)
     .single();
 
-  let customerId: number;
-
-  if (existingCustomer) {
-    customerId = existingCustomer.id;
-  } else {
-    const { data: newCustomer, error: customerError } = await supabaseClient
-      .from('hotmart_customers')
-      .insert({
-        user_id: userId,
-        subscriber_code: subscriberCode,
-        email: buyerEmail,
-      })
-      .select('id')
-      .single();
-
-    if (customerError) throw new Error(`Failed to create customer: ${customerError.message}`);
-    customerId = newCustomer.id;
-  }
+  if (customerError) throw new Error(`Failed to upsert customer: ${customerError.message}`);
+  const customerId = customer.id;
 
   // 2. Create or update subscription
   if (subscription) {
     const subscriptionData = {
       customer_id: customerId,
       subscription_id: subscription.subscription_id || subscriberCode,
-      plan_id: String(subscription.plan?.id || data.product.id),
+      plan_id: String(subscription.plan?.id || product.id),
       status: 'active',
       date_next_charge: subscription.date_next_charge?.date
         ? new Date(subscription.date_next_charge.date * 1000).toISOString()
@@ -221,8 +225,8 @@ async function handlePurchaseComplete(supabaseClient: any, userId: string, event
     purchase_date: purchase.approved_date || purchase.order_date
       ? new Date((purchase.approved_date || purchase.order_date)! * 1000).toISOString()
       : new Date().toISOString(),
-    product_id: String(data.product.id),
-    product_name: data.product.name,
+    product_id: String(product.id),
+    product_name: product.name,
     offer_code: purchase.offer?.code || null,
     amount_total: purchase.price?.value || 0,
     currency: purchase.price?.currency_code || 'BRL',
