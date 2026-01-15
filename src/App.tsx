@@ -14,8 +14,6 @@ import History from './pages/History';
 import Settings from './pages/Settings';
 import Pricing from './pages/Pricing';
 import Success from './pages/Success';
-import Cancel from './pages/Cancel';
-import TestStripe from './pages/TestStripe';
 import AdminRoute from './components/AdminRoute';
 import AdminPrompts from './pages/admin/Prompts';
 
@@ -40,9 +38,7 @@ function AppContent() {
           <Route path="/" component={Home} />
           <Route path="/auth" component={Auth} />
           <Route path="/pricing" component={Pricing} />
-          <Route path="/cancel" component={Cancel} />
-          <Route path="/test-stripe" component={TestStripe} />
-          
+
           <Route path="/dashboard">
             <ProtectedRoute>
               <Dashboard />

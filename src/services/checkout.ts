@@ -1,55 +1,47 @@
 import { supabase } from '../lib/supabase';
 
 export interface CheckoutSessionResponse {
-  sessionId: string;
   url: string;
 }
 
-export async function createCheckoutSession(priceId: string): Promise<CheckoutSessionResponse> {
+/**
+ * Creates a Hotmart checkout URL with user information
+ * @param checkoutLink - Base Hotmart checkout link
+ * @returns Checkout URL with user parameters
+ */
+export async function createCheckoutSession(checkoutLink: string): Promise<CheckoutSessionResponse> {
   try {
-    const origin = window.location.origin;
-    const successUrl = `${origin}/success`;
-    const cancelUrl = `${origin}/cancel`;
-
-    const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-checkout`;
-
     const { data: { session } } = await supabase.auth.getSession();
 
-    if (!session) {
+    if (!session?.user) {
       throw new Error('Usuário não autenticado');
     }
 
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${session.access_token}`,
-      },
-      body: JSON.stringify({
-        priceId,
-        successUrl,
-        cancelUrl,
-      }),
-    });
+    // Get user email
+    const userEmail = session.user.email;
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Checkout session error response:', errorText);
-      try {
-        const error = JSON.parse(errorText);
-        throw new Error(error.error || error.message || 'Falha ao criar sessão de pagamento');
-      } catch (e) {
-        throw new Error(`Falha ao criar sessão de pagamento: ${response.status} ${response.statusText}`);
-      }
+    if (!userEmail) {
+      throw new Error('Email do usuário não disponível');
     }
 
-    const data = await response.json();
+    // Build Hotmart checkout URL with parameters
+    const url = new URL(checkoutLink);
+    url.searchParams.set('email', userEmail);
 
-    if (!data.url) {
-      throw new Error('URL de pagamento não recebida');
+    // Optional: Add user name if available
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('full_name')
+      .eq('id', session.user.id)
+      .single();
+
+    if (profile?.full_name) {
+      url.searchParams.set('name', profile.full_name);
     }
 
-    return data;
+    return {
+      url: url.toString(),
+    };
   } catch (error) {
     console.error('Error creating checkout session:', error);
     throw error;

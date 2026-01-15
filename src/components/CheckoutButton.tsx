@@ -6,7 +6,7 @@ import { useAuth } from '../hooks/useAuth';
 import { createCheckoutSession } from '../services/checkout';
 
 interface CheckoutButtonProps {
-  priceId: string;
+  checkoutLink: string;
   planName: string;
   isCurrentPlan?: boolean;
   children: React.ReactNode;
@@ -15,7 +15,7 @@ interface CheckoutButtonProps {
 }
 
 export default function CheckoutButton({
-  priceId,
+  checkoutLink,
   planName,
   isCurrentPlan = false,
   children,
@@ -39,7 +39,7 @@ export default function CheckoutButton({
     setLoading(true);
 
     try {
-      const { url } = await createCheckoutSession(priceId);
+      const { url } = await createCheckoutSession(checkoutLink);
       window.location.href = url;
     } catch (error) {
       console.error('Erro ao processar pagamento:', error);

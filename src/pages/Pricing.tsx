@@ -27,7 +27,7 @@ export default function Pricing() {
   const savings = billingPeriod === 'annual' ? calculateAnnualSavings() : 0;
 
   const formatBRL = formatCurrency;
-  const currentPriceId = billingPeriod === 'monthly' ? PRICING.STRIPE_PRICE_ID_MONTHLY : PRICING.STRIPE_PRICE_ID_ANNUAL;
+  const currentCheckoutLink = billingPeriod === 'monthly' ? PRICING.HOTMART_CHECKOUT_LINK_MONTHLY : PRICING.HOTMART_CHECKOUT_LINK_ANNUAL;
 
   const plans = [
     {
@@ -132,7 +132,7 @@ export default function Pricing() {
     },
     {
       question: 'Quais métodos de pagamento vocês aceitam?',
-      answer: 'Aceitamos todos os principais cartões de crédito (Visa, Mastercard, American Express, Discover) e cartões de débito. Todos os pagamentos são processados de forma segura através do Stripe, e nunca armazenamos suas informações de pagamento em nossos servidores.',
+      answer: 'Aceitamos todos os principais cartões de crédito (Visa, Mastercard, American Express), PIX e boleto bancário. Todos os pagamentos são processados de forma segura através do Hotmart, e nunca armazenamos suas informações de pagamento em nossos servidores.',
     },
     {
       question: 'Vocês oferecem reembolso?',
@@ -192,7 +192,7 @@ export default function Pricing() {
               <TabsTrigger value="monthly">Mensal</TabsTrigger>
               <TabsTrigger value="annual" className="gap-2">
                 Anual
-                <Badge variant="success" className="ml-1 text-xs">Economize 20%</Badge>
+                <Badge variant="success" className="ml-1 text-xs">Economize 8%</Badge>
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -271,7 +271,7 @@ export default function Pricing() {
 
                   {plan.name === 'Pro' ? (
                     <CheckoutButton
-                      priceId={currentPriceId}
+                      checkoutLink={currentCheckoutLink}
                       planName={plan.name}
                       variant={plan.ctaVariant}
                       className={`w-full ${plan.highlighted ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600' : ''}`}
