@@ -27,6 +27,10 @@ export async function createCheckoutSession(checkoutLink: string): Promise<Check
     // Build Hotmart checkout URL with parameters
     const url = new URL(checkoutLink);
     url.searchParams.set('email', userEmail);
+    
+    // Add redirect URL for post-purchase
+    const redirectUrl = `${window.location.origin}/thank-you`;
+    url.searchParams.set('redirect_to', redirectUrl);
 
     // Optional: Add user name if available
     const { data: profile } = await supabase

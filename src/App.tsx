@@ -14,10 +14,11 @@ import History from './pages/History';
 import Settings from './pages/Settings';
 import Pricing from './pages/Pricing';
 import Success from './pages/Success';
+import ThankYou from './pages/ThankYou';
 import AdminRoute from './components/AdminRoute';
 import AdminPrompts from './pages/admin/Prompts';
 
-const protectedRoutes = ['/dashboard', '/format', '/history', '/settings', '/success', '/admin/prompts'];
+const protectedRoutes = ['/dashboard', '/format', '/history', '/settings', '/success', '/thank-you', '/admin/prompts'];
 
 /**
  * Main App Component
@@ -66,6 +67,12 @@ function AppContent() {
           <Route path="/success">
             <ProtectedRoute>
               <Success />
+            </ProtectedRoute>
+          </Route>
+
+          <Route path="/thank-you">
+            <ProtectedRoute>
+              <ThankYou />
             </ProtectedRoute>
           </Route>
 

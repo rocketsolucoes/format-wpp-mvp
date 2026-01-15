@@ -105,11 +105,11 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onClose }) => {
   const getIcon = () => {
     switch (toast.type) {
       case 'success':
-        return <CheckCircle className="w-5 h-5 text-emerald-400" />;
+        return <CheckCircle className="w-5 h-5 text-emerald-600" />;
       case 'error':
-        return <XCircle className="w-5 h-5 text-red-400" />;
+        return <XCircle className="w-5 h-5 text-red-600" />;
       case 'warning':
-        return <AlertCircle className="w-5 h-5 text-yellow-400" />;
+        return <AlertCircle className="w-5 h-5 text-yellow-600" />;
     }
   };
 
@@ -119,11 +119,11 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onClose }) => {
   const getStyles = () => {
     switch (toast.type) {
       case 'success':
-        return 'bg-emerald-500/10 border-emerald-500/20 text-emerald-100';
+        return 'bg-emerald-50 border-emerald-200 text-emerald-900';
       case 'error':
-        return 'bg-red-500/10 border-red-500/20 text-red-100';
+        return 'bg-red-50 border-red-200 text-red-900';
       case 'warning':
-        return 'bg-yellow-500/10 border-yellow-500/20 text-yellow-100';
+        return 'bg-yellow-50 border-yellow-200 text-yellow-900';
     }
   };
 
