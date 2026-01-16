@@ -71,6 +71,13 @@ const Auth: React.FC = () => {
   const [newPasswordGeneralError, setNewPasswordGeneralError] = useState<string>('');
 
   /**
+   * Scroll to top when page loads to show trial information
+   */
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  /**
    * Detecta quando o usuário vem do link de reset de senha
    */
   useEffect(() => {
@@ -93,6 +100,37 @@ const Auth: React.FC = () => {
     };
   }, []);
 
+  /**
+   * Formata o número de telefone no padrão brasileiro (+55 11 99999-9999)
+   */
+  const formatPhoneNumber = (value: string): string => {
+    // Remove tudo que não é dígito
+    const cleaned = value.replace(/\D/g, '');
+
+    // Limita a 13 dígitos (código do país + DDD + número)
+    const limited = cleaned.substring(0, 13);
+
+    // Aplica formatação progressiva
+    if (limited.length === 0) {
+      return '';
+    } else if (limited.length <= 2) {
+      return \`+\${limited}\`;
+    } else if (limited.length <= 4) {
+      return \`+\${limited.slice(0, 2)} \${limited.slice(2)}\`;
+    } else if (limited.length <= 9) {
+      return \`+\${limited.slice(0, 2)} \${limited.slice(2, 4)} \${limited.slice(4)}\`;
+    } else {
+      return \`+\${limited.slice(0, 2)} \${limited.slice(2, 4)} \${limited.slice(4, 9)}-\${limited.slice(9)}\`;
+    }
+  };
+
+  /**
+   * Handler para mudança no campo de WhatsApp com formatação automática
+   */
+  const handleWhatsappChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPhoneNumber(e.target.value);
+    setSignupWhatsapp(formatted);
+  };
   /**
    * Valida o formulário de login
    */
@@ -240,7 +278,7 @@ const Auth: React.FC = () => {
     console.log('✅ [handleSignupSubmit] Validação passou, chamando signUp...');
 
     try {
-      await signUp(signupEmail, signupPassword, signupFullName);
+      await signUp(signupEmail, signupPassword, signupFullName, signupWhatsapp);
       console.log('✅ [handleSignupSubmit] signUp completou com sucesso');
 
       // Limpar formulário
@@ -545,7 +583,7 @@ const Auth: React.FC = () => {
                     autoComplete="tel"
                     placeholder="+55 11 99999-9999"
                     value={signupWhatsapp}
-                    onChange={(e) => setSignupWhatsapp(e.target.value)}
+                    onChange={handleWhatsappChange}
                     error={signupErrors.whatsapp}
                     disabled={loading}
                     required

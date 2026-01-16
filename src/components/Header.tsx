@@ -75,6 +75,13 @@ const Header: React.FC = () => {
                   Planos
                 </a>
                 <Button
+                  variant="ghost"
+                  onClick={() => setLocation('/auth?tab=login')}
+                  className="hidden sm:flex"
+                >
+                  Entrar
+                </Button>
+                <Button
                   variant="primary"
                   onClick={() => setLocation('/auth?tab=signup')}
                   className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 border-0 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40"

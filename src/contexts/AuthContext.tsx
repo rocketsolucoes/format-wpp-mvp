@@ -32,7 +32,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   error: string | null;
-  signUp: (email: string, password: string, fullName: string) => Promise<void>;
+  signUp: (email: string, password: string, fullName: string, whatsapp?: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -128,8 +128,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   /**
    * Função de registro (signup)
    */
-  const signUp = async (email: string, password: string, fullName: string) => {
-    console.log('🔵 [SignUp] Iniciando processo de cadastro...', { email, fullName });
+  const signUp = async (email: string, password: string, fullName: string, whatsapp?: string) => {
+    console.log('🔵 [SignUp] Iniciando processo de cadastro...', { email, fullName, whatsapp });
 
     try {
       setError(null);
@@ -179,6 +179,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         id: data.user.id,
         email: data.user.email!,
         full_name: fullName,
+        whatsapp: whatsapp || null,
         avatar_url: null,
         plan: 'free',
         subscription_tier: 'free',
