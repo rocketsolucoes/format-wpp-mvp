@@ -34,6 +34,7 @@ interface AuthContextType {
   updateProfile: (data: Partial<User>) => Promise<void>;
   refreshUser: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
+  updatePassword: (newPassword: string) => Promise<void>;
 }
 
 /**
@@ -380,6 +381,43 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   /**
+   * Função para atualizar senha do usuário (usado após reset de senha)
+   */
+  const updatePassword = async (newPassword: string) => {
+    console.log('🔵 [UpdatePassword] Iniciando atualização de senha...');
+
+    try {
+      setError(null);
+      setLoading(true);
+
+      console.log('🔵 [UpdatePassword] Atualizando senha no Supabase...');
+      const { error: updateError } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+      if (updateError) {
+        console.error('❌ [UpdatePassword] Erro ao atualizar senha:', updateError);
+        setError(updateError.message);
+        toast.error(updateError.message);
+        throw updateError;
+      }
+
+      console.log('✅ [UpdatePassword] Senha atualizada com sucesso!');
+      toast.success('Senha atualizada com sucesso!', { icon: '✅', duration: 3000 });
+
+      console.log('🔵 [UpdatePassword] Fazendo logout para segurança...');
+      // Fazer logout após atualizar senha (para forçar novo login)
+      await signOut();
+    } catch (err) {
+      console.error('❌ [UpdatePassword] Erro no processo:', err);
+      setLoading(false);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**
    * Função para atualizar perfil do usuário
    */
   const updateProfile = async (data: Partial<User>) => {
@@ -448,6 +486,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     updateProfile,
     refreshUser,
     resetPassword,
+    updatePassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

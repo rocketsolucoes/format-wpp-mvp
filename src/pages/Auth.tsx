@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { Sparkles } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
@@ -9,6 +9,7 @@ import Button from '../components/ui/Button';
 import Checkbox from '../components/ui/Checkbox';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../components/ui/Dialog';
 import { hasPendingText } from '../utils/textPersistence';
+import { supabase } from '../lib/supabase';
 
 /**
  * Auth Page Component
@@ -24,7 +25,7 @@ import { hasPendingText } from '../utils/textPersistence';
  */
 const Auth: React.FC = () => {
   const [location, setLocation] = useLocation();
-  const { signIn, signUp, loading, resetPassword } = useAuth();
+  const { signIn, signUp, loading, resetPassword, updatePassword } = useAuth();
 
   // Extrair parâmetros da URL
   const urlParams = new URLSearchParams(window.location.search);
@@ -61,6 +62,36 @@ const Auth: React.FC = () => {
   // Estados do modal de reset
   const [resetEmailError, setResetEmailError] = useState<string>('');
   const [resetSuccess, setResetSuccess] = useState(false);
+
+  // Estados do modal de nova senha (após clicar no link de reset)
+  const [showNewPasswordModal, setShowNewPasswordModal] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [newPasswordErrors, setNewPasswordErrors] = useState<{ password?: string; confirmPassword?: string }>({});
+  const [newPasswordGeneralError, setNewPasswordGeneralError] = useState<string>('');
+
+  /**
+   * Detecta quando o usuário vem do link de reset de senha
+   */
+  useEffect(() => {
+    console.log('🔵 [Auth] Verificando se usuário vem de link de reset de senha...');
+
+    // Escutar mudanças na autenticação
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('🔵 [Auth] Evento de autenticação:', event);
+
+      // Se o evento for PASSWORD_RECOVERY, mostrar modal de nova senha
+      if (event === 'PASSWORD_RECOVERY') {
+        console.log('✅ [Auth] Detectado evento de PASSWORD_RECOVERY, mostrando modal...');
+        setShowNewPasswordModal(true);
+      }
+    });
+
+    // Cleanup
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   /**
    * Valida o formulário de login
@@ -289,6 +320,60 @@ const Auth: React.FC = () => {
       console.error('❌ [handleResetPassword] Erro ao enviar email:', error);
       const errorMessage = error.message || 'Erro ao enviar email de redefinição';
       setResetEmailError(errorMessage);
+    }
+  };
+
+  /**
+   * Handle New Password Submit (após clicar no link de reset)
+   */
+  const handleNewPasswordSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    console.log('🔵 [handleNewPasswordSubmit] Iniciando atualização de senha...');
+
+    // Limpar erros anteriores
+    setNewPasswordErrors({});
+    setNewPasswordGeneralError('');
+
+    // Validar nova senha
+    const errors: { password?: string; confirmPassword?: string } = {};
+
+    if (!newPassword) {
+      errors.password = 'Senha é obrigatória';
+    } else if (newPassword.length < 6) {
+      errors.password = 'A senha deve ter pelo menos 6 caracteres';
+    }
+
+    if (!confirmNewPassword) {
+      errors.confirmPassword = 'Confirmação de senha é obrigatória';
+    } else if (newPassword !== confirmNewPassword) {
+      errors.confirmPassword = 'As senhas não coincidem';
+    }
+
+    setNewPasswordErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
+      console.log('⚠️ [handleNewPasswordSubmit] Validação falhou');
+      return;
+    }
+
+    console.log('✅ [handleNewPasswordSubmit] Validação passou, chamando updatePassword...');
+
+    try {
+      await updatePassword(newPassword);
+      console.log('✅ [handleNewPasswordSubmit] Senha atualizada, usuário foi deslogado');
+
+      // Limpar formulário
+      setNewPassword('');
+      setConfirmNewPassword('');
+      setShowNewPasswordModal(false);
+
+      // Redirecionar para login com mensagem
+      console.log('🔵 [handleNewPasswordSubmit] Redirecionando para login...');
+      setLocation('/auth?tab=login');
+    } catch (error: any) {
+      console.error('❌ [handleNewPasswordSubmit] Erro ao atualizar senha:', error);
+      const errorMessage = error.message || 'Erro ao atualizar senha. Por favor, tente novamente.';
+      setNewPasswordGeneralError(errorMessage);
     }
   };
 
@@ -572,6 +657,72 @@ const Auth: React.FC = () => {
               </Button>
               <Button type="submit" loading={loading} disabled={resetSuccess}>
                 {loading ? 'Enviando...' : resetSuccess ? 'Enviado!' : 'Enviar Link'}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal de Nova Senha (após clicar no link de reset) */}
+      <Dialog open={showNewPasswordModal} onOpenChange={setShowNewPasswordModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Definir Nova Senha</DialogTitle>
+            <DialogDescription>
+              Digite sua nova senha. Após atualizar, você precisará fazer login novamente.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleNewPasswordSubmit} className="px-6 py-6 space-y-6">
+            <div>
+              <Label htmlFor="new-password" required>
+                Nova Senha
+              </Label>
+              <Input
+                id="new-password"
+                type="password"
+                placeholder="Digite sua nova senha"
+                value={newPassword}
+                onChange={(e) => {
+                  setNewPassword(e.target.value);
+                  // Limpar erros ao digitar
+                  setNewPasswordErrors({});
+                  setNewPasswordGeneralError('');
+                }}
+                error={newPasswordErrors.password}
+                disabled={loading}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="confirm-new-password" required>
+                Confirmar Nova Senha
+              </Label>
+              <Input
+                id="confirm-new-password"
+                type="password"
+                placeholder="Digite novamente sua nova senha"
+                value={confirmNewPassword}
+                onChange={(e) => {
+                  setConfirmNewPassword(e.target.value);
+                  // Limpar erros ao digitar
+                  setNewPasswordErrors({});
+                  setNewPasswordGeneralError('');
+                }}
+                error={newPasswordErrors.confirmPassword}
+                disabled={loading}
+              />
+            </div>
+
+            {/* Erro Geral */}
+            {newPasswordGeneralError && (
+              <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
+                <p className="text-sm text-destructive font-medium">{newPasswordGeneralError}</p>
+              </div>
+            )}
+
+            <div className="flex gap-3 justify-end pt-2">
+              <Button type="submit" loading={loading} fullWidth>
+                {loading ? 'Atualizando...' : 'Atualizar Senha'}
               </Button>
             </div>
           </form>
