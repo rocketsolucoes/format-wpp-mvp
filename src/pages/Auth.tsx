@@ -114,13 +114,13 @@ const Auth: React.FC = () => {
     if (limited.length === 0) {
       return '';
     } else if (limited.length <= 2) {
-      return \`+\${limited}\`;
+      return `+${limited}`;
     } else if (limited.length <= 4) {
-      return \`+\${limited.slice(0, 2)} \${limited.slice(2)}\`;
+      return `+${limited.slice(0, 2)} ${limited.slice(2)}`;
     } else if (limited.length <= 9) {
-      return \`+\${limited.slice(0, 2)} \${limited.slice(2, 4)} \${limited.slice(4)}\`;
+      return `+${limited.slice(0, 2)} ${limited.slice(2, 4)} ${limited.slice(4)}`;
     } else {
-      return \`+\${limited.slice(0, 2)} \${limited.slice(2, 4)} \${limited.slice(4, 9)}-\${limited.slice(9)}\`;
+      return `+${limited.slice(0, 2)} ${limited.slice(2, 4)} ${limited.slice(4, 9)}-${limited.slice(9)}`;
     }
   };
 
