@@ -21,6 +21,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { supabase } from '../lib/supabase';
 import { Badge } from './ui/Badge';
 import { Button } from './ui/Button';
+import { TrialBadge } from './TrialBadge';
 import { Progress } from './ui/Progress';
 import Avatar from './ui/Avatar';
 
@@ -168,14 +169,17 @@ export function DashboardSidebar({
                   <p className="text-sm font-semibold truncate">
                     {user.full_name || 'Usuário'}
                   </p>
-                  {user.plan === 'pro' || user.plan === 'enterprise' ? (
-                    <Badge className="bg-primary/20 text-primary border-primary/30 text-[10px] px-1.5 py-0 whitespace-nowrap">
-                      Ilimitado
-                    </Badge>
-                  ) : (
-                    <Badge variant="outline" className="text-[10px] px-1.5 py-0 whitespace-nowrap">
-                      Gratuito
-                    </Badge>
+                  <TrialBadge />
+                  {!user.trial_status && (
+                    user.plan === 'pro' || user.plan === 'enterprise' ? (
+                      <Badge className="bg-primary/20 text-primary border-primary/30 text-[10px] px-1.5 py-0 whitespace-nowrap">
+                        Ilimitado
+                      </Badge>
+                    ) : (
+                      <Badge variant="outline" className="text-[10px] px-1.5 py-0 whitespace-nowrap">
+                        Gratuito
+                      </Badge>
+                    )
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground truncate">

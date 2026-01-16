@@ -6,6 +6,7 @@ import { supabase } from '../lib/supabase';
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { DashboardStats } from '../components/DashboardStats';
 import { RecentFormatting } from '../components/RecentFormatting';
+import { TrialBanner } from '../components/TrialBanner';
 import { UsageChart } from '../components/UsageChart';
 import { StyleDistributionChart } from '../components/StyleDistributionChart';
 import { ActivityHeatmap } from '../components/ActivityHeatmap';
@@ -141,6 +142,8 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="px-4 py-6 sm:px-6 lg:px-8 space-y-8">
+          <TrialBanner />
+          
           {error && (
             <Alert variant="destructive">
               <AlertDescription>
