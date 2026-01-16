@@ -34,6 +34,7 @@ interface AuthContextType {
   updateProfile: (data: Partial<User>) => Promise<void>;
   refreshUser: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
+  updatePassword: (newPassword: string) => Promise<void>;
 }
 
 /**
@@ -119,10 +120,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
    * Função de registro (signup)
    */
   const signUp = async (email: string, password: string, fullName: string) => {
+    console.log('🔵 [SignUp] Iniciando processo de cadastro...', { email, fullName });
+
     try {
       setError(null);
       setLoading(true);
 
+      console.log('🔵 [SignUp] Criando usuário no Supabase Auth...');
       const { data, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
@@ -134,7 +138,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       if (signUpError) {
-        console.error('Sign up error:', signUpError);
+        console.error('❌ [SignUp] Erro ao criar usuário:', signUpError);
 
         let errorMessage = 'Erro ao criar conta';
         if (signUpError.message.includes('already registered')) {
@@ -150,36 +154,71 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         throw new Error(errorMessage);
       }
 
-      if (data.user) {
-        const { error: profileError } = await supabase.from('profiles').insert({
-          id: data.user.id,
-          email: data.user.email!,
-          full_name: fullName,
-          avatar_url: null,
-          plan: 'free',
-          subscription_tier: 'free',
-          subscription_status: null,
-          credits_remaining: 30,
-        });
-
-        if (profileError) {
-          console.error('Error creating profile:', profileError);
-          const profileErrorMsg = 'Erro ao criar perfil de usuário';
-          setError(profileErrorMsg);
-          toast.error(profileErrorMsg);
-          throw new Error(profileErrorMsg);
-        }
-
-        // Buscar o perfil recém-criado e atualizar o estado
-        const profile = await fetchUserProfile(data.user.id);
-        if (profile) {
-          setUser(profile);
-        }
-
-        toast.success('Conta criada com sucesso! ✨', { icon: '✅', duration: 3000 });
+      if (!data.user) {
+        console.error('❌ [SignUp] Nenhum usuário retornado após signup');
+        const noUserError = 'Erro ao criar conta: usuário não foi criado';
+        setError(noUserError);
+        toast.error(noUserError);
+        throw new Error(noUserError);
       }
+
+      console.log('✅ [SignUp] Usuário criado com sucesso:', data.user.id);
+      console.log('🔵 [SignUp] Criando perfil na tabela profiles...');
+
+      // Criar perfil na tabela profiles
+      const { error: profileError } = await supabase.from('profiles').insert({
+        id: data.user.id,
+        email: data.user.email!,
+        full_name: fullName,
+        avatar_url: null,
+        plan: 'free',
+        subscription_tier: 'free',
+        subscription_status: null,
+        credits_remaining: 30,
+      });
+
+      if (profileError) {
+        console.error('❌ [SignUp] Erro ao criar perfil:', profileError);
+
+        // Tratar erro de perfil duplicado (código 23505)
+        let profileErrorMsg = 'Erro ao criar perfil de usuário';
+        if (profileError.code === '23505') {
+          console.log('⚠️ [SignUp] Perfil já existe, tentando buscar perfil existente...');
+          // Perfil já existe, apenas buscar ele
+          const existingProfile = await fetchUserProfile(data.user.id);
+          if (existingProfile) {
+            console.log('✅ [SignUp] Perfil existente carregado com sucesso');
+            setUser(existingProfile);
+            toast.success('Conta criada com sucesso! ✨', { icon: '✅', duration: 3000 });
+            return;
+          }
+          profileErrorMsg = 'Erro ao carregar perfil existente';
+        }
+
+        setError(profileErrorMsg);
+        toast.error(profileErrorMsg);
+        throw new Error(profileErrorMsg);
+      }
+
+      console.log('✅ [SignUp] Perfil criado com sucesso');
+      console.log('🔵 [SignUp] Buscando perfil completo do usuário...');
+
+      // Buscar o perfil recém-criado e atualizar o estado
+      const profile = await fetchUserProfile(data.user.id);
+      if (!profile) {
+        console.error('❌ [SignUp] Erro ao buscar perfil após criação');
+        const fetchProfileError = 'Erro ao carregar perfil do usuário';
+        setError(fetchProfileError);
+        toast.error(fetchProfileError);
+        throw new Error(fetchProfileError);
+      }
+
+      console.log('✅ [SignUp] Perfil carregado com sucesso:', profile);
+      setUser(profile);
+      toast.success('Conta criada com sucesso! ✨', { icon: '✅', duration: 3000 });
+      console.log('✅ [SignUp] Processo de cadastro concluído com sucesso!');
     } catch (err: any) {
-      console.error('Signup error:', err);
+      console.error('❌ [SignUp] Erro no processo de cadastro:', err);
       setLoading(false);
       throw err;
     } finally {
@@ -191,17 +230,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
    * Função de login
    */
   const signIn = async (email: string, password: string) => {
+    console.log('🔵 [SignIn] Iniciando processo de login...', { email });
+
     try {
       setError(null);
       setLoading(true);
 
+      console.log('🔵 [SignIn] Autenticando usuário...');
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (signInError) {
-        console.error('Sign in error:', signInError);
+        console.error('❌ [SignIn] Erro na autenticação:', signInError);
 
         let errorMessage = 'Erro ao fazer login';
         if (signInError.message.includes('Invalid login credentials')) {
@@ -219,20 +261,33 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         throw new Error(errorMessage);
       }
 
-      if (data.user) {
-        const profile = await fetchUserProfile(data.user.id);
-        if (!profile) {
-          const profileError = 'Erro ao carregar perfil do usuário';
-          setError(profileError);
-          toast.error(profileError);
-          throw new Error(profileError);
-        }
-        setUser(profile);
-        const userName = profile.full_name?.split(' ')[0] || 'usuário';
-        toast.success(`Bem-vindo de volta, ${userName}!`, { icon: '✅', duration: 3000 });
+      if (!data.user) {
+        console.error('❌ [SignIn] Nenhum usuário retornado após login');
+        const noUserError = 'Erro ao fazer login: sessão não foi criada';
+        setError(noUserError);
+        toast.error(noUserError);
+        throw new Error(noUserError);
       }
+
+      console.log('✅ [SignIn] Usuário autenticado com sucesso:', data.user.id);
+      console.log('🔵 [SignIn] Carregando perfil do usuário...');
+
+      const profile = await fetchUserProfile(data.user.id);
+      if (!profile) {
+        console.error('❌ [SignIn] Erro ao carregar perfil do usuário');
+        const profileError = 'Erro ao carregar perfil do usuário';
+        setError(profileError);
+        toast.error(profileError);
+        throw new Error(profileError);
+      }
+
+      console.log('✅ [SignIn] Perfil carregado com sucesso:', profile);
+      setUser(profile);
+      const userName = profile.full_name?.split(' ')[0] || 'usuário';
+      toast.success(`Bem-vindo de volta, ${userName}!`, { icon: '✅', duration: 3000 });
+      console.log('✅ [SignIn] Processo de login concluído com sucesso!');
     } catch (err: any) {
-      console.error('Sign in error:', err);
+      console.error('❌ [SignIn] Erro no processo de login:', err);
       setLoading(false);
       throw err;
     } finally {
@@ -297,23 +352,66 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
    * Função para resetar senha
    */
   const resetPassword = async (email: string) => {
+    console.log('🔵 [ResetPassword] Iniciando redefinição de senha...', { email });
+
     try {
       setError(null);
       setLoading(true);
 
+      console.log('🔵 [ResetPassword] Enviando email de redefinição...');
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/auth?reset=true`,
       });
 
       if (resetError) {
+        console.error('❌ [ResetPassword] Erro ao enviar email:', resetError);
         setError(resetError.message);
         toast.error(resetError.message);
         throw resetError;
       }
 
-      toast.success('Password reset email sent! Check your inbox.');
+      console.log('✅ [ResetPassword] Email enviado com sucesso!');
+      toast.success('Email enviado! Verifique sua caixa de entrada.', { icon: '📧', duration: 4000 });
     } catch (err) {
-      console.error('Reset password error:', err);
+      console.error('❌ [ResetPassword] Erro no processo:', err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**
+   * Função para atualizar senha do usuário (usado após reset de senha)
+   */
+  const updatePassword = async (newPassword: string) => {
+    console.log('🔵 [UpdatePassword] Iniciando atualização de senha...');
+
+    try {
+      setError(null);
+      setLoading(true);
+
+      console.log('🔵 [UpdatePassword] Atualizando senha no Supabase...');
+      const { error: updateError } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+      if (updateError) {
+        console.error('❌ [UpdatePassword] Erro ao atualizar senha:', updateError);
+        setError(updateError.message);
+        toast.error(updateError.message);
+        throw updateError;
+      }
+
+      console.log('✅ [UpdatePassword] Senha atualizada com sucesso!');
+      toast.success('Senha atualizada com sucesso!', { icon: '✅', duration: 3000 });
+
+      console.log('🔵 [UpdatePassword] Fazendo logout para segurança...');
+      // Fazer logout após atualizar senha (para forçar novo login)
+      await signOut();
+    } catch (err) {
+      console.error('❌ [UpdatePassword] Erro no processo:', err);
+      setLoading(false);
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -388,6 +486,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     updateProfile,
     refreshUser,
     resetPassword,
+    updatePassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
