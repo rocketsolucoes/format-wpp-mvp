@@ -39,6 +39,7 @@ const Auth: React.FC = () => {
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [loginErrors, setLoginErrors] = useState<{ email?: string; password?: string }>({});
+  const [loginGeneralError, setLoginGeneralError] = useState<string>('');
 
   // Estados do formulário de Signup
   const [signupFullName, setSignupFullName] = useState('');
@@ -55,6 +56,11 @@ const Auth: React.FC = () => {
     confirmPassword?: string;
     terms?: string;
   }>({});
+  const [signupGeneralError, setSignupGeneralError] = useState<string>('');
+
+  // Estados do modal de reset
+  const [resetEmailError, setResetEmailError] = useState<string>('');
+  const [resetSuccess, setResetSuccess] = useState(false);
 
   /**
    * Valida o formulário de login
@@ -105,8 +111,13 @@ const Auth: React.FC = () => {
 
     if (!signupWhatsapp) {
       errors.whatsapp = 'WhatsApp é obrigatório';
-    } else if (!/^\+?[1-9]\d{1,14}$/.test(signupWhatsapp.replace(/[\s()-]/g, ''))) {
-      errors.whatsapp = 'Número de WhatsApp inválido';
+    } else {
+      // Remove espaços, parênteses, hífens e outros caracteres comuns
+      const cleanedWhatsapp = signupWhatsapp.replace(/[\s()+-]/g, '');
+      // Aceita números com 10-15 dígitos (formato brasileiro e internacional)
+      if (!/^\d{10,15}$/.test(cleanedWhatsapp)) {
+        errors.whatsapp = 'Número de WhatsApp inválido. Use formato: +55 11 99999-9999';
+      }
     }
 
     if (!signupPassword) {
@@ -134,30 +145,47 @@ const Auth: React.FC = () => {
    */
   const handleLoginSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    console.log('🔵 [handleLoginSubmit] Iniciando submit do formulário de login...');
 
+    // Limpar erros anteriores
     setLoginErrors({});
+    setLoginGeneralError('');
 
-    if (!validateLoginForm()) return;
+    console.log('🔵 [handleLoginSubmit] Validando formulário...');
+    if (!validateLoginForm()) {
+      console.log('⚠️ [handleLoginSubmit] Validação falhou');
+      return;
+    }
+
+    console.log('✅ [handleLoginSubmit] Validação passou, chamando signIn...');
 
     try {
       await signIn(loginEmail, loginPassword);
+      console.log('✅ [handleLoginSubmit] signIn completou com sucesso');
+
+      // Limpar formulário
       setLoginEmail('');
       setLoginPassword('');
 
       // Redirecionar para a página especificada ou padrão
       if (redirectParam) {
+        console.log('🔵 [handleLoginSubmit] Redirecionando para:', redirectParam);
         setLocation(redirectParam);
         return;
       }
 
       if (hasPendingText()) {
+        console.log('🔵 [handleLoginSubmit] Há texto pendente, redirecionando para /format');
         setLocation('/format');
         return;
       }
 
+      console.log('🔵 [handleLoginSubmit] Redirecionando para /dashboard');
       setLocation('/dashboard');
     } catch (error: any) {
-      console.error('Login error:', error);
+      console.error('❌ [handleLoginSubmit] Erro no processo de login:', error);
+      const errorMessage = error.message || 'Erro ao fazer login. Por favor, tente novamente.';
+      setLoginGeneralError(errorMessage);
     }
   };
 
@@ -166,13 +194,25 @@ const Auth: React.FC = () => {
    */
   const handleSignupSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    console.log('🔵 [handleSignupSubmit] Iniciando submit do formulário de cadastro...');
 
+    // Limpar erros anteriores
     setSignupErrors({});
+    setSignupGeneralError('');
 
-    if (!validateSignupForm()) return;
+    console.log('🔵 [handleSignupSubmit] Validando formulário...');
+    if (!validateSignupForm()) {
+      console.log('⚠️ [handleSignupSubmit] Validação falhou');
+      return;
+    }
+
+    console.log('✅ [handleSignupSubmit] Validação passou, chamando signUp...');
 
     try {
       await signUp(signupEmail, signupPassword, signupFullName);
+      console.log('✅ [handleSignupSubmit] signUp completou com sucesso');
+
+      // Limpar formulário
       setSignupFullName('');
       setSignupEmail('');
       setSignupWhatsapp('');
@@ -182,18 +222,23 @@ const Auth: React.FC = () => {
 
       // Redirecionar para a página especificada ou padrão
       if (redirectParam) {
+        console.log('🔵 [handleSignupSubmit] Redirecionando para:', redirectParam);
         setLocation(redirectParam);
         return;
       }
 
       if (hasPendingText()) {
+        console.log('🔵 [handleSignupSubmit] Há texto pendente, redirecionando para /format');
         setLocation('/format');
         return;
       }
 
+      console.log('🔵 [handleSignupSubmit] Redirecionando para /dashboard');
       setLocation('/dashboard');
     } catch (error: any) {
-      console.error('Signup error:', error);
+      console.error('❌ [handleSignupSubmit] Erro no processo de cadastro:', error);
+      const errorMessage = error.message || 'Erro ao criar conta. Por favor, tente novamente.';
+      setSignupGeneralError(errorMessage);
     }
   };
 
@@ -202,17 +247,48 @@ const Auth: React.FC = () => {
    */
   const handleResetPassword = async (e: FormEvent) => {
     e.preventDefault();
+    console.log('🔵 [handleResetPassword] Iniciando redefinição de senha...');
 
-    if (!resetEmail || !/\S+@\S+\.\S+/.test(resetEmail)) {
+    // Limpar erros anteriores
+    setResetEmailError('');
+    setResetSuccess(false);
+
+    // Validar email
+    if (!resetEmail) {
+      const errorMsg = 'E-mail é obrigatório';
+      setResetEmailError(errorMsg);
+      console.log('⚠️ [handleResetPassword] Email vazio');
       return;
     }
 
+    if (!/\S+@\S+\.\S+/.test(resetEmail)) {
+      const errorMsg = 'E-mail é inválido';
+      setResetEmailError(errorMsg);
+      console.log('⚠️ [handleResetPassword] Email inválido:', resetEmail);
+      return;
+    }
+
+    console.log('✅ [handleResetPassword] Email válido, enviando...');
+
     try {
       await resetPassword(resetEmail);
-      setShowResetModal(false);
-      setResetEmail('');
-    } catch (error) {
-      console.error('Reset password error:', error);
+      console.log('✅ [handleResetPassword] Email enviado com sucesso');
+
+      // Mostrar mensagem de sucesso
+      setResetSuccess(true);
+      setResetEmailError('');
+
+      // Aguardar 2 segundos antes de fechar o modal
+      setTimeout(() => {
+        console.log('🔵 [handleResetPassword] Fechando modal...');
+        setShowResetModal(false);
+        setResetEmail('');
+        setResetSuccess(false);
+      }, 2000);
+    } catch (error: any) {
+      console.error('❌ [handleResetPassword] Erro ao enviar email:', error);
+      const errorMessage = error.message || 'Erro ao enviar email de redefinição';
+      setResetEmailError(errorMessage);
     }
   };
 
@@ -295,8 +371,15 @@ const Auth: React.FC = () => {
                   </button>
                 </div>
 
+                {/* Erro Geral do Login */}
+                {loginGeneralError && (
+                  <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
+                    <p className="text-sm text-destructive font-medium">{loginGeneralError}</p>
+                  </div>
+                )}
+
                 <Button type="submit" loading={loading} fullWidth>
-                  Entrar
+                  {loading ? 'Entrando...' : 'Entrar'}
                 </Button>
               </form>
             </TabsContent>
@@ -407,8 +490,15 @@ const Auth: React.FC = () => {
                   )}
                 </div>
 
+                {/* Erro Geral do Signup */}
+                {signupGeneralError && (
+                  <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
+                    <p className="text-sm text-destructive font-medium">{signupGeneralError}</p>
+                  </div>
+                )}
+
                 <Button type="submit" loading={loading} fullWidth>
-                  Criar Conta
+                  {loading ? 'Criando conta...' : 'Criar Conta'}
                 </Button>
               </form>
             </TabsContent>
@@ -445,10 +535,27 @@ const Auth: React.FC = () => {
                 type="email"
                 placeholder="seu@email.com"
                 value={resetEmail}
-                onChange={(e) => setResetEmail(e.target.value)}
-                disabled={loading}
+                onChange={(e) => {
+                  setResetEmail(e.target.value);
+                  // Limpar erros ao digitar
+                  setResetEmailError('');
+                  setResetSuccess(false);
+                }}
+                error={resetEmailError}
+                disabled={loading || resetSuccess}
               />
             </div>
+
+            {/* Mensagem de Sucesso */}
+            {resetSuccess && (
+              <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+                <p className="text-sm text-emerald-400 font-medium flex items-center gap-2">
+                  <span>📧</span>
+                  <span>Email enviado! Verifique sua caixa de entrada.</span>
+                </p>
+              </div>
+            )}
+
             <div className="flex gap-3 justify-end pt-2">
               <Button
                 type="button"
@@ -456,13 +563,15 @@ const Auth: React.FC = () => {
                 onClick={() => {
                   setShowResetModal(false);
                   setResetEmail('');
+                  setResetEmailError('');
+                  setResetSuccess(false);
                 }}
                 disabled={loading}
               >
                 Cancelar
               </Button>
-              <Button type="submit" loading={loading}>
-                Enviar Link de Redefinição
+              <Button type="submit" loading={loading} disabled={resetSuccess}>
+                {loading ? 'Enviando...' : resetSuccess ? 'Enviado!' : 'Enviar Link'}
               </Button>
             </div>
           </form>
