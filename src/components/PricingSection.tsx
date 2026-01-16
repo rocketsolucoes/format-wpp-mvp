@@ -115,13 +115,13 @@ const PricingSection: React.FC = () => {
               key={plan.name}
               className={`relative transition-all duration-300 hover:scale-105 flex flex-col ${
                 plan.highlighted
-                  ? 'border-primary shadow-2xl shadow-primary/10'
+                  ? 'border-[3px] border-emerald-500/60 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 shadow-2xl shadow-emerald-500/30 dark:border-emerald-400/50'
                   : 'bg-card/50'
               }`}
             >
               {plan.highlighted && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <Badge className="bg-primary text-primary-foreground border-none px-4 py-1.5 text-sm font-bold shadow-lg">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+                  <Badge className="bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold uppercase px-4 py-2 text-sm shadow-lg hover:shadow-xl transition-shadow border-none">
                     ⭐ RECOMENDADO
                   </Badge>
                 </div>

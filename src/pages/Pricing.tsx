@@ -206,14 +206,14 @@ export default function Pricing() {
                 key={plan.name}
                 className={`relative transition-all duration-300 hover:scale-105 ${
                   plan.highlighted
-                    ? 'border-2 border-transparent bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 scale-105 shadow-2xl shadow-emerald-500/20'
+                    ? 'border-[3px] border-emerald-500/60 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 scale-105 shadow-2xl shadow-emerald-500/30 dark:border-emerald-400/50'
                     : 'border-border hover:shadow-xl'
                 }`}
               >
                 {plan.highlighted && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-gradient-to-r from-emerald-500 to-cyan-500 animate-pulse">
-                      {plan.badge.text}
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+                    <Badge className="bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold uppercase px-4 py-2 text-sm shadow-lg hover:shadow-xl transition-shadow">
+                      ⭐ {plan.badge.text}
                     </Badge>
                   </div>
                 )}
