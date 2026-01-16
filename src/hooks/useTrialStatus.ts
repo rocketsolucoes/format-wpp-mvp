@@ -12,21 +12,29 @@ import type { TrialInfo } from '../types/trial';
  * - Auto-downgrade when trial expires
  */
 export function useTrialStatus() {
-  const { user, profile, refreshUser } = useAuth();
+  const { user, refreshUser } = useAuth();
   const [trialInfo, setTrialInfo] = useState<TrialInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!profile) {
+    if (!user) {
       setIsLoading(false);
       return;
     }
 
     const checkTrial = async () => {
+      // 🛡️ REGRA DE OURO: Usuários com assinatura ativa NUNCA veem trial
+      // Isso garante que usuários pagantes tenham experiência 100% limpa
+      if (user.subscription_status === 'active') {
+        setTrialInfo(null);
+        setIsLoading(false);
+        return;
+      }
+
       // Only process if trial is active
-      if (profile.trial_status === 'active' && profile.trial_end_date) {
-        const endDate = new Date(profile.trial_end_date);
-        const startDate = profile.trial_start_date ? new Date(profile.trial_start_date) : new Date();
+      if (user.trial_status === 'active' && user.trial_end_date) {
+        const endDate = new Date(user.trial_end_date);
+        const startDate = user.trial_start_date ? new Date(user.trial_start_date) : new Date();
         const now = new Date();
         
         const timeLeft = endDate.getTime() - now.getTime();
@@ -96,7 +104,7 @@ export function useTrialStatus() {
     const interval = setInterval(checkTrial, 60000);
 
     return () => clearInterval(interval);
-  }, [profile, user, refreshUser]);
+  }, [user, refreshUser]);
 
   return { trialInfo, isLoading };
 }

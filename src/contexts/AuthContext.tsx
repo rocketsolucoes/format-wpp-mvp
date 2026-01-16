@@ -18,6 +18,11 @@ export interface User {
   credits_remaining: number;
   created_at: string;
   preferences?: any;
+  // Trial fields
+  trial_status?: 'active' | 'expired' | 'converted' | null;
+  trial_start_date?: string | null;
+  trial_end_date?: string | null;
+  trial_welcome_shown?: boolean;
 }
 
 /**
@@ -96,6 +101,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         credits_remaining: data.credits_remaining,
         created_at: data.created_at,
         preferences: data.preferences,
+        trial_status: data.trial_status,
+        trial_start_date: data.trial_start_date,
+        trial_end_date: data.trial_end_date,
+        trial_welcome_shown: data.trial_welcome_shown,
       };
     } catch (err) {
       console.error('Error in fetchUserProfile:', err);

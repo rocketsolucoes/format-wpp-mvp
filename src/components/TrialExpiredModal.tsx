@@ -13,19 +13,24 @@ import { useAuth } from '../hooks/useAuth';
  */
 export function TrialExpiredModal() {
   const [, setLocation] = useLocation();
-  const { profile } = useAuth();
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
+    // 🛡️ RULE: Never show to paying customers
+    if (user?.subscription_status === 'active') {
+      return;
+    }
+
     // Show modal if trial just expired
-    if (profile?.trial_status === 'expired') {
+    if (user?.trial_status === 'expired') {
       // Small delay to ensure smooth transition
       const timer = setTimeout(() => {
         setIsOpen(true);
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [profile?.trial_status]);
+  }, [user?.trial_status, user?.subscription_status]);
 
   const handleUpgrade = () => {
     setIsOpen(false);
