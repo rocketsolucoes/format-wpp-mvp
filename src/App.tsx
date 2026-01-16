@@ -7,6 +7,7 @@ import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
 import { ExtensionBadgeDetector } from './components/ExtensionBadgeDetector';
 import { TrialExpiredModal } from './components/TrialExpiredModal';
+import { TrialWelcomeModal } from './components/TrialWelcomeModal';
 import Home from './pages/Home';
 import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard';
@@ -35,6 +36,7 @@ function AppContent() {
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       {shouldShowHeader && <Header />}
       <ExtensionBadgeDetector />
+      <TrialWelcomeModal />
       <TrialExpiredModal />
 
         <Switch>
