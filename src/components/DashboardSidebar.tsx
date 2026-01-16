@@ -24,6 +24,8 @@ import { Button } from './ui/Button';
 import { TrialBadge } from './TrialBadge';
 import { Progress } from './ui/Progress';
 import Avatar from './ui/Avatar';
+import { useTrialStatus } from '../hooks/useTrialStatus';
+import { CheckCircle } from 'lucide-react';
 
 interface NavItem {
   label: string;
@@ -48,9 +50,9 @@ interface DashboardSidebarProps {
   onCloseMobile?: () => void;
 }
 
-export function DashboardSidebar({ 
-  onNavigate, 
-  collapsed = false, 
+export function DashboardSidebar({
+  onNavigate,
+  collapsed = false,
   onToggleCollapse,
   isMobile = false,
   onCloseMobile
@@ -60,6 +62,7 @@ export function DashboardSidebar({
   const { theme, toggleTheme } = useTheme();
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminCheckDone, setAdminCheckDone] = useState(false);
+  const { trialInfo } = useTrialStatus();
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -169,17 +172,27 @@ export function DashboardSidebar({
                   <p className="text-sm font-semibold truncate">
                     {user.full_name || 'Usuário'}
                   </p>
-                  <TrialBadge />
-                  {!user.trial_status && (
-                    user.plan === 'pro' || user.plan === 'enterprise' ? (
-                      <Badge className="bg-primary/20 text-primary border-primary/30 text-[10px] px-1.5 py-0 whitespace-nowrap">
-                        Ilimitado
-                      </Badge>
-                    ) : (
-                      <Badge variant="outline" className="text-[10px] px-1.5 py-0 whitespace-nowrap">
-                        Gratuito
-                      </Badge>
-                    )
+                  {/* 🛡️ Segregação: Apenas mostrar badge se NÃO for pagante */}
+                  {user.subscription_status === 'active' ? (
+                    <Badge className="bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-[10px] px-1.5 py-0 whitespace-nowrap flex items-center gap-1">
+                      <CheckCircle className="w-2.5 h-2.5" />
+                      Pro
+                    </Badge>
+                  ) : (
+                    <>
+                      <TrialBadge />
+                      {!user.trial_status && (
+                        user.plan === 'pro' || user.plan === 'enterprise' ? (
+                          <Badge className="bg-primary/20 text-primary border-primary/30 text-[10px] px-1.5 py-0 whitespace-nowrap">
+                            Ilimitado
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline" className="text-[10px] px-1.5 py-0 whitespace-nowrap">
+                            Gratuito
+                          </Badge>
+                        )
+                      )}
+                    </>
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground truncate">
@@ -191,10 +204,70 @@ export function DashboardSidebar({
         </div>
       )}
 
-      {/* Créditos / Upgrade */}
+      {/* Créditos / Upgrade / Trial Info */}
       {(!collapsed || isMobile) && (
         <div className="px-3 py-3 border-b border-border">
-          {user?.plan === 'pro' || user?.plan === 'enterprise' ? (
+          {/* 🛡️ Usuários com Assinatura Ativa - Experiência Limpa */}
+          {user?.subscription_status === 'active' ? (
+            <div className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-lg">
+              <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+              <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                Plano Pro Ativo
+              </span>
+            </div>
+          ) : trialInfo?.isActive ? (
+            /* 🎁 Usuários em Trial - Mostrar Contador e Progresso */
+            <div className="bg-gradient-to-br from-emerald-500/5 to-cyan-500/5 border border-emerald-500/20 rounded-lg p-3 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+                    Trial Pro Ativo
+                  </span>
+                </div>
+                <span className={`text-xs font-bold ${
+                  trialInfo.daysLeft >= 3
+                    ? 'text-emerald-600 dark:text-emerald-400'
+                    : trialInfo.daysLeft >= 1
+                      ? 'text-amber-600 dark:text-amber-400'
+                      : 'text-red-600 dark:text-red-400'
+                }`}>
+                  {trialInfo.daysLeft >= 1
+                    ? `${trialInfo.daysLeft} ${trialInfo.daysLeft === 1 ? 'dia' : 'dias'}`
+                    : `${trialInfo.hoursLeft}h`}
+                </span>
+              </div>
+
+              {/* Barra de Progresso do Trial */}
+              <div className="space-y-1">
+                <Progress
+                  value={trialInfo.daysLeft}
+                  max={7}
+                  className={`h-1.5 ${
+                    trialInfo.daysLeft >= 3
+                      ? '[&>div]:bg-emerald-500'
+                      : trialInfo.daysLeft >= 1
+                        ? '[&>div]:bg-amber-500'
+                        : '[&>div]:bg-red-500'
+                  }`}
+                />
+                <p className="text-[10px] text-muted-foreground text-center">
+                  Aproveite créditos ilimitados e estilos Pro
+                </p>
+              </div>
+
+              <Button
+                variant="outline"
+                fullWidth
+                onClick={() => window.location.href = '/pricing'}
+                size="sm"
+                className="border-emerald-500/30 hover:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+              >
+                Converter para Pro
+              </Button>
+            </div>
+          ) : user?.plan === 'pro' || user?.plan === 'enterprise' ? (
+            /* Usuário Pro sem assinatura ativa (edge case) */
             <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 rounded-lg">
               <Zap className="w-4 h-4 text-primary flex-shrink-0" />
               <span className="text-sm font-semibold text-primary">
@@ -202,6 +275,7 @@ export function DashboardSidebar({
               </span>
             </div>
           ) : (
+            /* Usuário Free - Mostrar Créditos */
             <div className="bg-muted/50 border border-border rounded-lg p-3 space-y-2.5">
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between text-xs">

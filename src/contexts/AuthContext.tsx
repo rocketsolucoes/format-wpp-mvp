@@ -18,6 +18,11 @@ export interface User {
   credits_remaining: number;
   created_at: string;
   preferences?: any;
+  // Trial fields
+  trial_status?: 'active' | 'expired' | 'converted' | null;
+  trial_start_date?: string | null;
+  trial_end_date?: string | null;
+  trial_welcome_shown?: boolean;
 }
 
 /**
@@ -27,7 +32,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   error: string | null;
-  signUp: (email: string, password: string, fullName: string) => Promise<void>;
+  signUp: (email: string, password: string, fullName: string, whatsapp?: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -96,6 +101,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         credits_remaining: data.credits_remaining,
         created_at: data.created_at,
         preferences: data.preferences,
+        trial_status: data.trial_status,
+        trial_start_date: data.trial_start_date,
+        trial_end_date: data.trial_end_date,
+        trial_welcome_shown: data.trial_welcome_shown,
       };
     } catch (err) {
       console.error('Error in fetchUserProfile:', err);
@@ -119,8 +128,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   /**
    * Função de registro (signup)
    */
-  const signUp = async (email: string, password: string, fullName: string) => {
-    console.log('🔵 [SignUp] Iniciando processo de cadastro...', { email, fullName });
+  const signUp = async (email: string, password: string, fullName: string, whatsapp?: string) => {
+    console.log('🔵 [SignUp] Iniciando processo de cadastro...', { email, fullName, whatsapp });
 
     try {
       setError(null);
@@ -170,6 +179,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         id: data.user.id,
         email: data.user.email!,
         full_name: fullName,
+        whatsapp: whatsapp || null,
         avatar_url: null,
         plan: 'free',
         subscription_tier: 'free',

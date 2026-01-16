@@ -11,18 +11,23 @@ import { supabase } from '../lib/supabase';
  * Only shows once per user (controlled by trial_welcome_shown flag).
  */
 export function TrialWelcomeModal() {
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
+    // 🛡️ RULE: Never show to paying customers
+    if (user?.subscription_status === 'active') {
+      return;
+    }
+
     // Only show if:
     // 1. User is logged in
     // 2. Trial is active
     // 3. Welcome modal hasn't been shown yet
     if (
       user &&
-      profile?.trial_status === 'active' &&
-      profile?.trial_welcome_shown === false
+      user.trial_status === 'active' &&
+      user.trial_welcome_shown === false
     ) {
       // Small delay for better UX
       const timer = setTimeout(() => {
@@ -31,7 +36,7 @@ export function TrialWelcomeModal() {
 
       return () => clearTimeout(timer);
     }
-  }, [user, profile]);
+  }, [user]);
 
   const handleClose = async () => {
     setIsOpen(false);
@@ -51,8 +56,8 @@ export function TrialWelcomeModal() {
 
   if (!isOpen) return null;
 
-  const trialEndDate = profile?.trial_end_date
-    ? new Date(profile.trial_end_date)
+  const trialEndDate = user?.trial_end_date
+    ? new Date(user.trial_end_date)
     : null;
 
   const daysLeft = trialEndDate

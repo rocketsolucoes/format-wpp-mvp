@@ -12,6 +12,8 @@ import {
   ExternalLink,
   Check,
   X as XIcon,
+  Sparkles,
+  Calendar,
 } from 'lucide-react';
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/Tabs';
@@ -26,6 +28,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { SimpleAlertDialog } from '../components/ui/AlertDialog';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../components/ui/Table';
 import { useAuth } from '../hooks/useAuth';
+import { useTrialStatus } from '../hooks/useTrialStatus';
 import { supabase } from '../lib/supabase';
 import { toast } from '../components/ui/Toaster';
 import { PRICING, formatBRL } from '../constants/pricing';
@@ -33,6 +36,7 @@ import { PRICING, formatBRL } from '../constants/pricing';
 export default function Settings() {
   const [, setLocation] = useLocation();
   const { user, updateProfile, signOut } = useAuth();
+  const { trialInfo } = useTrialStatus();
   const [activeTab, setActiveTab] = useState('profile');
 
   const [fullName, setFullName] = useState('');
@@ -870,90 +874,195 @@ export default function Settings() {
             <div className="space-y-6 max-w-2xl mx-auto">
               <Card className="border-border">
                 <CardContent className="p-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <div>
-                      <h3 className="text-2xl font-bold">Plano Atual</h3>
-                      <p className="text-muted-foreground">
-                        {isPro ? 'Você está no plano Pro' : 'Você está no plano Gratuito'}
-                      </p>
-                    </div>
-                    <Badge variant={isPro ? 'default' : 'secondary'} className="text-lg px-4 py-2">
-                      {isPro ? 'Pro' : 'Gratuito'}
-                    </Badge>
-                  </div>
+                  {/* 🛡️ Lógica de Segregação: Trial vs Pro Pago vs Free */}
+                  {(() => {
+                    // Determinar o tipo de usuário
+                    const isOnTrial = trialInfo?.isActive && user?.subscription_status !== 'active';
+                    const isProPaid = user?.subscription_status === 'active';
+                    const isFree = !isOnTrial && !isProPaid;
 
-                  {isPro && (
-                    <div className="mb-6 space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Preço</span>
-                        <span className="font-semibold">{formatBRL(PRICING.PRO_MONTHLY_PRICE)}/mês</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Status</span>
-                        <span className="text-green-400 font-semibold">
-                          {user.subscription_status === 'active' ? 'Ativo' : user.subscription_status}
-                        </span>
-                      </div>
-                    </div>
-                  )}
+                    return (
+                      <>
+                        <div className="flex items-center justify-between mb-6">
+                          <div>
+                            <h3 className="text-2xl font-bold">Plano Atual</h3>
+                            <p className="text-muted-foreground">
+                              {isOnTrial && 'Você está aproveitando o trial Pro gratuito'}
+                              {isProPaid && 'Você está no plano Pro'}
+                              {isFree && 'Você está no plano Gratuito'}
+                            </p>
+                          </div>
 
-                  <div className="mb-6">
-                    <h4 className="font-semibold mb-3">Recursos</h4>
-                    <div className="space-y-2">
-                      {isPro ? (
-                        <>
-                          <div className="flex items-center gap-2">
-                            <Check className="w-5 h-5 text-emerald-400" />
-                            <span>Formatação ilimitada</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Check className="w-5 h-5 text-emerald-400" />
-                            <span>Acesso ao histórico completo</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Check className="w-5 h-5 text-emerald-400" />
-                            <span>Suporte prioritário</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Check className="w-5 h-5 text-emerald-400" />
-                            <span>Estilos de formatação avançados</span>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="flex items-center gap-2">
-                            <Check className="w-5 h-5 text-emerald-400" />
-                            <span>30 créditos por mês</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Check className="w-5 h-5 text-emerald-400" />
-                            <span>7 dias de histórico</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <XIcon className="w-5 h-5 text-slate-600" />
-                            <span className="text-slate-500">Suporte prioritário</span>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </div>
+                          {isOnTrial && (
+                            <Badge className="bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-sm px-4 py-2">
+                              <Sparkles className="w-4 h-4 mr-1.5" />
+                              Período de Teste Pro
+                            </Badge>
+                          )}
+                          {isProPaid && (
+                            <Badge variant="default" className="text-lg px-4 py-2 bg-emerald-500 text-white border-0">
+                              Pro
+                            </Badge>
+                          )}
+                          {isFree && (
+                            <Badge variant="secondary" className="text-lg px-4 py-2">
+                              Gratuito
+                            </Badge>
+                          )}
+                        </div>
 
-                  {isPro ? (
-                    <Button
-                      onClick={handleManageSubscription}
-                      disabled={loading}
-                      className="w-full"
-                    >
-                      Gerenciar Assinatura
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={() => setLocation('/pricing')}
-                      className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500"
-                    >
-                      Fazer Upgrade para o Pro
-                    </Button>
-                  )}
+                        {/* Trial: Mensagem de transparência e data de expiração */}
+                        {isOnTrial && trialInfo && (
+                          <div className="mb-6 space-y-4">
+                            <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border-2 border-emerald-500/30 rounded-lg p-4">
+                              <div className="flex items-start gap-3">
+                                <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                                  <Sparkles className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                                </div>
+                                <div className="flex-1">
+                                  <h4 className="font-semibold text-emerald-700 dark:text-emerald-300 mb-1">
+                                    🎉 Acesso Pro Gratuito Ativo
+                                  </h4>
+                                  <p className="text-sm text-muted-foreground">
+                                    Você está aproveitando 7 dias de acesso Pro completo <strong>sem nenhum custo</strong>.
+                                    Nenhuma cobrança foi ou será realizada durante este período de teste.
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg border border-border">
+                              <Calendar className="w-5 h-5 text-muted-foreground" />
+                              <div className="flex-1">
+                                <p className="text-sm font-medium">Seu acesso gratuito expira em:</p>
+                                <p className="text-lg font-bold text-foreground">
+                                  {trialInfo.endDate.toLocaleDateString('pt-BR', {
+                                    weekday: 'long',
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                  })}
+                                </p>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  {trialInfo.daysLeft >= 1
+                                    ? `Restam ${trialInfo.daysLeft} ${trialInfo.daysLeft === 1 ? 'dia' : 'dias'}`
+                                    : `Restam ${trialInfo.hoursLeft} horas`}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Pro Pago: Informações de assinatura */}
+                        {isProPaid && (
+                          <div className="mb-6 space-y-2">
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">Preço</span>
+                              <span className="font-semibold">{formatBRL(PRICING.PRO_MONTHLY_PRICE)}/mês</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">Status</span>
+                              <span className="text-green-400 font-semibold flex items-center gap-1.5">
+                                <Check className="w-4 h-4" />
+                                Ativo
+                              </span>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Recursos do Plano */}
+                        <div className="mb-6">
+                          <h4 className="font-semibold mb-3">
+                            {isOnTrial ? 'Recursos que você está testando' : 'Recursos'}
+                          </h4>
+                          <div className="space-y-2">
+                            {(isPro || isOnTrial) ? (
+                              <>
+                                <div className="flex items-center gap-2">
+                                  <Check className="w-5 h-5 text-emerald-400" />
+                                  <span>Formatação ilimitada</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Check className="w-5 h-5 text-emerald-400" />
+                                  <span>Todos os estilos (Casual, Sales, Official)</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Check className="w-5 h-5 text-emerald-400" />
+                                  <span>Acesso ao histórico completo</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Check className="w-5 h-5 text-emerald-400" />
+                                  <span>Análises avançadas com gráficos</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Check className="w-5 h-5 text-emerald-400" />
+                                  <span>Suporte prioritário</span>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <div className="flex items-center gap-2">
+                                  <Check className="w-5 h-5 text-emerald-400" />
+                                  <span>30 créditos por mês</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Check className="w-5 h-5 text-emerald-400" />
+                                  <span>Estilo Casual</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Check className="w-5 h-5 text-emerald-400" />
+                                  <span>7 dias de histórico</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <XIcon className="w-5 h-5 text-slate-600" />
+                                  <span className="text-slate-500">Estilos Pro</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <XIcon className="w-5 h-5 text-slate-600" />
+                                  <span className="text-slate-500">Análises avançadas</span>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* CTAs Diferenciados */}
+                        {isOnTrial && (
+                          <div className="space-y-3">
+                            <Button
+                              onClick={() => setLocation('/pricing')}
+                              className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-semibold h-12"
+                            >
+                              <Sparkles className="w-4 h-4 mr-2" />
+                              Efetivar Assinatura Pro
+                            </Button>
+                            <p className="text-xs text-center text-muted-foreground">
+                              Continue aproveitando todos os recursos Pro após o período de teste
+                            </p>
+                          </div>
+                        )}
+                        {isProPaid && (
+                          <Button
+                            onClick={handleManageSubscription}
+                            disabled={loading}
+                            className="w-full"
+                          >
+                            Gerenciar Assinatura
+                          </Button>
+                        )}
+                        {isFree && (
+                          <Button
+                            onClick={() => setLocation('/pricing')}
+                            className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500"
+                          >
+                            Fazer Upgrade para o Pro
+                          </Button>
+                        )}
+                      </>
+                    );
+                  })()}
                 </CardContent>
               </Card>
             </div>

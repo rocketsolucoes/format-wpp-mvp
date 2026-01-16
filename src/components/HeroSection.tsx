@@ -31,14 +31,21 @@ const HeroSection: React.FC = () => {
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
         <button
           onClick={handleStartFree}
-          className="w-full sm:w-auto px-10 py-5 bg-primary text-primary-foreground rounded-xl font-bold text-lg shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+          className="w-full sm:w-auto px-10 py-5 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white rounded-xl font-bold text-lg shadow-xl shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 border-0"
         >
           <Sparkles className="w-5 h-5" />
-          Começar Grátis
+          Ganhar 7 Dias de Pro Grátis
         </button>
-        <div className="flex items-center gap-2 text-muted-foreground text-sm">
-          <CheckCircle className="w-4 h-4 text-primary" />
-          <span>Sem cartão de crédito</span>
+        <div className="flex flex-col sm:flex-row items-center gap-2 text-muted-foreground text-sm">
+          <div className="flex items-center gap-2">
+            <CheckCircle className="w-4 h-4 text-emerald-500" />
+            <span>Sem cartão de crédito</span>
+          </div>
+          <span className="hidden sm:inline">•</span>
+          <div className="flex items-center gap-2">
+            <CheckCircle className="w-4 h-4 text-emerald-500" />
+            <span>Trial completo por 7 dias</span>
+          </div>
         </div>
       </div>
     </section>

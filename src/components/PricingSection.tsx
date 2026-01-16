@@ -21,18 +21,18 @@ const PricingSection: React.FC = () => {
   const plans = [
     {
       name: 'Gratuito',
-      badge: { text: 'Grátis Para Sempre', variant: 'success' as const },
+      badge: { text: '🎁 +7 Dias de Pro Grátis', variant: 'success' as const },
       price: 0,
       period: 'mês',
-      description: 'Perfeito para experimentar a plataforma',
+      description: 'Comece com trial Pro de 7 dias, depois 30 créditos/mês',
       features: [
-        { text: '30 formatações por mês', included: true },
+        { text: '7 dias de trial Pro completo', included: true },
+        { text: 'Depois: 30 formatações por mês', included: true },
         { text: 'Estilo Casual', included: true },
         { text: 'Estilização básica por IA', included: true },
         { text: 'Histórico completo', included: true },
-        { text: 'Estilos Pro (Sales e Official)', included: false },
       ],
-      cta: 'Começar Grátis',
+      cta: 'Ganhar 7 Dias de Pro Grátis',
       ctaVariant: 'outline' as const,
       highlighted: false,
       icon: Sparkles,

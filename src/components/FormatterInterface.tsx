@@ -312,32 +312,76 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
         </div>
       </section>
 
-      {/* Modal de Cadastro - Centralizado */}
+      {/* Modal de Cadastro - Trial como Recompensa */}
       <Dialog open={showSignupModal} onOpenChange={setShowSignupModal}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <div className="flex justify-center mb-4">
-              <div className="p-4 bg-primary/10 rounded-full">
-                <Lock className="w-12 h-12 text-primary" />
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-cyan-500 to-blue-500 rounded-full blur-xl opacity-30 animate-pulse"></div>
+                <div className="relative p-4 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-full">
+                  <Sparkles className="w-12 h-12 text-white" />
+                </div>
               </div>
             </div>
-            <DialogTitle className="text-center text-2xl">
-              🎉 Gostou do Resultado?
+            <DialogTitle className="text-center text-2xl font-bold">
+              Desbloqueie sua mensagem e ganhe<br />
+              <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                7 Dias de Pro de Presente! 🎁
+              </span>
             </DialogTitle>
-            <DialogDescription className="text-center text-base leading-relaxed pt-2">
-              Cadastre-se <strong className="text-foreground">GRÁTIS</strong> para copiar esta mensagem e ganhar <strong className="text-primary">30 créditos/mês</strong> para formatar quantas mensagens quiser!
+            <DialogDescription className="text-center text-base leading-relaxed pt-3 text-foreground/80">
+              Crie sua conta <strong className="text-foreground">GRÁTIS</strong> agora e aproveite todos os recursos premium por 7 dias!
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-3 pt-4">
+          <div className="grid grid-cols-2 gap-3 py-4">
+            {/* Benefício 1 */}
+            <div className="flex flex-col items-center p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+              <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center mb-2">
+                <span className="text-2xl">⚡</span>
+              </div>
+              <h4 className="font-semibold text-sm text-foreground text-center">Créditos Ilimitados</h4>
+              <p className="text-xs text-muted-foreground text-center mt-1">Formate sem limites</p>
+            </div>
+
+            {/* Benefício 2 */}
+            <div className="flex flex-col items-center p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+              <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center mb-2">
+                <span className="text-2xl">🔥</span>
+              </div>
+              <h4 className="font-semibold text-sm text-foreground text-center">Estilos Pro</h4>
+              <p className="text-xs text-muted-foreground text-center mt-1">Sales & Official</p>
+            </div>
+
+            {/* Benefício 3 */}
+            <div className="flex flex-col items-center p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg">
+              <div className="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center mb-2">
+                <span className="text-2xl">📝</span>
+              </div>
+              <h4 className="font-semibold text-sm text-foreground text-center">Histórico Completo</h4>
+              <p className="text-xs text-muted-foreground text-center mt-1">Acesso ilimitado</p>
+            </div>
+
+            {/* Benefício 4 */}
+            <div className="flex flex-col items-center p-3 bg-orange-500/10 border border-orange-500/20 rounded-lg">
+              <div className="w-10 h-10 bg-orange-500/20 rounded-full flex items-center justify-center mb-2">
+                <span className="text-2xl">📊</span>
+              </div>
+              <h4 className="font-semibold text-sm text-foreground text-center">Análises Avançadas</h4>
+              <p className="text-xs text-muted-foreground text-center mt-1">Insights e gráficos</p>
+            </div>
+          </div>
+
+          <div className="space-y-3">
             <button
               onClick={handleSignupRedirect}
-              className="w-full px-8 py-4 bg-primary text-primary-foreground rounded-xl font-bold shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+              className="w-full px-8 py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white rounded-xl font-bold shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2"
             >
               <Sparkles className="w-5 h-5" />
-              Cadastrar e Copiar Grátis
+              Criar conta e ativar meus 7 dias grátis
             </button>
-            
+
             <button
               onClick={() => setShowSignupModal(false)}
               className="w-full px-6 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -345,10 +389,10 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
               Continuar explorando
             </button>
           </div>
-          
-          <div className="mt-6 pt-6 border-t border-border text-center">
+
+          <div className="mt-4 pt-4 border-t border-border text-center">
             <p className="text-xs text-muted-foreground">
-              ✓ Sem cartão de crédito • ✓ 30 créditos grátis • ✓ Cancele quando quiser
+              ✓ Sem cartão de crédito • ✓ Trial Pro de 7 dias • ✓ Sem compromisso
             </p>
           </div>
         </DialogContent>
