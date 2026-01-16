@@ -76,9 +76,12 @@ const Header: React.FC = () => {
                 </a>
                 <Button
                   variant="primary"
-                  onClick={() => setLocation('/auth')}
+                  onClick={() => setLocation('/auth?tab=signup')}
+                  className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 border-0 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40"
                 >
-                  Entrar
+                  <Sparkles className="w-4 h-4 mr-1.5" />
+                  <span className="hidden sm:inline">Testar Pro Grátis</span>
+                  <span className="sm:hidden">7 Dias Grátis</span>
                 </Button>
               </>
             ) : (

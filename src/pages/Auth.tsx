@@ -383,18 +383,44 @@ const Auth: React.FC = () => {
         {/* Logo e Título */}
         <div className="text-center mb-6">
           <div className="flex justify-center mb-4">
-            <div className="p-3 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-2xl shadow-lg shadow-emerald-500/20">
-              <Sparkles className="w-8 h-8 text-white" />
+            <div className="relative">
+              {activeTab === 'signup' && hasPendingText() && (
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-cyan-500 to-blue-500 rounded-2xl blur-lg opacity-40 animate-pulse"></div>
+              )}
+              <div className="relative p-3 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-2xl shadow-lg shadow-emerald-500/20">
+                <Sparkles className="w-8 h-8 text-white" />
+              </div>
             </div>
           </div>
           <h1 className="text-2xl font-bold mb-2">
             <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-              {activeTab === 'signup' ? 'Crie sua Conta' : 'Bem-vindo de Volta'}
+              {activeTab === 'signup' && hasPendingText()
+                ? '🎁 Falta pouco para seu Trial Pro!'
+                : activeTab === 'signup'
+                  ? 'Ganhe 7 Dias de Pro Grátis'
+                  : 'Bem-vindo de Volta'}
             </span>
           </h1>
-          <p className="text-muted-foreground">
-            {activeTab === 'signup' ? 'Comece a formatar suas mensagens gratuitamente' : 'Faça login para continuar formatando'}
+          <p className="text-muted-foreground leading-relaxed">
+            {activeTab === 'signup' && hasPendingText()
+              ? 'Crie sua conta para liberar sua mensagem e ativar seu trial Pro de 7 dias!'
+              : activeTab === 'signup'
+                ? 'Crie sua conta e ganhe acesso completo aos recursos Pro por 7 dias'
+                : 'Faça login para continuar formatando suas mensagens'}
           </p>
+          {activeTab === 'signup' && (
+            <div className="mt-3 flex flex-wrap justify-center gap-2">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-xs font-medium text-emerald-700 dark:text-emerald-300">
+                ⚡ Créditos Ilimitados
+              </span>
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-xs font-medium text-blue-700 dark:text-blue-300">
+                🔥 Estilos Pro
+              </span>
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-500/10 border border-purple-500/20 rounded-full text-xs font-medium text-purple-700 dark:text-purple-300">
+                📊 Análises
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Card com Tabs */}
