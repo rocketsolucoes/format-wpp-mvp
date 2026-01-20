@@ -258,12 +258,9 @@ const Dashboard: React.FC = () => {
               </div>
             )}
 
-            <div
-              className={`grid grid-cols-1 gap-6 ${
-                !authLoading && user?.plan === 'free' ? 'lg:grid-cols-3' : ''
-              }`}
-            >
-              <div className={!authLoading && user?.plan === 'free' ? 'lg:col-span-2' : ''}>
+            {/* Only show Recent Formatting for Pro users */}
+            {!authLoading && user?.plan !== 'free' && (
+              <div className="mb-6">
                 <RecentFormatting
                   items={recentItems}
                   loading={loading}
@@ -271,8 +268,15 @@ const Dashboard: React.FC = () => {
                   totalCount={totalHistoryCount}
                 />
               </div>
+            )}
+
+            <div
+              className={`grid grid-cols-1 gap-6 ${
+                !authLoading && user?.plan === 'free' ? 'lg:grid-cols-3' : ''
+              }`}
+            >
               {!authLoading && user?.plan === 'free' && (
-                <div className="space-y-6">
+                <div className="lg:col-span-3 space-y-6">
                   <UsageChart
                     data={chartData}
                     loading={loading}
