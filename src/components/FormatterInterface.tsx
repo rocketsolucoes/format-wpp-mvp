@@ -34,8 +34,8 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
       setValidationError(null);
     } else if (inputText.trim().length < 10) {
       setValidationError('O texto deve ter pelo menos 10 caracteres');
-    } else if (!user && inputText.length > 500) {
-      setValidationError('Preview limitado a 500 caracteres. Cadastre-se para mais!');
+    } else if ((!user || user.subscription_tier === 'free') && inputText.length > 500) {
+      setValidationError('Limite de 500 caracteres no plano Free. Faça upgrade para 5000!');
     } else if (inputText.length > 5000) {
       setValidationError('O texto deve ter menos de 5000 caracteres');
     } else {
@@ -45,7 +45,7 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
 
   const getCharCountColor = () => {
     const length = inputText.length;
-    const limit = user ? 5000 : 500;
+    const limit = (user && user.subscription_tier === 'pro') ? 5000 : 500;
     
     if (length <= limit * 0.8) return 'text-emerald-500';
     if (length <= limit * 0.98) return 'text-amber-500';
@@ -54,7 +54,7 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
 
   const isInputValid = (): boolean => {
     const trimmedText = inputText.trim();
-    const maxLength = user ? 5000 : 500;
+    const maxLength = (user && user.subscription_tier === 'pro') ? 5000 : 500;
     return trimmedText.length >= 10 && trimmedText.length <= maxLength;
   };
 
@@ -207,7 +207,7 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
     }
   };
 
-  const maxChars = user ? 5000 : 500;
+  const maxChars = (user && user.subscription_tier === 'pro') ? 5000 : 500;
 
   return (
     <>
@@ -223,7 +223,7 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
               <div className="flex items-center justify-between px-1">
                 <span className={`text-[10px] font-medium uppercase tracking-wider ${getCharCountColor()}`}>
                   {inputText.length} / {maxChars} caracteres
-                  {!user && <span className="ml-2 text-muted-foreground">(Preview limitado)</span>}
+                  {(!user || user.subscription_tier === 'free') && <span className="ml-2 text-muted-foreground">(Plano Free limitado)</span>}
                 </span>
                 {validationError && (
                   <span className="text-[10px] text-destructive font-medium">{validationError}</span>

@@ -204,7 +204,7 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">Créditos</span>
-            <Tooltip content="Você ganha 30 créditos novos todo mês. Cada formatação consome 1 crédito. Faça upgrade para créditos ilimitados!">
+            <Tooltip content="Você ganha 10 créditos novos todo mês. Cada formatação consome 1 crédito. Faça upgrade para créditos ilimitados!">
               <div className="w-4 h-4 rounded-full bg-slate-700/50 flex items-center justify-center cursor-help hover:bg-slate-700 transition-colors">
                 <span className="text-xs text-muted-foreground">?</span>
               </div>

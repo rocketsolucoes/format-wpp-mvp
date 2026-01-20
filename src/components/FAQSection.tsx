@@ -4,7 +4,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 const faqs = [
   {
     question: "Como funciona o plano gratuito?",
-    answer: "Todos os novos usuários começam com 30 créditos de formatação gratuitos por mês. Você pode estilizar mensagens usando o estilo Casual e ter acesso ao seu histórico completo."
+    answer: "Todos os novos usuários começam com 10 créditos de formatação gratuitos por mês. Você pode estilizar mensagens usando o estilo Casual. Para acessar o histórico, é necessário fazer upgrade para o plano Pro."
   },
   {
     question: "O que são os 'Estilos Pro'?",

@@ -1005,15 +1005,15 @@ export default function Settings() {
                               <>
                                 <div className="flex items-center gap-2">
                                   <Check className="w-5 h-5 text-emerald-400" />
-                                  <span>30 créditos por mês</span>
+                                  <span>10 créditos por mês</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                   <Check className="w-5 h-5 text-emerald-400" />
                                   <span>Estilo Casual</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                  <Check className="w-5 h-5 text-emerald-400" />
-                                  <span>7 dias de histórico</span>
+                                  <XIcon className="w-5 h-5 text-slate-600" />
+                                  <span className="text-slate-500">Histórico (apenas Pro)</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                   <XIcon className="w-5 h-5 text-slate-600" />

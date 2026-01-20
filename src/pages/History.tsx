@@ -107,7 +107,8 @@ export default function History() {
     let startDate: Date | null = null;
 
     if (!isPro) {
-      startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      // Free users have no access to history
+      return new Date(now.getTime() + 1000); // Return future date to block all records
     } else {
       switch (dateFilter) {
         case '7days':
