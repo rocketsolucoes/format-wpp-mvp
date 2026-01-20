@@ -71,10 +71,44 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [error, setError] = useState<string | null>(null);
 
   /**
+   * Verifica e expira trial do usuário se necessário
+   * Chamada quando usuário faz login para garantir dados corretos
+   */
+  const checkAndExpireTrial = async (userId: string): Promise<boolean> => {
+    try {
+      console.log('🔵 [checkAndExpireTrial] Verificando trial do usuário...');
+
+      const { data, error } = await supabase.rpc('check_and_expire_user_trial', {
+        user_id: userId,
+      });
+
+      if (error) {
+        console.error('❌ [checkAndExpireTrial] Erro ao verificar trial:', error);
+        // Não é um erro crítico, continuar normalmente
+        return false;
+      }
+
+      if (data && data.length > 0 && data[0].was_expired) {
+        console.log('✅ [checkAndExpireTrial] Trial foi expirado automaticamente');
+        return true;
+      }
+
+      console.log('✅ [checkAndExpireTrial] Trial válido ou não aplicável');
+      return false;
+    } catch (err) {
+      console.error('❌ [checkAndExpireTrial] Erro inesperado:', err);
+      return false;
+    }
+  };
+
+  /**
    * Busca os dados completos do perfil do usuário
    */
   const fetchUserProfile = async (userId: string): Promise<User | null> => {
     try {
+      // Verificar e expirar trial se necessário (antes de buscar perfil)
+      await checkAndExpireTrial(userId);
+
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
