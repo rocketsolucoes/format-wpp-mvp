@@ -63,19 +63,26 @@ const Dashboard: React.FC = () => {
     setError(null);
 
     try {
+      const isPro = user.plan === 'pro' || user.plan === 'enterprise';
+
       const [statsResult, historyResult, countResult, chartResult] = await Promise.all([
         supabase.rpc('get_user_stats', { p_user_id: user.id }),
-        supabase
-          .from('formatting_history')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
-          .limit(3),
-        supabase
-          .from('formatting_history')
-          .select('id', { count: 'exact', head: true })
-          .eq('user_id', user.id),
-        user.plan !== 'free'
+        // Block history access for Free users
+        isPro
+          ? supabase
+              .from('formatting_history')
+              .select('*')
+              .eq('user_id', user.id)
+              .order('created_at', { ascending: false })
+              .limit(3)
+          : Promise.resolve({ data: [], error: null }),
+        isPro
+          ? supabase
+              .from('formatting_history')
+              .select('id', { count: 'exact', head: true })
+              .eq('user_id', user.id)
+          : Promise.resolve({ count: 0, error: null }),
+        isPro
           ? supabase.rpc('get_daily_usage', { p_user_id: user.id })
           : Promise.resolve({ data: [], error: null }),
       ]);

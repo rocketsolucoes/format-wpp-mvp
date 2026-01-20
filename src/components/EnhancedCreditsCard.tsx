@@ -7,6 +7,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/Collap
 import { Tooltip } from './ui/Tooltip';
 import { Badge } from './ui/Badge';
 import { supabase } from '../lib/supabase';
+import { PRICING } from '../constants/pricing';
 
 interface StyleUsage {
   style_id: string;
@@ -27,7 +28,7 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
 
   const isPro = user?.plan === 'pro';
   const creditsRemaining = user?.credits_remaining || 0;
-  const totalCredits = 30;
+  const totalCredits = PRICING.FREE_MONTHLY_CREDITS;
   const percentage = (creditsRemaining / totalCredits) * 100;
 
   const calculateDaysUntilReset = (createdAt: string): number => {

@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState, ReactNode } from 'react';
 import { User as SupabaseUser, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 import { toast } from '../components/ui/Toaster';
+import { PRICING } from '../constants/pricing';
 
 /**
  * Interface do usuário extendida com dados do perfil
@@ -184,7 +185,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         plan: 'free',
         subscription_tier: 'free',
         subscription_status: null,
-        credits_remaining: 30,
+        credits_remaining: PRICING.FREE_MONTHLY_CREDITS,
       });
 
       if (profileError) {
