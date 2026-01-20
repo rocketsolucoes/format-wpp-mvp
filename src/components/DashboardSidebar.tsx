@@ -19,6 +19,7 @@ import {
 import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../contexts/ThemeContext';
 import { supabase } from '../lib/supabase';
+import { PRICING } from '../constants/pricing';
 import { Badge } from './ui/Badge';
 import { Button } from './ui/Button';
 import { TrialBadge } from './TrialBadge';
@@ -281,14 +282,14 @@ export function DashboardSidebar({
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-muted-foreground">Créditos</span>
                   <span className={`font-semibold ${
-                    (user?.credits_remaining || 0) >= 15 ? 'text-green-500' :
-                    (user?.credits_remaining || 0) >= 6 ? 'text-amber-500' :
+                    (user?.credits_remaining || 0) >= 6 ? 'text-green-500' :
+                    (user?.credits_remaining || 0) >= 3 ? 'text-amber-500' :
                     'text-destructive'
                   }`}>
-                    {user?.credits_remaining || 0} / 30
+                    {user?.credits_remaining || 0} / {PRICING.FREE_MONTHLY_CREDITS}
                   </span>
                 </div>
-                <Progress value={user?.credits_remaining || 0} max={30} className="h-1.5" />
+                <Progress value={user?.credits_remaining || 0} max={PRICING.FREE_MONTHLY_CREDITS} className="h-1.5" />
               </div>
               <Button
                 variant="primary"

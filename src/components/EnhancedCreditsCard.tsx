@@ -7,6 +7,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/Collap
 import { Tooltip } from './ui/Tooltip';
 import { Badge } from './ui/Badge';
 import { supabase } from '../lib/supabase';
+import { PRICING } from '../constants/pricing';
 
 interface StyleUsage {
   style_id: string;
@@ -27,7 +28,7 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
 
   const isPro = user?.plan === 'pro';
   const creditsRemaining = user?.credits_remaining || 0;
-  const totalCredits = 30;
+  const totalCredits = PRICING.FREE_MONTHLY_CREDITS;
   const percentage = (creditsRemaining / totalCredits) * 100;
 
   const calculateDaysUntilReset = (createdAt: string): number => {
@@ -204,7 +205,7 @@ export function EnhancedCreditsCard({ user, onUpgradeClick }: EnhancedCreditsCar
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">Créditos</span>
-            <Tooltip content="Você ganha 30 créditos novos todo mês. Cada formatação consome 1 crédito. Faça upgrade para créditos ilimitados!">
+            <Tooltip content="Você ganha 10 créditos novos todo mês. Cada formatação consome 1 crédito. Faça upgrade para créditos ilimitados!">
               <div className="w-4 h-4 rounded-full bg-slate-700/50 flex items-center justify-center cursor-help hover:bg-slate-700 transition-colors">
                 <span className="text-xs text-muted-foreground">?</span>
               </div>

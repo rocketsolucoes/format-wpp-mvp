@@ -20,8 +20,8 @@ export const PRICING = {
   /**
    * Free Plan
    */
-  FREE_MONTHLY_CREDITS: 30,
-  FREE_HISTORY_DAYS: 7,
+  FREE_MONTHLY_CREDITS: 10,
+  FREE_HISTORY_DAYS: 0,
 
   /**
    * Hotmart Checkout Links

@@ -161,7 +161,7 @@ export function TrialWelcomeModal() {
               <div>
                 <p className="text-sm text-foreground">
                   <span className="font-semibold">Seu trial expira em {daysLeft} dias.</span>
-                  {' '}Após esse período, você pode continuar usando o plano Free (30 créditos/mês) ou assinar o Pro para manter todos os benefícios.
+                  {' '}Após esse período, você pode continuar usando o plano Free (10 créditos/mês) ou assinar o Pro para manter todos os benefícios.
                 </p>
               </div>
             </div>

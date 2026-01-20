@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from './useAuth';
 import { supabase } from '../lib/supabase';
 import type { TrialInfo } from '../types/trial';
+import { PRICING } from '../constants/pricing';
 
 /**
  * Hook to manage trial status and information
@@ -72,7 +73,7 @@ export function useTrialStatus() {
             plan: 'free',
             subscription_tier: 'free',
             trial_status: 'expired',
-            credits_remaining: 30,
+            credits_remaining: PRICING.FREE_MONTHLY_CREDITS,
           })
           .eq('id', user.id);
 

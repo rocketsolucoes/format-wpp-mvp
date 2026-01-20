@@ -63,19 +63,26 @@ const Dashboard: React.FC = () => {
     setError(null);
 
     try {
+      const isPro = user.plan === 'pro' || user.plan === 'enterprise';
+
       const [statsResult, historyResult, countResult, chartResult] = await Promise.all([
         supabase.rpc('get_user_stats', { p_user_id: user.id }),
-        supabase
-          .from('formatting_history')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
-          .limit(3),
-        supabase
-          .from('formatting_history')
-          .select('id', { count: 'exact', head: true })
-          .eq('user_id', user.id),
-        user.plan !== 'free'
+        // Block history access for Free users
+        isPro
+          ? supabase
+              .from('formatting_history')
+              .select('*')
+              .eq('user_id', user.id)
+              .order('created_at', { ascending: false })
+              .limit(3)
+          : Promise.resolve({ data: [], error: null }),
+        isPro
+          ? supabase
+              .from('formatting_history')
+              .select('id', { count: 'exact', head: true })
+              .eq('user_id', user.id)
+          : Promise.resolve({ count: 0, error: null }),
+        isPro
           ? supabase.rpc('get_daily_usage', { p_user_id: user.id })
           : Promise.resolve({ data: [], error: null }),
       ]);
@@ -251,12 +258,9 @@ const Dashboard: React.FC = () => {
               </div>
             )}
 
-            <div
-              className={`grid grid-cols-1 gap-6 ${
-                !authLoading && user?.plan === 'free' ? 'lg:grid-cols-3' : ''
-              }`}
-            >
-              <div className={!authLoading && user?.plan === 'free' ? 'lg:col-span-2' : ''}>
+            {/* Only show Recent Formatting for Pro users */}
+            {!authLoading && user?.plan !== 'free' && (
+              <div className="mb-6">
                 <RecentFormatting
                   items={recentItems}
                   loading={loading}
@@ -264,8 +268,15 @@ const Dashboard: React.FC = () => {
                   totalCount={totalHistoryCount}
                 />
               </div>
+            )}
+
+            <div
+              className={`grid grid-cols-1 gap-6 ${
+                !authLoading && user?.plan === 'free' ? 'lg:grid-cols-3' : ''
+              }`}
+            >
               {!authLoading && user?.plan === 'free' && (
-                <div className="space-y-6">
+                <div className="lg:col-span-3 space-y-6">
                   <UsageChart
                     data={chartData}
                     loading={loading}
