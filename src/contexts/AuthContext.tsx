@@ -71,10 +71,44 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [error, setError] = useState<string | null>(null);
 
   /**
+   * Verifica e expira trial do usuário se necessário
+   * Chamada quando usuário faz login para garantir dados corretos
+   */
+  const checkAndExpireTrial = async (userId: string): Promise<boolean> => {
+    try {
+      console.log('🔵 [checkAndExpireTrial] Verificando trial do usuário...');
+
+      const { data, error } = await supabase.rpc('check_and_expire_user_trial', {
+        user_id: userId,
+      });
+
+      if (error) {
+        console.error('❌ [checkAndExpireTrial] Erro ao verificar trial:', error);
+        // Não é um erro crítico, continuar normalmente
+        return false;
+      }
+
+      if (data && data.length > 0 && data[0].was_expired) {
+        console.log('✅ [checkAndExpireTrial] Trial foi expirado automaticamente');
+        return true;
+      }
+
+      console.log('✅ [checkAndExpireTrial] Trial válido ou não aplicável');
+      return false;
+    } catch (err) {
+      console.error('❌ [checkAndExpireTrial] Erro inesperado:', err);
+      return false;
+    }
+  };
+
+  /**
    * Busca os dados completos do perfil do usuário
    */
   const fetchUserProfile = async (userId: string): Promise<User | null> => {
     try {
+      // Verificar e expirar trial se necessário (antes de buscar perfil)
+      await checkAndExpireTrial(userId);
+
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -143,6 +177,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         options: {
           data: {
             full_name: fullName,
+            whatsapp: whatsapp || null,  // Pass whatsapp in metadata
           },
         },
       });
@@ -173,48 +208,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
 
       console.log('✅ [SignUp] Usuário criado com sucesso:', data.user.id);
-      console.log('🔵 [SignUp] Criando perfil na tabela profiles...');
+      console.log('🔵 [SignUp] Trigger handle_new_user() criou o perfil automaticamente');
 
-      // Criar perfil na tabela profiles
-      const { error: profileError } = await supabase.from('profiles').insert({
-        id: data.user.id,
-        email: data.user.email!,
-        full_name: fullName,
-        whatsapp: whatsapp || null,
-        avatar_url: null,
-        plan: 'free',
-        subscription_tier: 'free',
-        subscription_status: null,
-        credits_remaining: PRICING.FREE_MONTHLY_CREDITS,
-      });
+      // Wait a moment for trigger to complete
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-      if (profileError) {
-        console.error('❌ [SignUp] Erro ao criar perfil:', profileError);
+      console.log('🔵 [SignUp] Buscando perfil criado pelo trigger...');
 
-        // Tratar erro de perfil duplicado (código 23505)
-        let profileErrorMsg = 'Erro ao criar perfil de usuário';
-        if (profileError.code === '23505') {
-          console.log('⚠️ [SignUp] Perfil já existe, tentando buscar perfil existente...');
-          // Perfil já existe, apenas buscar ele
-          const existingProfile = await fetchUserProfile(data.user.id);
-          if (existingProfile) {
-            console.log('✅ [SignUp] Perfil existente carregado com sucesso');
-            setUser(existingProfile);
-            toast.success('Conta criada com sucesso! ✨', { icon: '✅', duration: 3000 });
-            return;
-          }
-          profileErrorMsg = 'Erro ao carregar perfil existente';
-        }
-
-        setError(profileErrorMsg);
-        toast.error(profileErrorMsg);
-        throw new Error(profileErrorMsg);
-      }
-
-      console.log('✅ [SignUp] Perfil criado com sucesso');
-      console.log('🔵 [SignUp] Buscando perfil completo do usuário...');
-
-      // Buscar o perfil recém-criado e atualizar o estado
+      // Fetch the profile created by the trigger
       const profile = await fetchUserProfile(data.user.id);
       if (!profile) {
         console.error('❌ [SignUp] Erro ao buscar perfil após criação');
