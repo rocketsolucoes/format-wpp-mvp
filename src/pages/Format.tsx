@@ -3,6 +3,7 @@ import { Sparkles, Copy, RefreshCw, Eraser, MessageCircle } from 'lucide-react';
 import { toast } from '../components/ui/Toaster';
 import { formatText, FormatterError } from '../services/formatter';
 import { useAuth } from '../hooks/useAuth';
+import { trackEvent } from '../hooks/useAnalytics';
 import { useLocation } from 'wouter';
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { Button } from '../components/ui/Button';
@@ -22,6 +23,19 @@ export default function Format() {
   const [whatsappFallbackOpen, setWhatsappFallbackOpen] = useState(false);
   const { user, refreshUser } = useAuth();
   const [, setLocation] = useLocation();
+  const [initialStyleSet, setInitialStyleSet] = useState(false);
+
+  // Rastrear mudança de estilo (apenas após a primeira vez)
+  useEffect(() => {
+    if (initialStyleSet && selectedStyle) {
+      trackEvent('style_change', {
+        style: selectedStyle,
+        plan: user?.plan || 'guest',
+        event_category: 'engagement',
+        event_label: 'format_style_changed'
+      });
+    }
+  }, [selectedStyle, initialStyleSet, user]);
 
   useEffect(() => {
     const pendingText = getPendingText();
@@ -60,6 +74,9 @@ export default function Format() {
       const styleName = selectedStyleFromDashboard === 'casual' ? 'Casual' : selectedStyleFromDashboard === 'sales' ? 'Sales' : 'Official';
       toast.success(`Estilo ${styleName} selecionado. Cole seu texto para começar!`);
     }
+
+    // Marcar que o estilo inicial foi definido (para não rastrear a primeira mudança)
+    setTimeout(() => setInitialStyleSet(true), 100);
   }, []);
 
   useEffect(() => {
@@ -87,6 +104,12 @@ export default function Format() {
     }
 
     if (user.plan === 'free' && user.credits_remaining <= 0) {
+      trackEvent('upgrade_prompt_view', {
+        reason: 'no_credits',
+        plan: user.plan,
+        event_category: 'conversion',
+        event_label: 'credits_exhausted'
+      });
       setUpgradeReason('credits');
       setUpgradeModalOpen(true);
       return;
@@ -94,10 +117,27 @@ export default function Format() {
 
     const proStyles = ['sales', 'announcement'];
     if (user.plan === 'free' && proStyles.includes(selectedStyle)) {
+      trackEvent('upgrade_prompt_view', {
+        reason: 'pro_style',
+        style: selectedStyle,
+        plan: user.plan,
+        event_category: 'conversion',
+        event_label: 'pro_style_required'
+      });
       setUpgradeReason('pro-style');
       setUpgradeModalOpen(true);
       return;
     }
+
+    // Rastrear início da formatação
+    trackEvent('format_start', {
+      style: selectedStyle,
+      plan: user.plan,
+      text_length: inputText.trim().length,
+      credits_remaining: user.credits_remaining,
+      event_category: 'engagement',
+      event_label: 'format_text'
+    });
 
     setIsFormatting(true);
 
@@ -107,6 +147,17 @@ export default function Format() {
       const result = await formatText(inputText.trim(), selectedStyle);
       setOutputText(result.formatted_text);
       await refreshUser();
+
+      // Rastrear sucesso da formatação
+      trackEvent('format_success', {
+        style: selectedStyle,
+        plan: user.plan,
+        input_length: inputText.trim().length,
+        output_length: result.formatted_text.length,
+        credits_remaining: result.credits_remaining,
+        event_category: 'engagement',
+        event_label: 'format_complete'
+      });
 
       if (result.credits_remaining === 0) {
         toast.warning('Você usou todos os seus créditos!');
@@ -153,11 +204,19 @@ export default function Format() {
     if (!outputText) return;
     try {
       await navigator.clipboard.writeText(outputText);
+
+      trackEvent('text_copy', {
+        style: selectedStyle,
+        text_length: outputText.length,
+        event_category: 'engagement',
+        event_label: 'copy_formatted_output'
+      });
+
       toast.success('Copiado!');
     } catch (error) {
       toast.error('Falha ao copiar');
     }
-  }, [outputText]);
+  }, [outputText, selectedStyle]);
 
   const handleSendToWhatsApp = useCallback(() => {
     if (!outputText) return;

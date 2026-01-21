@@ -9,6 +9,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useLocation } from 'wouter';
 import { savePendingText, saveFormattedPreview } from '../utils/textPersistence';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/Dialog';
+import { trackEvent } from '../hooks/useAnalytics';
 
 interface FormatterInterfaceProps {
   onNoCredits?: () => void;
@@ -71,6 +72,14 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
   const handleCopyClick = () => {
     // Se não estiver logado, mostra modal
     if (!user && outputText) {
+      // Rastrear tentativa de copiar que leva ao signup
+      trackEvent('copy_attempt_signup_trigger', {
+        user_status: 'guest',
+        text_length: outputText.length,
+        event_category: 'conversion',
+        event_label: 'demo_copy_to_signup'
+      });
+
       // Salvar textos usando a função de persistência
       saveFormattedPreview(inputText, outputText);
       setShowSignupModal(true);
@@ -79,12 +88,25 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
 
     // Se estiver logado, copia normalmente
     if (outputText) {
+      trackEvent('text_copy', {
+        user_status: 'logged_in',
+        text_length: outputText.length,
+        event_category: 'engagement',
+        event_label: 'copy_formatted_text'
+      });
+
       navigator.clipboard.writeText(outputText);
       toast.success('Texto copiado! ✨', { duration: 2000 });
     }
   };
 
   const handleSignupRedirect = () => {
+    trackEvent('signup_click', {
+      source: 'copy_modal',
+      event_category: 'conversion',
+      event_label: 'demo_to_signup'
+    });
+
     setShowSignupModal(false);
     setLocation('/auth?tab=signup&redirect=/format');
   };
@@ -125,6 +147,14 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
       return;
     }
 
+    // Rastrear início da formatação
+    trackEvent('format_start', {
+      user_status: user ? 'logged_in' : 'guest',
+      text_length: inputText.trim().length,
+      event_category: 'engagement',
+      event_label: user ? 'format_authenticated' : 'format_demo'
+    });
+
     setIsFormatting(true);
     setProgress(0);
 
@@ -143,6 +173,16 @@ const FormatterInterface: React.FC<FormatterInterfaceProps> = ({
         formattedText = await formatTextPreview(inputText.trim());
         setProgress(100);
         setOutputText(formattedText);
+
+        // Rastrear sucesso da formatação demo
+        trackEvent('format_success', {
+          user_status: 'guest',
+          text_length: inputText.trim().length,
+          output_length: formattedText.length,
+          event_category: 'engagement',
+          event_label: 'demo_format_complete'
+        });
+
         toast.success('Texto formatado pela IA! 🎉 Veja o resultado abaixo.', { duration: 3000 });
       } else {
         // Fluxo normal para usuários logados

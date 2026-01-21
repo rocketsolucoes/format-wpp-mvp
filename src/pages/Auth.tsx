@@ -2,6 +2,7 @@ import React, { useState, FormEvent, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { Sparkles } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { trackEvent } from '../hooks/useAnalytics';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/Tabs';
 import Input from '../components/ui/Input';
 import Label from '../components/ui/Label';
@@ -226,11 +227,25 @@ const Auth: React.FC = () => {
       return;
     }
 
+    // Rastrear início do login
+    trackEvent('login_start', {
+      method: 'email',
+      event_category: 'authentication',
+      event_label: 'login_form_submit'
+    });
+
     console.log('✅ [handleLoginSubmit] Validação passou, chamando signIn...');
 
     try {
       await signIn(loginEmail, loginPassword);
       console.log('✅ [handleLoginSubmit] signIn completou com sucesso');
+
+      // Rastrear login bem-sucedido
+      trackEvent('login', {
+        method: 'email',
+        event_category: 'authentication',
+        event_label: 'login_success'
+      });
 
       // Limpar formulário
       setLoginEmail('');
@@ -275,11 +290,33 @@ const Auth: React.FC = () => {
       return;
     }
 
+    // Rastrear início do signup
+    trackEvent('sign_up_start', {
+      method: 'email',
+      event_category: 'authentication',
+      event_label: 'signup_form_submit'
+    });
+
     console.log('✅ [handleSignupSubmit] Validação passou, chamando signUp...');
 
     try {
       await signUp(signupEmail, signupPassword, signupFullName, signupWhatsapp);
       console.log('✅ [handleSignupSubmit] signUp completou com sucesso');
+
+      // Rastrear signup bem-sucedido e início do trial
+      trackEvent('sign_up', {
+        method: 'email',
+        event_category: 'authentication',
+        event_label: 'signup_success'
+      });
+
+      // Evento específico de início de trial
+      trackEvent('trial_start', {
+        trial_days: 7,
+        plan: 'pro_trial',
+        event_category: 'conversion',
+        event_label: 'trial_activated'
+      });
 
       // Limpar formulário
       setSignupFullName('');

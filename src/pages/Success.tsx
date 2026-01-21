@@ -3,11 +3,31 @@ import { useLocation } from 'wouter';
 import { CheckCircle, Check } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent } from '../components/ui/Card';
+import { trackEvent } from '../hooks/useAnalytics';
 import confetti from 'canvas-confetti';
 
 export default function Success() {
   const [, setLocation] = useLocation();
   const [countdown, setCountdown] = useState(5);
+
+  // Rastrear conversão de pagamento (apenas uma vez ao carregar a página)
+  useEffect(() => {
+    trackEvent('purchase', {
+      transaction_id: `txn_${Date.now()}`,
+      value: 0, // Valor seria passado via URL params em produção
+      currency: 'BRL',
+      event_category: 'ecommerce',
+      event_label: 'purchase_complete'
+    });
+
+    // Evento adicional de conversão
+    trackEvent('conversion', {
+      conversion_type: 'purchase',
+      plan: 'pro',
+      event_category: 'conversion',
+      event_label: 'paid_plan_activated'
+    });
+  }, []);
 
   useEffect(() => {
     const duration = 3 * 1000;
