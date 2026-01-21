@@ -22,9 +22,10 @@ interface FormattingRecord {
   created_at: string;
   is_favorite?: boolean;
   style_id?: string;
+  intent_mode?: string;
 }
 
-interface StyleBadgeConfig {
+interface BadgeConfig {
   label: string;
   icon: string;
   bgColor: string;
@@ -32,7 +33,8 @@ interface StyleBadgeConfig {
   borderColor: string;
 }
 
-const STYLE_CONFIGS: Record<string, StyleBadgeConfig> = {
+// Badges para os ESTILOS ANTIGOS (compatibilidade)
+const STYLE_CONFIGS: Record<string, BadgeConfig> = {
   casual: {
     label: 'Casual',
     icon: '😊',
@@ -56,10 +58,38 @@ const STYLE_CONFIGS: Record<string, StyleBadgeConfig> = {
   },
 };
 
-function StyleBadge({ styleId }: { styleId?: string }) {
-  if (!styleId) return null;
+// Badges para os NOVOS MODOS DE INTENÇÃO
+const INTENT_MODE_CONFIGS: Record<string, BadgeConfig> = {
+  general: {
+    label: 'Geral',
+    icon: '💬',
+    bgColor: 'bg-emerald-500/10',
+    textColor: 'text-emerald-400',
+    borderColor: 'border-emerald-500/20',
+  },
+  sales: {
+    label: 'Vendas',
+    icon: '🔥',
+    bgColor: 'bg-orange-500/10',
+    textColor: 'text-orange-400',
+    borderColor: 'border-orange-500/20',
+  },
+  notice: {
+    label: 'Aviso',
+    icon: '📢',
+    bgColor: 'bg-blue-500/10',
+    textColor: 'text-blue-400',
+    borderColor: 'border-blue-500/20',
+  },
+};
 
-  const config = STYLE_CONFIGS[styleId];
+function FormatBadge({ record }: { record: FormattingRecord }) {
+  // Prioridade: intent_mode > style_id
+  const mode = record.intent_mode || record.style_id;
+  if (!mode) return null;
+
+  // Primeiro tenta intent_mode, depois style_id (retrocompatibilidade)
+  const config = INTENT_MODE_CONFIGS[mode] || STYLE_CONFIGS[mode];
   if (!config) return null;
 
   return (
@@ -480,7 +510,7 @@ export default function History() {
                 >
                   <div className="space-y-3">
                     <div className="flex items-start justify-between gap-3">
-                      <StyleBadge styleId={record.style_id} />
+                      <FormatBadge record={record} />
                       {record.is_favorite && (
                         <span className="text-yellow-400" title="Favorito">
                           <Star className="w-4 h-4 fill-yellow-400" />

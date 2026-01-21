@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Sparkles, Copy, RefreshCw, Eraser, MessageCircle, ChevronDown } from 'lucide-react';
+import { Sparkles, Copy, RefreshCw, Eraser, MessageCircle, ChevronDown, HelpCircle } from 'lucide-react';
 import { toast } from '../components/ui/Toaster';
 import { formatText, FormatterError, UserFormattingProfile } from '../services/formatter';
 import { useAuth } from '../hooks/useAuth';
@@ -11,6 +11,7 @@ import { WhatsAppPreview } from '../components/WhatsAppPreview';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../components/ui/Dialog';
 import { getPendingText, clearPendingText, getFormattedPreview, clearFormattedPreview } from '../utils/textPersistence';
 import { useLocalStorageState } from '../hooks/useLocalStorageState';
+import { Tooltip } from '../components/ui/Tooltip';
 
 export default function Format() {
   const [inputText, setInputText] = useState('');
@@ -273,9 +274,14 @@ export default function Format() {
             <div className="sticky top-6 space-y-4">
               {/* Modo de Intenção */}
               <div className="bg-card border border-border rounded-lg p-4">
-                <h3 className="text-sm font-semibold text-foreground mb-3">
-                  🎯 Modo de Intenção
-                </h3>
+                <div className="flex items-center gap-2 mb-3">
+                  <h3 className="text-sm font-semibold text-foreground">
+                    🎯 Modo de Intenção
+                  </h3>
+                  <Tooltip content="Define o tom e estilo geral da mensagem. Cada modo ajusta persuasão, urgência e call-to-action." side="right">
+                    <HelpCircle className="w-4 h-4 text-muted-foreground cursor-help" />
+                  </Tooltip>
+                </div>
                 <div className="space-y-2">
                   <button
                     onClick={() => setIntentMode('general')}
@@ -343,15 +349,25 @@ export default function Format() {
 
               {/* Ajustes Finos */}
               <div className="bg-card border border-border rounded-lg p-4">
-                <h3 className="text-sm font-semibold text-foreground mb-3">
-                  ✨ Ajustes Finos
-                </h3>
+                <div className="flex items-center gap-2 mb-3">
+                  <h3 className="text-sm font-semibold text-foreground">
+                    ✨ Ajustes Finos
+                  </h3>
+                  <Tooltip content="Personalize detalhes da formatação. Estas preferências são salvas automaticamente." side="right">
+                    <HelpCircle className="w-4 h-4 text-muted-foreground cursor-help" />
+                  </Tooltip>
+                </div>
                 <div className="space-y-4">
                   {/* Nível de Destaque */}
                   <div>
-                    <label className="block text-xs font-medium text-muted-foreground mb-2">
-                      Destaque
-                    </label>
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <label className="text-xs font-medium text-muted-foreground">
+                        Destaque
+                      </label>
+                      <Tooltip content="Controla a quantidade de negritos e itálicos. Discreto usa pouco, Chamativo usa muito." side="right">
+                        <HelpCircle className="w-3 h-3 text-muted-foreground/70 cursor-help" />
+                      </Tooltip>
+                    </div>
                     <div className="grid grid-cols-3 gap-1">
                       {(['clean', 'balanced', 'flashy'] as const).map((level) => (
                         <button
@@ -375,9 +391,14 @@ export default function Format() {
 
                   {/* Emojis */}
                   <div>
-                    <label className="block text-xs font-medium text-muted-foreground mb-2">
-                      Emojis
-                    </label>
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <label className="text-xs font-medium text-muted-foreground">
+                        Emojis
+                      </label>
+                      <Tooltip content="Desligado remove todos, Manter preserva os seus, Adicionar insere emojis relevantes." side="right">
+                        <HelpCircle className="w-3 h-3 text-muted-foreground/70 cursor-help" />
+                      </Tooltip>
+                    </div>
                     <div className="grid grid-cols-3 gap-1">
                       {(['off', 'keep_only', 'smart'] as const).map((mode) => (
                         <button
@@ -401,9 +422,14 @@ export default function Format() {
 
                   {/* Layout */}
                   <div>
-                    <label className="block text-xs font-medium text-muted-foreground mb-2">
-                      Layout
-                    </label>
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <label className="text-xs font-medium text-muted-foreground">
+                        Layout
+                      </label>
+                      <Tooltip content="Original mantém a estrutura, Blocos reorganiza em parágrafos lógicos com quebras de linha." side="right">
+                        <HelpCircle className="w-3 h-3 text-muted-foreground/70 cursor-help" />
+                      </Tooltip>
+                    </div>
                     <div className="grid grid-cols-2 gap-1">
                       {(['preserve', 'blocks'] as const).map((mode) => (
                         <button
@@ -424,9 +450,14 @@ export default function Format() {
 
                   {/* Destacar */}
                   <div>
-                    <label className="block text-xs font-medium text-muted-foreground mb-2">
-                      Destacar
-                    </label>
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <label className="text-xs font-medium text-muted-foreground">
+                        Destacar
+                      </label>
+                      <Tooltip content="Essencial destaca só preços/datas/CTAs, Tudo inclui também palavras-chave importantes." side="right">
+                        <HelpCircle className="w-3 h-3 text-muted-foreground/70 cursor-help" />
+                      </Tooltip>
+                    </div>
                     <div className="grid grid-cols-2 gap-1">
                       {(['essential_only', 'important_words'] as const).map((mode) => (
                         <button

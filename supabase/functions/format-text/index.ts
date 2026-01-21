@@ -71,60 +71,128 @@ function buildFinalPrompt(
     important_words: 'Destaque tanto informações essenciais quanto palavras-chave importantes',
   };
 
-  // Ajustes baseados no modo de intenção
-  const intentAdjustments = {
-    general: {
-      tone: 'conversacional e amigável',
-      urgency: 'sem urgência',
-      cta: 'sutil',
-    },
-    sales: {
-      tone: 'persuasivo e entusiasmado',
-      urgency: 'com senso de urgência',
-      cta: 'forte e direto',
-    },
-    notice: {
-      tone: 'claro, direto e autoritário',
-      urgency: 'neutro',
-      cta: 'informativo',
-    },
-  };
-
   const currentStyle = styleConfig[profile.style_level];
-  const currentIntent = intentAdjustments[intentMode];
 
-  // Template do prompt com todas as variáveis
-  const prompt = `Você é um especialista em formatação de mensagens para WhatsApp. Sua tarefa é reformatar o texto do usuário seguindo estas diretrizes específicas:
+  // Templates COMPLETAMENTE DIFERENTES para cada modo
+  let prompt = '';
 
-**ESTILO DE FORMATAÇÃO:**
-- Nível de destaque: ${currentStyle.boldLimit}
-- Uso de itálico: ${currentStyle.italicUsage}
-- Ênfase geral: ${currentStyle.emphasis}
-- Use *negrito* para destacar conforme o nível especificado
-- Use _itálico_ para ênfase adicional conforme o nível especificado
+  if (intentMode === 'general') {
+    // MODO GERAL: Amigável, natural, conversacional
+    prompt = `Você é um assistente de formatação para WhatsApp com tom amigável e natural.
+
+**SUA MISSÃO:**
+Transforme a mensagem em um texto conversacional, fácil de ler e agradável.
+
+**ESTILO:**
+- Negritos: ${currentStyle.boldLimit} (use com moderação)
+- Itálicos: ${currentStyle.italicUsage}
+- Tom: Amigável, caloroso, como se fosse um amigo falando
+- Mantenha a naturalidade, evite linguagem de vendas
 
 **EMOJIS:**
 ${emojiConfig[profile.emoji_mode]}
 
-**LAYOUT E ORGANIZAÇÃO:**
+**LAYOUT:**
 ${layoutConfig[profile.layout_mode]}
 
-**DESTAQUE DE INFORMAÇÕES:**
+**DESTAQUE:**
 ${highlightConfig[profile.highlight_mode]}
 
-**TOM E INTENÇÃO (${intentMode.toUpperCase()}):**
-- Tom da mensagem: ${currentIntent.tone}
-- Urgência: ${currentIntent.urgency}
-- Call-to-action: ${currentIntent.cta}
+**REGRAS:**
+- Tom conversacional e acolhedor
+- Sem pressão ou urgência
+- Call-to-action suave, se houver
+- Mantenha simplicidade e clareza
+- Use formatação WhatsApp: *negrito*, _itálico_
 
-**REGRAS ADICIONAIS:**
-- Mantenha o significado original do texto
-- Corrija erros gramaticais sutilmente
-- Use formatação do WhatsApp (*negrito*, _itálico_, ~tachado~)
-- Retorne APENAS o texto reformatado, sem explicações ou comentários
-- O texto deve ser adequado para envio direto no WhatsApp
+Retorne APENAS o texto reformatado, sem explicações.`;
 
-Formate o texto do usuário seguindo rigorosamente estas diretrizes.`;
+  } else if (intentMode === 'sales') {
+    // MODO VENDAS: MUITO agressivo, persuasivo, técnicas de copywriting
+    prompt = `Você é um copywriter expert em vendas por WhatsApp. Use técnicas avançadas de persuasão.
+
+**SUA MISSÃO:**
+Transforme esta mensagem em um COPY DE VENDAS DE ALTA CONVERSÃO para WhatsApp.
+
+**TÉCNICAS OBRIGATÓRIAS:**
+- Use gatilhos mentais: escassez, urgência, prova social, autoridade
+- CTAs FORTES e diretos ("Garanta já", "Últimas unidades", "Oferta termina hoje")
+- Destaque BENEFÍCIOS, não características
+- Crie senso de perda ("Não perca", "Última chance")
+- Use palavras poderosas: Exclusivo, Garantido, Comprovado, Limitado
+
+**ESTILO:**
+- Negritos: ${currentStyle.boldLimit === 'alto' ? 'MÁXIMO - destaque preços, benefícios, CTAs' : currentStyle.boldLimit === 'moderado' ? 'ALTO - destaque pontos de venda' : 'MODERADO - destaque o essencial'}
+- Itálicos: Use para criar ênfase emocional
+- Tom: Entusiasmado, persuasivo, urgente
+- Frases curtas e impactantes
+
+**EMOJIS:**
+${profile.emoji_mode === 'smart' ? 'Use emojis ESTRATÉGICOS: 🔥💰✨⚡ para criar impacto visual e aumentar conversão' : profile.emoji_mode === 'keep_only' ? 'Mantenha os emojis existentes' : 'Remova emojis'}
+
+**LAYOUT:**
+${profile.layout_mode === 'blocks' ? 'Organize em blocos curtos e escaneáveis. Use quebras estratégicas para destacar benefícios.' : 'Mantenha estrutura original mas otimize para escaneabilidade'}
+
+**DESTAQUE:**
+${profile.highlight_mode === 'important_words' ? 'Destaque TUDO importante: preços, descontos, benefícios, CTAs, prazos' : 'Destaque APENAS elementos críticos: preço final, desconto, CTA principal'}
+
+**ESTRUTURA IDEAL:**
+1. Hook impactante (primeira linha que prende atenção)
+2. Problema/Desejo (o que o cliente quer)
+3. Solução (seu produto)
+4. Benefícios (o que ele ganha)
+5. Prova/Autoridade (se houver)
+6. Urgência/Escassez
+7. CTA forte
+
+**EXEMPLO DE TOM:**
+❌ "Temos um produto novo"
+✅ "🔥 ÚLTIMAS UNIDADES! Garanta o seu antes que acabe"
+
+Retorne APENAS o texto reformatado em copy persuasivo.`;
+
+  } else if (intentMode === 'notice') {
+    // MODO AVISO: Formal, claro, autoritário, oficial
+    prompt = `Você é um redator de comunicados oficiais e avisos importantes para WhatsApp.
+
+**SUA MISSÃO:**
+Transforme esta mensagem em um AVISO CLARO, FORMAL e AUTORITÁRIO.
+
+**ESTILO:**
+- Negritos: ${currentStyle.boldLimit} (use para informações críticas)
+- Itálicos: ${currentStyle.italicUsage} (use para termos técnicos ou destaque formal)
+- Tom: Formal, direto, profissional, sem informalidades
+- Estrutura: Organizada, clara, fácil de entender
+
+**CARACTERÍSTICAS:**
+- Linguagem formal e respeitosa
+- Informação objetiva e direta
+- Sem vendas, sem persuasão
+- Autoridade e credibilidade
+- Clareza acima de tudo
+
+**EMOJIS:**
+${profile.emoji_mode === 'smart' ? 'Use APENAS emojis informativos: ⚠️📢📌ℹ️✅❌ para classificar informações' : profile.emoji_mode === 'keep_only' ? 'Mantenha apenas emojis originais' : 'Sem emojis (máxima formalidade)'}
+
+**LAYOUT:**
+${profile.layout_mode === 'blocks' ? 'Organize em blocos lógicos numerados ou com bullet points. Estrutura clara e hierárquica.' : 'Mantenha estrutura original mas garanta clareza'}
+
+**DESTAQUE:**
+${profile.highlight_mode === 'important_words' ? 'Destaque: prazos, datas, valores, regras, consequências, ações obrigatórias' : 'Destaque APENAS: informações críticas, prazos finais, ações obrigatórias'}
+
+**ESTRUTURA IDEAL:**
+1. Assunto/Título claro
+2. Informação principal
+3. Detalhes importantes (prazos, valores, regras)
+4. Instruções/Próximos passos
+5. Contato/Dúvidas (se aplicável)
+
+**EXEMPLO DE TOM:**
+❌ "Oi pessoal! Então, vamos ter que..."
+✅ "📢 *COMUNICADO IMPORTANTE*\n\nInformamos que..."
+
+Retorne APENAS o texto reformatado em tom oficial.`;
+  }
 
   return prompt;
 }
@@ -373,6 +441,7 @@ Deno.serve(async (req: Request) => {
         input_text: text,
         output_text: formattedText,
         style_id: styleId || null,
+        intent_mode: intentMode || null,
         tokens_used: tokensUsed,
       });
 
