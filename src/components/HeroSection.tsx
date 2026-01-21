@@ -1,11 +1,18 @@
 import React from 'react';
 import { Sparkles, Users, CheckCircle } from 'lucide-react';
 import { useLocation } from 'wouter';
+import { trackEvent } from '../hooks/useAnalytics';
 
 const HeroSection: React.FC = () => {
   const [, setLocation] = useLocation();
   
   const handleStartFree = () => {
+    trackEvent('cta_click', {
+      cta_location: 'hero',
+      cta_text: 'Ganhar 7 Dias de Pro Grátis',
+      event_category: 'engagement',
+      event_label: 'hero_trial_button'
+    });
     setLocation('/auth?tab=signup');
   };
 

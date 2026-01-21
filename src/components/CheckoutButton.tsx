@@ -3,6 +3,7 @@ import { useLocation } from 'wouter';
 import { Loader2 } from 'lucide-react';
 import { Button } from './ui/Button';
 import { useAuth } from '../hooks/useAuth';
+import { trackEvent } from '../hooks/useAnalytics';
 import { createCheckoutSession } from '../services/checkout';
 
 interface CheckoutButtonProps {
@@ -28,6 +29,11 @@ export default function CheckoutButton({
 
   const handleClick = async () => {
     if (!user) {
+      trackEvent('checkout_login_required', {
+        plan: planName.toLowerCase(),
+        event_category: 'conversion',
+        event_label: 'checkout_redirect_auth'
+      });
       setLocation('/auth');
       return;
     }
@@ -36,10 +42,26 @@ export default function CheckoutButton({
       return;
     }
 
+    // Rastrear início do checkout
+    trackEvent('begin_checkout', {
+      plan: planName.toLowerCase(),
+      event_category: 'ecommerce',
+      event_label: 'checkout_initiated'
+    });
+
     setLoading(true);
 
     try {
       const { url } = await createCheckoutSession(checkoutLink);
+
+      // Rastrear redirecionamento para checkout externo
+      trackEvent('checkout_redirect', {
+        plan: planName.toLowerCase(),
+        provider: 'hotmart',
+        event_category: 'ecommerce',
+        event_label: 'hotmart_checkout_redirect'
+      });
+
       window.location.href = url;
     } catch (error) {
       console.error('Erro ao processar pagamento:', error);

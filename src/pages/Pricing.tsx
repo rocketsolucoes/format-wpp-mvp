@@ -10,6 +10,7 @@ import { Input } from '../components/ui/Input';
 import { Label } from '../components/ui/Label';
 import CheckoutButton from '../components/CheckoutButton';
 import { useAuth } from '../hooks/useAuth';
+import { trackEvent } from '../hooks/useAnalytics';
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { PRICING, formatBRL as formatCurrency, calculateAnnualSavings } from '../constants/pricing';
 
@@ -21,6 +22,17 @@ export default function Pricing() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const { user } = useAuth();
+
+  // Rastrear mudança de período de billing
+  React.useEffect(() => {
+    if (billingPeriod === 'annual') {
+      trackEvent('billing_period_change', {
+        period: 'annual',
+        event_category: 'engagement',
+        event_label: 'annual_billing_selected'
+      });
+    }
+  }, [billingPeriod]);
 
   const proPrice = billingPeriod === 'monthly' ? PRICING.PRO_MONTHLY_PRICE : PRICING.PRO_ANNUAL_MONTHLY_PRICE;
   const proTotal = billingPeriod === 'monthly' ? PRICING.PRO_MONTHLY_PRICE : PRICING.PRO_ANNUAL_TOTAL_PRICE;
@@ -178,8 +190,18 @@ export default function Pricing() {
 
   const handlePlanClick = (planName: string) => {
     if (planName === 'Enterprise') {
+      trackEvent('enterprise_contact_click', {
+        plan: 'enterprise',
+        event_category: 'engagement',
+        event_label: 'contact_sales'
+      });
       setContactModalOpen(true);
     } else {
+      trackEvent('pricing_cta_click', {
+        plan: planName.toLowerCase(),
+        event_category: 'engagement',
+        event_label: 'free_plan_signup'
+      });
       setLocation('/auth');
     }
   };
