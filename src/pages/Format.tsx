@@ -1,48 +1,55 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Sparkles, Copy, RefreshCw, Eraser, MessageCircle } from 'lucide-react';
 import { toast } from '../components/ui/Toaster';
-import { formatText, FormatterError } from '../services/formatter';
+import { formatText, FormatterError, UserFormattingProfile } from '../services/formatter';
 import { useAuth } from '../hooks/useAuth';
 import { trackEvent } from '../hooks/useAnalytics';
 import { useLocation } from 'wouter';
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { Button } from '../components/ui/Button';
-import { StyleSelector } from '../components/StyleSelector';
 import { WhatsAppPreview } from '../components/WhatsAppPreview';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter } from '../components/ui/Dialog';
 import { getPendingText, clearPendingText, getFormattedPreview, clearFormattedPreview } from '../utils/textPersistence';
+import { useLocalStorageState } from '../hooks/useLocalStorageState';
 
 export default function Format() {
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
   const [isFormatting, setIsFormatting] = useState(false);
-  const [selectedStyle, setSelectedStyle] = useState<string>('casual');
   const [previewText, setPreviewText] = useState('');
   const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
   const [upgradeReason, setUpgradeReason] = useState<'credits' | 'pro-style'>('credits');
   const [whatsappFallbackOpen, setWhatsappFallbackOpen] = useState(false);
   const { user, refreshUser } = useAuth();
   const [, setLocation] = useLocation();
-  const [initialStyleSet, setInitialStyleSet] = useState(false);
 
-  // Rastrear mudança de estilo (apenas após a primeira vez)
+  // NOVO SISTEMA: Modo de intenção (não salvo no localStorage, reset a cada visita)
+  const [intentMode, setIntentMode] = useState<'general' | 'sales' | 'notice'>('general');
+
+  // NOVO SISTEMA: Perfil de formatação (salvo no localStorage)
+  const [profile, setProfile] = useLocalStorageState<UserFormattingProfile>('user-formatting-profile', {
+    style_level: 'balanced',
+    emoji_mode: 'smart',
+    layout_mode: 'blocks',
+    highlight_mode: 'essential_only',
+  });
+
+  // Rastrear mudança de modo de intenção
   useEffect(() => {
-    if (initialStyleSet && selectedStyle) {
-      trackEvent('style_change', {
-        style: selectedStyle,
+    if (intentMode) {
+      trackEvent('intent_mode_change', {
+        mode: intentMode,
         plan: user?.plan || 'guest',
         event_category: 'engagement',
-        event_label: 'format_style_changed'
+        event_label: 'intent_mode_changed'
       });
     }
-  }, [selectedStyle, initialStyleSet, user]);
+  }, [intentMode, user]);
 
   useEffect(() => {
     const pendingText = getPendingText();
     const formattedPreview = getFormattedPreview();
     const reformatText = localStorage.getItem('reformat_text');
-    const reformatStyle = localStorage.getItem('reformat_style');
-    const selectedStyleFromDashboard = localStorage.getItem('selectedStyle');
 
     // Prioridade 1: Preview formatado da landing page
     if (formattedPreview) {
@@ -63,20 +70,6 @@ export default function Format() {
       setInputText(reformatText);
       localStorage.removeItem('reformat_text');
     }
-
-    if (reformatStyle) {
-      setSelectedStyle(reformatStyle);
-      localStorage.removeItem('reformat_style');
-    } else if (selectedStyleFromDashboard) {
-      setSelectedStyle(selectedStyleFromDashboard);
-      localStorage.removeItem('selectedStyle');
-
-      const styleName = selectedStyleFromDashboard === 'casual' ? 'Casual' : selectedStyleFromDashboard === 'sales' ? 'Sales' : 'Official';
-      toast.success(`Estilo ${styleName} selecionado. Cole seu texto para começar!`);
-    }
-
-    // Marcar que o estilo inicial foi definido (para não rastrear a primeira mudança)
-    setTimeout(() => setInitialStyleSet(true), 100);
   }, []);
 
   useEffect(() => {
@@ -115,14 +108,15 @@ export default function Format() {
       return;
     }
 
-    const proStyles = ['sales', 'announcement'];
-    if (user.plan === 'free' && proStyles.includes(selectedStyle)) {
+    // NOVO SISTEMA: Validar acesso a modos PRO
+    const proIntentModes = ['sales', 'notice'];
+    if (user.plan === 'free' && proIntentModes.includes(intentMode)) {
       trackEvent('upgrade_prompt_view', {
-        reason: 'pro_style',
-        style: selectedStyle,
+        reason: 'pro_mode',
+        mode: intentMode,
         plan: user.plan,
         event_category: 'conversion',
-        event_label: 'pro_style_required'
+        event_label: 'pro_mode_required'
       });
       setUpgradeReason('pro-style');
       setUpgradeModalOpen(true);
@@ -131,7 +125,8 @@ export default function Format() {
 
     // Rastrear início da formatação
     trackEvent('format_start', {
-      style: selectedStyle,
+      intent_mode: intentMode,
+      profile: profile,
       plan: user.plan,
       text_length: inputText.trim().length,
       credits_remaining: user.credits_remaining,
@@ -141,16 +136,19 @@ export default function Format() {
 
     setIsFormatting(true);
 
-    console.log('Format.tsx - selectedStyle:', selectedStyle);
+    console.log('Format.tsx - intentMode:', intentMode);
+    console.log('Format.tsx - userProfile:', profile);
 
     try {
-      const result = await formatText(inputText.trim(), selectedStyle);
+      // NOVO SISTEMA: Enviar intentMode e userProfile
+      const result = await formatText(inputText.trim(), undefined, intentMode, profile);
       setOutputText(result.formatted_text);
       await refreshUser();
 
       // Rastrear sucesso da formatação
       trackEvent('format_success', {
-        style: selectedStyle,
+        intent_mode: intentMode,
+        profile: profile,
         plan: user.plan,
         input_length: inputText.trim().length,
         output_length: result.formatted_text.length,
@@ -206,7 +204,7 @@ export default function Format() {
       await navigator.clipboard.writeText(outputText);
 
       trackEvent('text_copy', {
-        style: selectedStyle,
+        intent_mode: intentMode,
         text_length: outputText.length,
         event_category: 'engagement',
         event_label: 'copy_formatted_output'
@@ -216,7 +214,7 @@ export default function Format() {
     } catch (error) {
       toast.error('Falha ao copiar');
     }
-  }, [outputText, selectedStyle]);
+  }, [outputText, intentMode]);
 
   const handleSendToWhatsApp = useCallback(() => {
     if (!outputText) return;
@@ -269,37 +267,7 @@ export default function Format() {
       </div>
 
       <div className="px-4 py-6 sm:px-6 lg:px-8">
-        <div className="lg:hidden mb-6">
-          <h2 className="text-sm font-semibold text-foreground mb-3">Estilos de Formatação</h2>
-          <StyleSelector
-            selectedStyle={selectedStyle}
-            onStyleChange={setSelectedStyle}
-            userPlan={user?.plan || 'free'}
-            onProStyleClick={() => {
-              setUpgradeReason('pro-style');
-              setUpgradeModalOpen(true);
-            }}
-          />
-        </div>
-
         <div className="flex gap-6">
-          <aside className="hidden lg:block w-64 flex-shrink-0">
-            <div className="sticky top-6 space-y-4">
-              <div>
-                <h2 className="text-sm font-semibold text-foreground mb-3">Estilos de Formatação</h2>
-                <StyleSelector
-                  selectedStyle={selectedStyle}
-                  onStyleChange={setSelectedStyle}
-                  userPlan={user?.plan || 'free'}
-                  onProStyleClick={() => {
-                    setUpgradeReason('pro-style');
-                    setUpgradeModalOpen(true);
-                  }}
-                />
-              </div>
-            </div>
-          </aside>
-
           <main className="flex-1 min-w-0 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <span className={`text-sm font-medium ${charCountColor}`}>
@@ -347,6 +315,230 @@ export default function Format() {
                   className="w-full min-h-[180px] sm:min-h-[200px] px-3 sm:px-4 py-3 bg-card border border-border rounded-lg text-foreground placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-y disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                   aria-label="Original text input"
                 />
+              </div>
+
+              {/* PAINEL DE CONTROLE INTEGRADO */}
+              <div className="bg-card border border-border rounded-lg p-4 space-y-4">
+                {/* 1. Modo de Intenção */}
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-3">
+                    1. Qual a intenção da mensagem?
+                  </label>
+                  <div className="flex gap-2 flex-wrap">
+                    <button
+                      onClick={() => setIntentMode('general')}
+                      disabled={isFormatting}
+                      className={`flex-1 min-w-[100px] px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${
+                        intentMode === 'general'
+                          ? 'bg-emerald-500 text-white shadow-md'
+                          : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                      } disabled:opacity-50 disabled:cursor-not-allowed`}
+                    >
+                      Geral
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (user?.plan === 'free') {
+                          setUpgradeReason('pro-style');
+                          setUpgradeModalOpen(true);
+                        } else {
+                          setIntentMode('sales');
+                        }
+                      }}
+                      disabled={isFormatting}
+                      className={`flex-1 min-w-[100px] px-4 py-2.5 rounded-lg font-medium text-sm transition-all relative ${
+                        intentMode === 'sales'
+                          ? 'bg-orange-500 text-white shadow-md'
+                          : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                      } disabled:opacity-50 disabled:cursor-not-allowed`}
+                    >
+                      Vendas {user?.plan === 'free' && '🔒'}
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (user?.plan === 'free') {
+                          setUpgradeReason('pro-style');
+                          setUpgradeModalOpen(true);
+                        } else {
+                          setIntentMode('notice');
+                        }
+                      }}
+                      disabled={isFormatting}
+                      className={`flex-1 min-w-[100px] px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${
+                        intentMode === 'notice'
+                          ? 'bg-blue-500 text-white shadow-md'
+                          : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                      } disabled:opacity-50 disabled:cursor-not-allowed`}
+                    >
+                      Aviso {user?.plan === 'free' && '🔒'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* 2. Ajuste Fino (Expansível) */}
+                <details className="group">
+                  <summary className="cursor-pointer list-none flex items-center justify-between py-2 px-3 bg-muted/50 hover:bg-muted rounded-lg transition-colors">
+                    <span className="text-sm font-medium text-foreground">
+                      Personalizar meu estilo ✨
+                    </span>
+                    <svg
+                      className="w-5 h-5 text-muted-foreground transition-transform group-open:rotate-180"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </summary>
+
+                  <div className="mt-4 space-y-4 px-2">
+                    {/* Nível de Destaque */}
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Nível de Destaque
+                      </label>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setProfile({ ...profile, style_level: 'clean' })}
+                          disabled={isFormatting}
+                          className={`flex-1 px-3 py-2 rounded-md text-xs font-medium transition-all ${
+                            profile.style_level === 'clean'
+                              ? 'bg-emerald-500 text-white'
+                              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                          } disabled:opacity-50`}
+                        >
+                          Discreto
+                        </button>
+                        <button
+                          onClick={() => setProfile({ ...profile, style_level: 'balanced' })}
+                          disabled={isFormatting}
+                          className={`flex-1 px-3 py-2 rounded-md text-xs font-medium transition-all ${
+                            profile.style_level === 'balanced'
+                              ? 'bg-emerald-500 text-white'
+                              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                          } disabled:opacity-50`}
+                        >
+                          Equilibrado
+                        </button>
+                        <button
+                          onClick={() => setProfile({ ...profile, style_level: 'flashy' })}
+                          disabled={isFormatting}
+                          className={`flex-1 px-3 py-2 rounded-md text-xs font-medium transition-all ${
+                            profile.style_level === 'flashy'
+                              ? 'bg-emerald-500 text-white'
+                              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                          } disabled:opacity-50`}
+                        >
+                          Chamativo
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Uso de Emojis */}
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Uso de Emojis
+                      </label>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setProfile({ ...profile, emoji_mode: 'off' })}
+                          disabled={isFormatting}
+                          className={`flex-1 px-3 py-2 rounded-md text-xs font-medium transition-all ${
+                            profile.emoji_mode === 'off'
+                              ? 'bg-emerald-500 text-white'
+                              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                          } disabled:opacity-50`}
+                        >
+                          Desligado
+                        </button>
+                        <button
+                          onClick={() => setProfile({ ...profile, emoji_mode: 'keep_only' })}
+                          disabled={isFormatting}
+                          className={`flex-1 px-3 py-2 rounded-md text-xs font-medium transition-all ${
+                            profile.emoji_mode === 'keep_only'
+                              ? 'bg-emerald-500 text-white'
+                              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                          } disabled:opacity-50`}
+                        >
+                          Manter os meus
+                        </button>
+                        <button
+                          onClick={() => setProfile({ ...profile, emoji_mode: 'smart' })}
+                          disabled={isFormatting}
+                          className={`flex-1 px-3 py-2 rounded-md text-xs font-medium transition-all ${
+                            profile.emoji_mode === 'smart'
+                              ? 'bg-emerald-500 text-white'
+                              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                          } disabled:opacity-50`}
+                        >
+                          Adicionar emojis
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Layout do Texto */}
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Layout do Texto
+                      </label>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setProfile({ ...profile, layout_mode: 'preserve' })}
+                          disabled={isFormatting}
+                          className={`flex-1 px-3 py-2 rounded-md text-xs font-medium transition-all ${
+                            profile.layout_mode === 'preserve'
+                              ? 'bg-emerald-500 text-white'
+                              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                          } disabled:opacity-50`}
+                        >
+                          Preservar original
+                        </button>
+                        <button
+                          onClick={() => setProfile({ ...profile, layout_mode: 'blocks' })}
+                          disabled={isFormatting}
+                          className={`flex-1 px-3 py-2 rounded-md text-xs font-medium transition-all ${
+                            profile.layout_mode === 'blocks'
+                              ? 'bg-emerald-500 text-white'
+                              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                          } disabled:opacity-50`}
+                        >
+                          Organizar em blocos
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* O que Destacar */}
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        O que Destacar?
+                      </label>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setProfile({ ...profile, highlight_mode: 'essential_only' })}
+                          disabled={isFormatting}
+                          className={`flex-1 px-3 py-2 rounded-md text-xs font-medium transition-all ${
+                            profile.highlight_mode === 'essential_only'
+                              ? 'bg-emerald-500 text-white'
+                              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                          } disabled:opacity-50`}
+                        >
+                          Só o essencial
+                        </button>
+                        <button
+                          onClick={() => setProfile({ ...profile, highlight_mode: 'important_words' })}
+                          disabled={isFormatting}
+                          className={`flex-1 px-3 py-2 rounded-md text-xs font-medium transition-all ${
+                            profile.highlight_mode === 'important_words'
+                              ? 'bg-emerald-500 text-white'
+                              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                          } disabled:opacity-50`}
+                        >
+                          Também palavras-chave
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </details>
               </div>
 
               <Button

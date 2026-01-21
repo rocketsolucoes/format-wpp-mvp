@@ -1,8 +1,18 @@
 import { supabase } from '../lib/supabase';
 
+export interface UserFormattingProfile {
+  style_level: 'flashy' | 'balanced' | 'clean';
+  emoji_mode: 'smart' | 'keep_only' | 'off';
+  layout_mode: 'preserve' | 'blocks';
+  highlight_mode: 'essential_only' | 'important_words';
+}
+
 export interface FormatTextRequest {
   text: string;
   styleId?: string;
+  // Novo sistema de formatação dinâmica
+  intentMode?: 'general' | 'sales' | 'notice';
+  userProfile?: UserFormattingProfile;
 }
 
 export interface FormatTextResponse {
@@ -24,7 +34,9 @@ export class FormatterError extends Error {
 
 export async function formatText(
   text: string,
-  styleId?: string
+  styleId?: string,
+  intentMode?: 'general' | 'sales' | 'notice',
+  userProfile?: UserFormattingProfile
 ): Promise<FormatTextResponse> {
   if (text.length < 10) {
     throw new FormatterError(
@@ -56,6 +68,8 @@ export async function formatText(
   const apiUrl = `${supabaseUrl}/functions/v1/format-text`;
 
   console.log('Formatting with styleId:', styleId);
+  console.log('Formatting with intentMode:', intentMode);
+  console.log('Formatting with userProfile:', userProfile);
 
   try {
     const response = await fetch(apiUrl, {
@@ -64,7 +78,12 @@ export async function formatText(
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${session.access_token}`,
       },
-      body: JSON.stringify({ text, styleId }),
+      body: JSON.stringify({
+        text,
+        styleId,
+        intentMode,
+        userProfile
+      }),
     });
 
     if (!response.ok) {

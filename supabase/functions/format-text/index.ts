@@ -11,12 +11,122 @@ interface FormatRequest {
   text: string;
   styleId?: string;
   customPrompt?: string;
+  // Novo sistema de formatação dinâmica
+  intentMode?: 'general' | 'sales' | 'notice';
+  userProfile?: UserFormattingProfile;
+}
+
+interface UserFormattingProfile {
+  style_level: 'flashy' | 'balanced' | 'clean';
+  emoji_mode: 'smart' | 'keep_only' | 'off';
+  layout_mode: 'preserve' | 'blocks';
+  highlight_mode: 'essential_only' | 'important_words';
 }
 
 interface FormatResponse {
   formatted_text: string;
   credits_remaining: number;
   tokens_used: number;
+}
+
+/**
+ * Constrói o prompt final baseado no perfil do usuário e modo de intenção
+ */
+function buildFinalPrompt(
+  intentMode: 'general' | 'sales' | 'notice',
+  profile: UserFormattingProfile
+): string {
+  // Configurações baseadas no perfil
+  const styleConfig = {
+    flashy: {
+      boldLimit: 'alto',
+      italicUsage: 'frequente',
+      emphasis: 'muita ênfase visual',
+    },
+    balanced: {
+      boldLimit: 'moderado',
+      italicUsage: 'moderado',
+      emphasis: 'ênfase equilibrada',
+    },
+    clean: {
+      boldLimit: 'mínimo',
+      italicUsage: 'raro',
+      emphasis: 'ênfase sutil',
+    },
+  };
+
+  const emojiConfig = {
+    smart: 'Adicione emojis relevantes de forma inteligente para aumentar o engajamento',
+    keep_only: 'Mantenha apenas os emojis já presentes no texto original, não adicione novos',
+    off: 'Remova todos os emojis do texto',
+  };
+
+  const layoutConfig = {
+    preserve: 'Preserve a estrutura de parágrafos original do texto',
+    blocks: 'Organize o texto em blocos lógicos com quebras de linha estratégicas',
+  };
+
+  const highlightConfig = {
+    essential_only: 'Destaque apenas informações essenciais (preços, datas, CTAs)',
+    important_words: 'Destaque tanto informações essenciais quanto palavras-chave importantes',
+  };
+
+  // Ajustes baseados no modo de intenção
+  const intentAdjustments = {
+    general: {
+      tone: 'conversacional e amigável',
+      urgency: 'sem urgência',
+      cta: 'sutil',
+    },
+    sales: {
+      tone: 'persuasivo e entusiasmado',
+      urgency: 'com senso de urgência',
+      cta: 'forte e direto',
+    },
+    notice: {
+      tone: 'claro, direto e autoritário',
+      urgency: 'neutro',
+      cta: 'informativo',
+    },
+  };
+
+  const currentStyle = styleConfig[profile.style_level];
+  const currentIntent = intentAdjustments[intentMode];
+
+  // Template do prompt com todas as variáveis
+  const prompt = `Você é um especialista em formatação de mensagens para WhatsApp. Sua tarefa é reformatar o texto do usuário seguindo estas diretrizes específicas:
+
+**ESTILO DE FORMATAÇÃO:**
+- Nível de destaque: ${currentStyle.boldLimit}
+- Uso de itálico: ${currentStyle.italicUsage}
+- Ênfase geral: ${currentStyle.emphasis}
+- Use *negrito* para destacar conforme o nível especificado
+- Use _itálico_ para ênfase adicional conforme o nível especificado
+
+**EMOJIS:**
+${emojiConfig[profile.emoji_mode]}
+
+**LAYOUT E ORGANIZAÇÃO:**
+${layoutConfig[profile.layout_mode]}
+
+**DESTAQUE DE INFORMAÇÕES:**
+${highlightConfig[profile.highlight_mode]}
+
+**TOM E INTENÇÃO (${intentMode.toUpperCase()}):**
+- Tom da mensagem: ${currentIntent.tone}
+- Urgência: ${currentIntent.urgency}
+- Call-to-action: ${currentIntent.cta}
+
+**REGRAS ADICIONAIS:**
+- Mantenha o significado original do texto
+- Corrija erros gramaticais sutilmente
+- Use formatação do WhatsApp (*negrito*, _itálico_, ~tachado~)
+- Retorne APENAS o texto reformatado, sem explicações ou comentários
+- O texto deve ser adequado para envio direto no WhatsApp
+
+Formate o texto do usuário seguindo rigorosamente estas diretrizes.`;
+
+  return prompt;
 }
 
 Deno.serve(async (req: Request) => {
@@ -76,9 +186,11 @@ Deno.serve(async (req: Request) => {
       },
     });
 
-    const { text, styleId, customPrompt }: FormatRequest = await req.json();
+    const { text, styleId, customPrompt, intentMode, userProfile }: FormatRequest = await req.json();
 
     console.log("Received styleId:", styleId);
+    console.log("Received intentMode:", intentMode);
+    console.log("Received userProfile:", userProfile);
     console.log("Text length:", text.length);
     console.log("Using custom prompt:", !!customPrompt);
 
@@ -130,12 +242,29 @@ Deno.serve(async (req: Request) => {
 
     const userPlan = profile.subscription_tier || profile.plan;
     const proStyles = ["sales", "announcement"];
+    const proIntentModes = ["sales", "notice"];
 
+    // Validação para o sistema antigo (styleId)
     if (userPlan === "free" && styleId && proStyles.includes(styleId)) {
       console.log(`Free user ${user.id} attempted to use Pro style: ${styleId}`);
       return new Response(
         JSON.stringify({
           error: "This style is exclusive to Pro plan. Please upgrade to access Sales and Official styles.",
+          code: "PRO_STYLE_REQUIRED"
+        }),
+        {
+          status: 403,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Validação para o novo sistema (intentMode)
+    if (userPlan === "free" && intentMode && proIntentModes.includes(intentMode)) {
+      console.log(`Free user ${user.id} attempted to use Pro intent mode: ${intentMode}`);
+      return new Response(
+        JSON.stringify({
+          error: "Os modos Vendas e Aviso são exclusivos do plano Pro. Faça upgrade para acessar todos os modos de formatação.",
           code: "PRO_STYLE_REQUIRED"
         }),
         {
@@ -158,8 +287,13 @@ Deno.serve(async (req: Request) => {
     let systemPrompt: string;
 
     if (customPrompt) {
+      // Admin override: prompt customizado
       systemPrompt = customPrompt;
+    } else if (intentMode && userProfile) {
+      // NOVO SISTEMA: Prompt dinâmico baseado em perfil
+      systemPrompt = buildFinalPrompt(intentMode, userProfile);
     } else if (styleId) {
+      // SISTEMA ANTIGO: Compatibilidade com prompts fixos do banco
       const { data: promptData, error: promptError } = await supabaseAdmin
         .from("formatting_prompts")
         .select("prompt")
@@ -177,10 +311,11 @@ Deno.serve(async (req: Request) => {
         systemPrompt = "You are a text formatter. Improve the user's text by fixing grammar, improving clarity, and enhancing readability while maintaining the original tone and meaning. Format with proper line breaks for WhatsApp. ONLY return the improved text, nothing else.";
       }
     } else {
+      // Fallback padrão
       systemPrompt = "You are a text formatter. Improve the user's text by fixing grammar, improving clarity, and enhancing readability while maintaining the original tone and meaning. Format with proper line breaks for WhatsApp. ONLY return the improved text, nothing else.";
     }
 
-    console.log("Using prompt from:", customPrompt ? "custom" : styleId ? "database" : "default");
+    console.log("Using prompt from:", customPrompt ? "custom" : (intentMode && userProfile) ? "dynamic" : styleId ? "database" : "default");
     console.log("System prompt (first 100 chars):", systemPrompt.substring(0, 100));
 
     const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -201,7 +336,7 @@ Deno.serve(async (req: Request) => {
             content: text,
           },
         ],
-        temperature: 0.7,
+        temperature: 0.1, // Baixa temperatura para consistência
         max_tokens: 2000,
       }),
     });
