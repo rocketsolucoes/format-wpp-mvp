@@ -3,6 +3,7 @@ import { Route, Switch, useLocation } from 'wouter';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { useAuth } from './hooks/useAuth';
+import { useAnalytics } from './hooks/useAnalytics';
 import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
 import { ExtensionBadgeDetector } from './components/ExtensionBadgeDetector';
@@ -28,6 +29,10 @@ const protectedRoutes = ['/dashboard', '/format', '/history', '/settings', '/suc
 function AppContent() {
   const [location] = useLocation();
   const { user } = useAuth();
+
+  // Inicializa Google Analytics 4 com rastreamento automático de páginas
+  useAnalytics();
+
   const isProtectedRoute = protectedRoutes.includes(location);
 
   const shouldShowHeader = !isProtectedRoute && !(location === '/pricing' && user);
