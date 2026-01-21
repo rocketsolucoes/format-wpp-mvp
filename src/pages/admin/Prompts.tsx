@@ -289,9 +289,11 @@ export default function Prompts() {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label className="text-sm font-semibold text-foreground">Conteúdo do Prompt</Label>
-              <span className={`text-xs font-mono ${charCount > MAX_PROMPT_LENGTH ? 'text-destructive' : 'text-muted-foreground'}`}>
-                {charCount} / {MAX_PROMPT_LENGTH}
-              </span>
+              {isEditing && (
+                <span className={`text-xs font-mono ${charCount > MAX_PROMPT_LENGTH ? 'text-destructive' : 'text-foreground'}`}>
+                  {charCount} / {MAX_PROMPT_LENGTH}
+                </span>
+              )}
             </div>
             <div className="relative group">
               <Textarea
@@ -299,9 +301,9 @@ export default function Prompts() {
                 onChange={(e) => isEditing && setEditedPrompt(e.target.value)}
                 readOnly={!isEditing}
                 className={`min-h-[400px] font-mono text-sm p-4 transition-all duration-200 ${
-                  isEditing 
-                    ? 'bg-background border-primary ring-1 ring-primary/20 text-foreground' 
-                    : 'bg-muted/50 border-border text-foreground/80 cursor-not-allowed'
+                  isEditing
+                    ? 'bg-background border-primary ring-1 ring-primary/20 text-foreground'
+                    : 'bg-muted/50 border-border text-foreground cursor-not-allowed'
                 }`}
                 placeholder="Instruções da IA..."
               />
