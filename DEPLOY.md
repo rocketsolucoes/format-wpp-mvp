@@ -16,7 +16,10 @@ supabase login
 # 3. Link com o projeto (apenas a primeira vez)
 supabase link --project-ref SEU_PROJECT_REF
 
-# 4. Deploy das functions
+# 4. Executar migrations (NOVO - adiciona campo intent_mode)
+supabase db push
+
+# 5. Deploy das functions
 supabase functions deploy format-text
 ```
 
@@ -42,16 +45,31 @@ System prompt (first 100 chars): Você é um especialista em formatação de men
 
 - ✅ Novo sistema de formatação dinâmica com `intentMode` + `userProfile`
 - ✅ Função `buildFinalPrompt()` que gera prompts personalizados
+- ✅ **Prompts COMPLETAMENTE REFORMULADOS** para diferenças marcantes:
+  - **Geral**: Tom amigável, conversacional, sem vendas
+  - **Vendas**: Copy agressivo com gatilhos mentais e CTAs fortes
+  - **Aviso**: Formal, oficial, autoritário
 - ✅ Temperatura OpenAI ajustada para 0.1 (maior consistência)
 - ✅ Validação de modos PRO (sales, notice) para usuários free
+- ✅ Campo `intent_mode` salvo no histórico
 - ✅ Compatibilidade retroativa com sistema antigo (styleId)
 
 ### Frontend
 
 - ✅ Sidebar de controles no desktop
 - ✅ Controles colapsáveis no mobile
+- ✅ **Tooltips explicativos** em todos os controles (ícone ?)
 - ✅ Persistência de preferências no localStorage
 - ✅ Novo hook `useLocalStorageState`
+- ✅ Histórico atualizado para exibir novos modos
+- ✅ Badges coloridos para cada modo (Geral 💬, Vendas 🔥, Aviso 📢)
+
+### Database
+
+- ✅ Nova migration: `20260121000001_add_intent_mode_to_history.sql`
+- ✅ Campo `intent_mode` adicionado à tabela `formatting_history`
+- ✅ Índice criado para otimizar queries
+- ✅ Retrocompatibilidade mantida (registros antigos = 'general')
 
 ---
 
