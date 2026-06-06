@@ -181,16 +181,57 @@ format-wpp-mvp/
 │   │   ├── format-text-preview/
 │   │   ├── create-checkout/
 │   │   ├── create-portal-session/
-│   │   └── stripe-webhook/
-│   └── migrations/         # 17 migrations SQL
+│   │   ├── stripe-webhook/
+│   │   └── hotmart-webhook/
+│   └── migrations/         # Migrations SQL (numeradas)
+├── docs/                   # 📚 Documentação técnica
+│   ├── AUTO_EXPIRE_TRIALS.md        # Sistema de expiração automática de trials
+│   ├── SISTEMA_COMPLETO_TRIALS.md   # Visão geral do sistema de trials
+│   ├── TROUBLESHOOTING.md           # Solução de problemas
+│   ├── MELHORIAS_ONBOARDING_TRIAL.md # Melhorias de onboarding
+│   ├── ui/                          # Documentação de UI
+│   │   ├── ALTERACOES_UI_HOTMART.md
+│   │   ├── BADGES_TROUBLESHOOTING.md
+│   │   └── COMPARACAO_CORES.md
+│   └── hotmart/                     # Integração Hotmart
+│       ├── HOTMART_COMPLETE_GUIDE.md
+│       └── HOTMART_MIGRATION_GUIDE.md
+├── scripts/                # 🔧 Scripts e queries úteis
+│   └── queries/            # Queries SQL de diagnóstico
+│       ├── validate_migrations.sql  # Validar migrations
+│       ├── validate_users.sql       # Validar dados de usuários
+│       └── debug_user.sql           # Debug de usuário específico
 ├── public/                 # Assets estáticos
-├── docs/                   # Documentação adicional
 ├── package.json
 ├── tsconfig.json
 ├── vite.config.ts
 ├── tailwind.config.js
 └── README.md
 ```
+
+## 📚 Documentação Adicional
+
+### Sistema de Trials
+- **[Sistema Completo de Trials](docs/SISTEMA_COMPLETO_TRIALS.md)** - Visão geral do sistema de trials de 7 dias
+- **[Auto-Expiração de Trials](docs/AUTO_EXPIRE_TRIALS.md)** - Como funciona a expiração automática
+- **[Melhorias de Onboarding](docs/MELHORIAS_ONBOARDING_TRIAL.md)** - Onboarding e experiência do usuário
+
+### Integração Hotmart
+- **[Guia Completo Hotmart](docs/hotmart/HOTMART_COMPLETE_GUIDE.md)** - Integração completa com Hotmart
+- **[Migração Hotmart](docs/hotmart/HOTMART_MIGRATION_GUIDE.md)** - Guia de migração de Stripe para Hotmart
+
+### UI e Design
+- **[Alterações UI Hotmart](docs/ui/ALTERACOES_UI_HOTMART.md)** - Mudanças de interface para Hotmart
+- **[Badges e Planos](docs/ui/BADGES_TROUBLESHOOTING.md)** - Sistema de badges e planos
+- **[Cores e Temas](docs/ui/COMPARACAO_CORES.md)** - Comparação de cores e temas
+
+### Troubleshooting
+- **[Solução de Problemas](docs/TROUBLESHOOTING.md)** - Guia geral de troubleshooting
+
+### Scripts e Queries
+- **[Validar Migrations](scripts/queries/validate_migrations.sql)** - Verificar status das migrations
+- **[Validar Usuários](scripts/queries/validate_users.sql)** - Diagnosticar dados de usuários
+- **[Debug de Usuário](scripts/queries/debug_user.sql)** - Debug de usuário específico
 
 ## 🏗️ Arquitetura
 
@@ -260,21 +301,38 @@ format-wpp-mvp/
 - `/settings` - Configurações
 - `/admin/*` - Área administrativa
 
-## 💳 Sistema de Créditos
+## 💳 Sistema de Créditos e Trials
+
+### Trial Gratuito de 7 Dias 🎁
+Novos usuários recebem automaticamente:
+- ✅ **7 dias** de acesso Pro completo
+- ✅ **Créditos ilimitados** durante o trial (9999)
+- ✅ **Todos os estilos** de formatação
+- ✅ **Histórico completo** e análises
+- ✅ **Expiração automática** após 7 dias
 
 ### Planos Disponíveis
 
 | Plano | Créditos | Preço | Recursos |
 |-------|----------|-------|----------|
-| **Free** | 30/mês | Grátis | Estilos básicos |
+| **Trial** | Ilimitado | Grátis (7 dias) | Acesso completo Pro |
+| **Free** | 10/mês | Grátis | Estilos básicos |
 | **Pro** | Ilimitado | R$ 29/mês | Todos os estilos + histórico |
 | **Enterprise** | Ilimitado | R$ 99/mês | API + suporte prioritário |
 
 ### Como Funciona
-1. Cada formatação consome 1 crédito
-2. Créditos renovam mensalmente
-3. Planos Pro/Enterprise têm créditos ilimitados
-4. Preview gratuito (sem cadastro) não consome créditos
+1. **Trial (7 dias)**: Acesso completo Pro, créditos ilimitados
+2. **Após Trial**: Downgrade automático para Free (10 créditos/mês)
+3. **Upgrade**: Assine Pro via Hotmart para créditos ilimitados permanentes
+4. Cada formatação consome 1 crédito (exceto Pro/Trial)
+5. Preview gratuito (sem cadastro) não consome créditos
+
+### Sistema Automático ⚙️
+- ✅ Trial expira automaticamente após 7 dias (cron diário às 00:00 UTC)
+- ✅ Downgrade automático para plano Free
+- ✅ Verificação em tempo real no login (redundância)
+- ✅ Logs de execução disponíveis
+- 📖 [Documentação completa](docs/AUTO_EXPIRE_TRIALS.md)
 
 ## 🧪 Testes
 
@@ -373,13 +431,18 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 ## 🗺️ Roadmap
 
 ### ✅ Implementado
-- [x] Formatação com IA
-- [x] Sistema de créditos
-- [x] Integração com Stripe
+- [x] Formatação com IA (OpenAI)
+- [x] Sistema de créditos e trials
+- [x] Trial gratuito de 7 dias (automático)
+- [x] Expiração automática de trials (cron + real-time)
+- [x] Integração com Hotmart (pagamentos)
 - [x] Dashboard com estatísticas
-- [x] Histórico de formatações
+- [x] Histórico de formatações com favoritos
 - [x] Tema claro/escuro
-- [x] Múltiplos estilos
+- [x] Múltiplos estilos de formatação
+- [x] Onboarding completo para novos usuários
+- [x] Sistema de badges e planos
+- [x] WhatsApp persistido durante signup
 
 ### 🚧 Em Desenvolvimento
 - [ ] Testes automatizados
